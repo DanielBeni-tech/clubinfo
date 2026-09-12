@@ -37,8 +37,9 @@ export const Route = createFileRoute("/")({
 const icons = { brain: Brain, code: Code2, shield: Shield, network: Network, cpu: Cpu, lightbulb: Lightbulb };
 
 function Home() {
-  const featured = projects[0];
-  const others = projects.slice(1);
+  const featured = projects.find((p) => p.featured) ?? projects[0]!;
+  const others = projects.filter((p) => p !== featured);
+
 
   return (
     <div>
