@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/site/shared";
 import { club, joinForm, school } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/join")({
@@ -21,7 +22,9 @@ export const Route = createFileRoute("/join")({
       },
       { property: "og:title", content: "Rejoindre le Club Informatique SUP'PTIC" },
       { property: "og:description", content: "Adhère au Club en renseignant ta formation SUP'PTIC." },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: JoinPage,
 });

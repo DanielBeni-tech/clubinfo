@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CTASection, PageHeader } from "@/components/site/shared";
 import { events } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/events")({
   head: () => ({
@@ -17,7 +18,9 @@ export const Route = createFileRoute("/events")({
       },
       { property: "og:title", content: "Activités & événements du Club Informatique SUP'PTIC" },
       { property: "og:description", content: "Le calendrier des formations, hackathons et conférences du Club." },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: EventsPage,
 });

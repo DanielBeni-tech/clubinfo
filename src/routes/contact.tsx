@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/site/shared";
 import { club } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -20,7 +21,9 @@ export const Route = createFileRoute("/contact")({
       },
       { property: "og:title", content: "Contacter le Club Informatique SUP'PTIC" },
       { property: "og:description", content: "Écris-nous pour un partenariat, une collaboration ou une question." },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: ContactPage,
 });

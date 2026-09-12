@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Partners } from "@/components/site/Partners";
 import { CTASection, PageHeader, SectionTitle } from "@/components/site/shared";
 import { bureau, objectives, poles } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import galleryTeam from "@/assets/gallery-team.jpg";
 
 export const Route = createFileRoute("/about")({
@@ -20,7 +21,9 @@ export const Route = createFileRoute("/about")({
         property: "og:description",
         content: "Mission, valeurs et organisation du Club Informatique de SUP'PTIC.",
       },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: About,
 });

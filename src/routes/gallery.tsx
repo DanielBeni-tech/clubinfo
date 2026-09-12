@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { CTASection, PageHeader } from "@/components/site/shared";
 import { gallery } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -15,7 +16,9 @@ export const Route = createFileRoute("/gallery")({
       },
       { property: "og:title", content: "Galerie du Club Informatique SUP'PTIC" },
       { property: "og:description", content: "La vie du Club en images : événements, formations et projets." },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: GalleryPage,
 });

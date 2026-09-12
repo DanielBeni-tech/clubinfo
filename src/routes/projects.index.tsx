@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CTASection, PageHeader, ProjectCard } from "@/components/site/shared";
 import { projects } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects/")({
@@ -16,7 +17,9 @@ export const Route = createFileRoute("/projects/")({
       },
       { property: "og:title", content: "Les projets du Club Informatique SUP'PTIC" },
       { property: "og:description", content: "SUP'ONE AI et les autres réalisations du Club." },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: ProjectsPage,
 });

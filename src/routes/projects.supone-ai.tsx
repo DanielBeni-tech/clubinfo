@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CTASection } from "@/components/site/shared";
 import { projects } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/projects/supone-ai")({
   head: () => ({
@@ -22,7 +23,9 @@ export const Route = createFileRoute("/projects/supone-ai")({
         property: "og:description",
         content: "Le projet phare du Club Informatique SUP'PTIC : un assistant IA au service des étudiants.",
       },
+      ...brandSocialMeta,
     ],
+    links: [...brandHeadLinks],
   }),
   component: SuponePage,
 });

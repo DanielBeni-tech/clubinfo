@@ -16,6 +16,7 @@ import { Partners } from "@/components/site/Partners";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
 import { club, events, expertise, gallery, projects, stats } from "@/data/club";
+import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,15 +32,9 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Projets, formations et événements du Club Informatique de SUP'PTIC.",
       },
-      { property: "og:image", content: "/og-image.jpg" },
-      { name: "twitter:image", content: "/og-image.jpg" },
+      ...brandSocialMeta,
     ],
-    links: [
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon.ico", sizes: "any" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "manifest", href: "/site.webmanifest" },
-    ],
+    links: [...brandHeadLinks],
   }),
   component: Home,
 });

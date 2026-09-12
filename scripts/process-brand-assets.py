@@ -226,18 +226,22 @@ def make_og(mark: Image.Image) -> Image.Image:
     img = Image.alpha_composite(img, glow)
     icon = fit_on(mark, 280, scale=0.88)
     img.alpha_composite(icon, (96, (h - icon.size[0]) // 2))
+    # Dessiner le texte sur RGB : Pillow double les glyphes sur un calque RGBA.
+    canvas = img.convert("RGB")
     try:
-        title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 54)
-        sub = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-        tiny = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        title = ImageFont.truetype("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf", 54)
+        sub = ImageFont.truetype("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", 24)
+        tiny = ImageFont.truetype("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", 18)
     except OSError:
-        title = sub = tiny = ImageFont.load_default()
-    draw = ImageDraw.Draw(img)
-    draw.text((420, 230), "Club Informatique", font=title, fill=WHITE)
-    draw.text((420, 300), "SUP'PTIC", font=title, fill=CYAN)
-    draw.text((420, 380), "Une école, un esprit, une intelligence", font=sub, fill=(210, 224, 238, 255))
-    draw.text((420, 430), "Yaoundé  ·  Cameroun", font=tiny, fill=(160, 184, 204, 255))
-    return img.convert("RGB")
+        title = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf", 54)
+        sub = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf", 24)
+        tiny = sub
+    draw = ImageDraw.Draw(canvas)
+    draw.text((420, 230), "Club Informatique", font=title, fill=WHITE[:3])
+    draw.text((420, 300), "SUP'PTIC", font=title, fill=CYAN[:3])
+    draw.text((420, 380), "Une école, un esprit, une intelligence", font=sub, fill=(210, 224, 238))
+    draw.text((420, 430), "Yaoundé  ·  Cameroun", font=tiny, fill=(160, 184, 204))
+    return canvas
 
 
 def cut_ceiling(im: Image.Image, top: float = 0.22, bottom: float = 0.0) -> Image.Image:
