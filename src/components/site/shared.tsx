@@ -55,7 +55,7 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
   const body = (
     <Card
       className={cn(
-        "h-full overflow-hidden py-0 transition-shadow hover:shadow-[var(--shadow-elevated)]",
+        "h-full overflow-hidden py-0",
         featured && "md:grid md:grid-cols-2",
       )}
     >
@@ -94,11 +94,13 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
               </Link>
             </Button>
           ) : (
-            <Button asChild size="sm" variant="outline">
-              <a href="https://github.com/" target="_blank" rel="noreferrer">
-                <Github className="size-4" /> GitHub
-              </a>
-            </Button>
+            project.github ? (
+              <Button asChild size="sm" variant="outline">
+                <a href={project.github} target="_blank" rel="noreferrer">
+                  <Github className="size-4" /> GitHub
+                </a>
+              </Button>
+            ) : null
           )}
         </div>
       </CardContent>

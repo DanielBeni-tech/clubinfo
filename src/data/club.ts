@@ -5,14 +5,26 @@ import galleryHackathon from "@/assets/gallery-hackathon.jpg";
 import galleryFormation from "@/assets/gallery-formation.jpg";
 import galleryTeam from "@/assets/gallery-team.jpg";
 import galleryConference from "@/assets/gallery-conference.jpg";
+import galleryTalk from "@/assets/gallery-talk.jpg";
+import gallerySpeaker from "@/assets/gallery-speaker.jpg";
+import president from "@/assets/president.jpg";
+import presidentPortrait from "@/assets/president-portrait.jpg";
+import logoSupptic from "@/assets/images/sup'ptic.jpeg";
+import logoMinpostel from "@/assets/images/minpostel.jpeg";
+import logoCamtel from "@/assets/images/Camtel.png";
+import logoCampost from "@/assets/images/campost.jpeg";
+import logoHuawei from "@/assets/images/huawei.jpeg";
 
 export const club = {
   name: "Club Informatique SUP'PTIC",
   short: "Club Info SUP'PTIC",
   tagline: "Une école, un esprit, une intelligence",
-  email: "clubinfo@supptic.cm",
-  linkedin: "https://www.linkedin.com/",
-  github: "https://github.com/",
+  email: "clubinfosupptic@gmail.com",
+  linkedin: "https://www.linkedin.com/company/club-info-supptic",
+  github: "https://github.com/nkoumougrinnel/SupOneAI",
+  schoolUrl: "https://e-supptic.cm",
+  schoolEmail: "contact@e-supptic.cm",
+  schoolPhone: "+237 222 233 700",
 };
 
 export const expertise = [
@@ -60,6 +72,7 @@ export type Project = {
   image: string;
   featured?: boolean;
   href?: string;
+  github?: string;
 };
 
 export const projects: Project[] = [
@@ -75,6 +88,7 @@ export const projects: Project[] = [
     image: projectSupone,
     featured: true,
     href: "/projects/supone-ai",
+    github: "https://github.com/nkoumougrinnel/SupOneAI",
   },
   {
     slug: "cyberveille",
@@ -145,6 +159,7 @@ export const events: ClubEvent[] = [
     displayDate: "8 juin 2026",
     type: "Atelier",
     description: "Initiation aux challenges de cybersécurité : web, forensic et cryptographie.",
+    image: galleryTalk,
     upcoming: false,
   },
   {
@@ -153,6 +168,7 @@ export const events: ClubEvent[] = [
     displayDate: "19 avril 2026",
     type: "Visite",
     description: "Découverte d'un centre d'exploitation réseau et échange avec les ingénieurs sur site.",
+    image: gallerySpeaker,
     upcoming: false,
   },
   {
@@ -161,6 +177,7 @@ export const events: ClubEvent[] = [
     displayDate: "2 mars 2026",
     type: "Collaboration",
     description: "Rencontre avec les clubs informatiques d'écoles partenaires autour de projets communs.",
+    image: galleryTeam,
     upcoming: false,
   },
 ];
@@ -172,14 +189,49 @@ export type GalleryItem = {
 };
 
 export const gallery: GalleryItem[] = [
-  { src: galleryHackathon, alt: "Étudiants en équipe pendant le hackathon du Club", category: "Événements" },
-  { src: galleryFormation, alt: "Formation animée par un membre du Club en salle de cours", category: "Formations" },
-  { src: galleryTeam, alt: "Photo de groupe des membres du Club Informatique", category: "Vie du club" },
-  { src: galleryConference, alt: "Table ronde lors d'une conférence organisée par le Club", category: "Événements" },
-  { src: projectSupone, alt: "Interface de l'assistant SUP'ONE AI", category: "Projets" },
-  { src: projectIot, alt: "Prototype de capteurs connectés du projet Campus IoT", category: "Projets" },
-  { src: projectCyber, alt: "Tableau de bord du projet CyberVeille", category: "Projets" },
-  { src: galleryTeam, alt: "Membres du Club réunis devant l'école", category: "Vie du club" },
+  {
+    src: galleryFormation,
+    alt: "Membres du Club en salle informatique pendant une session de formation",
+    category: "Formations",
+  },
+  {
+    src: gallerySpeaker,
+    alt: "Échange entre un intervenant et les étudiants en salle de cours",
+    category: "Formations",
+  },
+  {
+    src: galleryHackathon,
+    alt: "Briefing d'équipe avant une présentation, ordinateur et projecteur",
+    category: "Événements",
+  },
+  {
+    src: galleryConference,
+    alt: "Prise de parole lors d'une présentation organisée par le Club",
+    category: "Événements",
+  },
+  {
+    src: galleryTalk,
+    alt: "Atelier du Club : présentation devant le tableau et le matériel",
+    category: "Événements",
+  },
+  {
+    src: galleryTeam,
+    alt: "Session de travail autour d'un projet logiciel",
+    category: "Projets",
+  },
+  {
+    src: president,
+    alt: "Freded Messi Ovaah, président du Club Informatique SUP'PTIC",
+    category: "Vie du club",
+  },
+];
+
+export const bureau = [
+  {
+    name: "Freded Messi Ovaah",
+    role: "Président du Club Informatique",
+    image: presidentPortrait,
+  },
 ];
 
 export const poles = [
@@ -215,3 +267,120 @@ export const stats = [
   { value: "15", label: "Projets menés" },
   { value: "3", label: "Pôles opérationnels" },
 ];
+
+export type Partner = {
+  name: string;
+  role: string;
+  href?: string;
+  logo?: string;
+};
+
+export const partners: Partner[] = [
+  {
+    name: "SUP'PTIC",
+    role: "École d'accueil — Yaoundé & Buea",
+    href: "https://e-supptic.cm",
+    logo: logoSupptic,
+  },
+  {
+    name: "MINPOSTEL",
+    role: "Ministère de tutelle",
+    logo: logoMinpostel,
+  },
+  {
+    name: "CAMTEL",
+    role: "Opérateur historique des télécoms",
+    href: "https://www.camtel.cm",
+    logo: logoCamtel,
+  },
+  {
+    name: "CAMPOST",
+    role: "Opérateur postal national",
+    href: "https://www.campost.cm",
+    logo: logoCampost,
+  },
+  {
+    name: "Huawei",
+    role: "Partenaire formation et technologie",
+    logo: logoHuawei,
+  },
+];
+
+export const school = {
+  name: "SUP'PTIC",
+  fullName:
+    "École Nationale Supérieure des Postes, des Télécommunications et des Technologies de l'Information et de la Communication",
+  url: "https://e-supptic.cm",
+  campuses: ["Yaoundé", "Buea"] as const,
+  cursus: ["Ingénierie", "Management"] as const,
+};
+
+export const joinForm = {
+  campuses: ["Yaoundé", "Buea"] as const,
+  poles: ["Pôle Innovation & Projets", "Pôle Développement", "Pôle Communication", "Je ne sais pas encore"] as const,
+  domains: [
+    "Intelligence Artificielle",
+    "Développement logiciel",
+    "Cybersécurité",
+    "Réseaux & Télécommunications",
+    "Électronique & IoT",
+    "Radiocommunication",
+    "Management des télécoms",
+    "Innovation & Recherche",
+  ] as const,
+  cyclesByCampus: {
+    Yaoundé: [
+      { value: "ITT", label: "ITT — Ingénieur des Travaux de Télécommunications" },
+      { value: "IPT", label: "IPT — Inspecteur des Postes et Télécommunications" },
+      { value: "MIT", label: "Master — Ingénieur des Télécommunications" },
+      { value: "MAPT", label: "Master — Administrateur des Postes et Télécommunications" },
+    ],
+    Buea: [
+      { value: "TT", label: "TT — Technicien des Télécoms" },
+      { value: "CPT", label: "CPT — Contrôleur des Postes et Télécoms" },
+      { value: "ATT", label: "ATT — Agent Technique des Télécoms" },
+      { value: "AEPT", label: "AEPT — Agent d'Exploitation des Postes et Télécoms" },
+    ],
+  },
+  regimesByCycle: {
+    ITT: ["Classique", "Alternance"],
+    IPT: ["Classique", "Alternance"],
+    MIT: ["Concours", "Admission directe"],
+    MAPT: ["Concours", "Admission directe"],
+    TT: ["Classique"],
+    CPT: ["Classique"],
+    ATT: ["Classique"],
+    AEPT: ["Classique"],
+  } as Record<string, string[]>,
+  optionsByCycle: {
+    ITT: [
+      "Tronc commun (1re année)",
+      "Informatique et réseaux (IR)",
+      "Réseaux et télécommunications (RT)",
+      "Radiocommunication (RC)",
+    ],
+    IPT: [
+      "Tronc commun (1re année)",
+      "Management (MGT)",
+      "Comptabilité et Finances (CF)",
+      "Logistique et Transport (LT)",
+      "Commerce et distribution",
+    ],
+    MIT: ["Tronc commun", "Sécurité des réseaux et systèmes (SERES)", "Services et Radiomobiles (SRM)"],
+    MAPT: ["Tronc commun", "Spécialité à préciser"],
+    TT: ["Parcours technique télécoms"],
+    CPT: ["Contrôle et exploitation des P&T"],
+    ATT: ["Techniques des télécoms"],
+    AEPT: ["Exploitation des postes et télécoms"],
+  } as Record<string, string[]>,
+  levelsByCycle: {
+    ITT: ["1re année (ITT1)", "2e année (ITT2)", "3e année (ITT3)"],
+    IPT: ["1re année (IPT1)", "2e année (IPT2)", "3e année (IPT3)"],
+    MIT: ["Master 1", "Master 2"],
+    MAPT: ["Master 1", "Master 2"],
+    TT: ["1re année", "2e année"],
+    CPT: ["1re année", "2e année"],
+    ATT: ["1re année", "2e année"],
+    AEPT: ["1re année", "2e année"],
+  } as Record<string, string[]>,
+};

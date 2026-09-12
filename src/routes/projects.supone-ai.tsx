@@ -55,7 +55,7 @@ function SuponePage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <a href="https://github.com/" target="_blank" rel="noreferrer">
+              <a href="https://github.com/nkoumougrinnel/SupOneAI" target="_blank" rel="noreferrer">
                 <Github className="size-4" /> Voir sur GitHub
               </a>
             </Button>
@@ -64,8 +64,8 @@ function SuponePage() {
               variant="outline"
               className="border-night-muted/40 bg-transparent text-night-foreground hover:bg-night-foreground/10 hover:text-night-foreground"
             >
-              <a href="https://github.com/" target="_blank" rel="noreferrer">
-                <Globe className="size-4" /> Voir la démo
+              <a href="https://github.com/nkoumougrinnel/SupOneAI" target="_blank" rel="noreferrer">
+                <Globe className="size-4" /> Dépôt SUP'ONE AI
               </a>
             </Button>
           </div>
@@ -131,19 +131,19 @@ function SuponePage() {
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             <img
               src={projectSupone}
-              alt="Interface de conversation de SUP'ONE AI"
+              alt="Équipe du Club en session de travail sur SUP'ONE AI"
               loading="lazy"
               width={1200}
               height={800}
-              className="w-full rounded-lg border border-border object-cover"
+              className="aspect-3/2 w-full rounded-lg border border-border object-cover"
             />
             <img
               src={galleryHackathon}
-              alt="Équipe de SUP'ONE AI en session de travail"
+              alt="Membres du pôle Développement autour d'un ordinateur"
               loading="lazy"
               width={1200}
               height={900}
-              className="w-full rounded-lg border border-border object-cover"
+              className="aspect-3/2 w-full rounded-lg border border-border object-cover"
             />
           </div>
         </div>

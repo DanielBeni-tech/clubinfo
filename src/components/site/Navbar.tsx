@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { club } from "@/data/club";
+import { Logo } from "@/components/site/Logo";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -29,19 +29,12 @@ export function Navbar() {
     <header
       className={cn(
         "sticky top-0 z-50 transition-colors",
+        "duration-300",
         scrolled ? "border-b border-border bg-background/90 backdrop-blur" : "bg-background",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="grid size-9 place-items-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
-            CI
-          </span>
-          <span className="hidden font-display text-sm leading-tight font-bold sm:block">
-            Club Info
-            <span className="block text-xs font-medium text-muted-foreground">SUP'PTIC</span>
-          </span>
-        </Link>
+        <Logo onClick={() => setOpen(false)} />
 
         <ul className="hidden items-center gap-1 lg:flex">
           {links.map((link) => (
@@ -99,7 +92,6 @@ export function Navbar() {
           </ul>
         </div>
       )}
-      <span className="sr-only">{club.name}</span>
     </header>
   );
 }

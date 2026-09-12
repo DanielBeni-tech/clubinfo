@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { CheckCircle2, Github, Linkedin, Mail, MapPin } from "lucide-react";
+import { CheckCircle2, ExternalLink, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -95,7 +95,13 @@ function ContactPage() {
                   </li>
                   <li className="flex items-center gap-3">
                     <MapPin className="size-4 text-primary" />
-                    <span>SUP'PTIC, Yaoundé — Cameroun</span>
+                    <span>SUP'PTIC — Yaoundé & Buea</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <ExternalLink className="size-4 text-primary" />
+                    <a href={club.schoolUrl} target="_blank" rel="noreferrer" className="hover:text-primary">
+                      e-supptic.cm
+                    </a>
                   </li>
                 </ul>
               </CardContent>

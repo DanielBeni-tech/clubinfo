@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { Logo } from "@/components/site/Logo";
 import { club } from "@/data/club";
 
 export function Footer() {
@@ -7,12 +8,8 @@ export function Footer() {
     <footer className="night-panel mt-auto">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2">
-            <span className="grid size-9 place-items-center rounded-md bg-accent font-display text-sm font-bold text-accent-foreground">
-              CI
-            </span>
-            <span className="font-display text-base font-bold">{club.name}</span>
-          </div>
+          <Logo inverted withWordmark={false} className="w-fit" />
+          <p className="mt-3 font-display text-base font-bold">{club.name}</p>
           <p className="mt-4 max-w-sm text-sm text-night-muted">
             {club.tagline}. Le Club Informatique fédère les étudiants de SUP'PTIC autour de projets technologiques
             concrets.
@@ -85,7 +82,12 @@ export function Footer() {
                 {club.email}
               </a>
             </li>
-            <li>SUP'PTIC, Yaoundé — Cameroun</li>
+            <li>
+              <a href={club.schoolUrl} target="_blank" rel="noreferrer" className="hover:text-accent">
+                e-supptic.cm
+              </a>
+            </li>
+            <li>SUP'PTIC — Yaoundé & Buea</li>
             <li>
               <Link to="/contact" className="hover:text-accent">
                 Formulaire de contact
