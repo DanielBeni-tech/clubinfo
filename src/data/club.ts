@@ -23,6 +23,9 @@ import galleryJuioHuddle from "@/assets/images/gallery/juio-huddle.jpg";
 import gallerySyntraPitch from "@/assets/images/gallery/syntra-pitch.jpg";
 import president from "@/assets/images/people/president.jpg";
 import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
+import memberPolo from "@/assets/images/people/member-polo.jpg";
+import memberPlaid from "@/assets/images/people/member-plaid.jpg";
+import memberBlackTee from "@/assets/images/people/member-black-tee.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
@@ -131,11 +134,12 @@ export const projects: Project[] = [
     name: "Syntra",
     subtitle: "Le messager technique sécurisé",
     summary:
-      "Messagerie d'entreprise en temps réel, présentée aux Journées universitaires de l'informatique 2026 : échanges sécurisés, markdown natif et prise en charge du code.",
+      "CommHQ — messagerie d'entreprise en temps réel (canaux, Markdown, code, bot IA), présentée aux Journées universitaires de l'informatique 2026.",
     status: "Terminé",
     domain: "Développement logiciel",
-    tags: ["Temps réel", "Sécurité", "Messagerie"],
+    tags: ["React", "NestJS", "Socket.IO", "MongoDB"],
     image: gallerySyntraPitch,
+    github: "https://github.com/DanielBeni-tech/CommHQ",
   },
 ];
 
@@ -335,26 +339,57 @@ export const bureau = [
   {
     name: "Freded Messi Ovaah",
     role: "Président du Club Informatique",
+    roleEn: "President of the Computer Club",
     image: presidentPortrait,
+  },
+  {
+    name: "Membre du Bureau",
+    role: "Vice-président",
+    roleEn: "Vice-president",
+    image: memberPolo,
+  },
+  {
+    name: "Membre du Bureau",
+    role: "Secrétaire général",
+    roleEn: "Secretary-general",
+    image: memberPlaid,
+  },
+  {
+    name: "Membre du Bureau",
+    role: "Trésorier",
+    roleEn: "Treasurer",
+    image: memberBlackTee,
   },
 ];
 
 export const poles = [
   {
     name: "Bureau Exécutif",
+    nameEn: "Executive Board",
     role: "Coordonne la vie du Club, représente les membres auprès de l'administration et garantit le respect de la Charte.",
+    roleEn: "Coordinates club life, represents members to the administration and upholds the Charter.",
+    image: galleryRackTeam,
   },
   {
     name: "Pôle Innovation & Projets",
+    nameEn: "Innovation & Projects",
     role: "Fait émerger les idées, cadre les projets et accompagne les équipes jusqu'à la livraison.",
+    roleEn: "Shapes ideas, frames projects and supports teams through to delivery.",
+    image: galleryJuioWinners,
   },
   {
     name: "Pôle Développement",
+    nameEn: "Development",
     role: "Conçoit et code les solutions du Club, et anime les formations techniques auprès des membres.",
+    roleEn: "Designs and builds the Club's solutions, and runs technical training for members.",
+    image: galleryJuioHuddle,
   },
   {
     name: "Pôle Communication",
+    nameEn: "Communications",
     role: "Anime les réseaux, organise les événements et assure le suivi des candidatures d'adhésion.",
+    roleEn: "Runs social channels, organises events and follows up membership applications.",
+    image: galleryCollabDelegation,
   },
 ];
 
@@ -370,31 +405,37 @@ export const heroSlides = [
   {
     src: galleryJuioPrize,
     caption: "Prix du meilleur projet · JUIO 2026",
+    captionEn: "Best project prize · JUIO 2026",
     focus: "center 38%",
   },
   {
-    src: gallerySyntraPitch,
-    caption: "Syntra, pitch en hackathon",
-    focus: "center 22%",
+    src: galleryJuioTalk,
+    caption: "Présentation en salle informatique",
+    captionEn: "Talk in the computer lab",
+    focus: "center 40%",
   },
   {
     src: galleryJuioWinners,
     caption: "Lauréats · 100 000 FCFA",
+    captionEn: "Winners · 100,000 FCFA",
     focus: "center 42%",
   },
   {
     src: galleryJuioPitch,
     caption: "Présentation en amphithéâtre",
+    captionEn: "Presentation in the lecture hall",
     focus: "center 40%",
   },
   {
     src: galleryJuioHuddle,
     caption: "Équipe au travail pendant l'événement",
+    captionEn: "Team working during the event",
     focus: "center 50%",
   },
   {
     src: galleryGroup,
     caption: "Le Club Informatique SUP'PTIC",
+    captionEn: "The SUP'PTIC Computer Club",
     focus: "center 58%",
   },
 ] as const;

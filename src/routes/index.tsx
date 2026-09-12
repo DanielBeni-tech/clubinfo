@@ -17,6 +17,7 @@ import { PartnerMarquee } from "@/components/site/PartnerMarquee";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
 import { club, events, expertise, gallery, projects, stats } from "@/data/club";
+import { useLocale } from "@/lib/i18n";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/")({
@@ -43,6 +44,7 @@ export const Route = createFileRoute("/")({
 const icons = { brain: Brain, code: Code2, shield: Shield, network: Network, cpu: Cpu, lightbulb: Lightbulb };
 
 function Home() {
+  const { t } = useLocale();
   const featured = projects.find((p) => p.featured) ?? projects[0]!;
   const others = projects.filter((p) => p !== featured);
 
@@ -51,7 +53,7 @@ function Home() {
     <div>
       <HeroSlideshow>
         <p className="animate-in fade-in slide-in-from-bottom-2 font-mono text-xs tracking-[0.25em] text-accent uppercase duration-700">
-          SUP'PTIC · Yaoundé
+          {t("hero.kicker")}
         </p>
         <h1 className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-3xl font-display text-4xl leading-tight duration-700 sm:text-5xl lg:text-6xl [animation-delay:80ms]">
           {club.name}
@@ -60,13 +62,11 @@ function Home() {
           « {club.tagline} »
         </p>
         <p className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-2xl text-base text-night-muted duration-700 [animation-delay:240ms]">
-          Nous réunissons les étudiants passionnés de technologie autour de projets réels : intelligence
-          artificielle, développement, cybersécurité, réseaux et objets connectés. Le Club forme, expérimente et
-          livre — avec l'exigence d'une équipe tech professionnelle.
+          {t("hero.lead")}
         </p>
         <div className="animate-in fade-in slide-in-from-bottom-3 mt-9 flex flex-col gap-3 duration-700 sm:flex-row [animation-delay:320ms]">
           <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link to="/about">Découvrir le club</Link>
+            <Link to="/about">{t("hero.discover")}</Link>
           </Button>
           <Button
             asChild
@@ -74,7 +74,7 @@ function Home() {
             variant="outline"
             className="border-night-muted/40 bg-transparent text-night-foreground hover:bg-night-foreground/10 hover:text-night-foreground"
           >
-            <Link to="/projects">Nos projets</Link>
+            <Link to="/projects">{t("hero.projects")}</Link>
           </Button>
         </div>
         <dl className="mt-14 grid grid-cols-2 gap-6 border-t border-night-muted/20 pt-8 sm:grid-cols-4">

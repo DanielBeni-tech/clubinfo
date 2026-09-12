@@ -3,20 +3,22 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/Logo";
+import { LangToggle } from "@/components/site/LangToggle";
+import { useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-
-const links = [
-  { to: "/", label: "Accueil" },
-  { to: "/about", label: "À propos" },
-  { to: "/projects", label: "Projets" },
-  { to: "/events", label: "Événements" },
-  { to: "/gallery", label: "Galerie" },
-  { to: "/contact", label: "Contact" },
-] as const;
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLocale();
+  const links = [
+    { to: "/", label: t("nav.home") },
+    { to: "/about", label: t("nav.about") },
+    { to: "/projects", label: t("nav.projects") },
+    { to: "/events", label: t("nav.events") },
+    { to: "/gallery", label: t("nav.gallery") },
+    { to: "/contact", label: t("nav.contact") },
+  ] as const;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -52,12 +54,13 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <LangToggle />
           <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link to="/join">Rejoindre</Link>
+            <Link to="/join">{t("nav.join")}</Link>
           </Button>
           <button
             type="button"
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={open ? t("nav.close") : t("nav.menu")}
             onClick={() => setOpen((v) => !v)}
             className="grid size-9 place-items-center rounded-md border border-border lg:hidden"
           >
@@ -82,10 +85,11 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
-            <li className="pt-2">
-              <Button asChild className="w-full">
+            <li className="flex items-center justify-between pt-2">
+              <LangToggle />
+              <Button asChild className="flex-1 sm:hidden">
                 <Link to="/join" onClick={() => setOpen(false)}>
-                  Rejoindre le club
+                  {t("nav.joinClub")}
                 </Link>
               </Button>
             </li>

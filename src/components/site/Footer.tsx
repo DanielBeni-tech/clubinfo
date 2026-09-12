@@ -1,9 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { Logo } from "@/components/site/Logo";
+import { LangToggle } from "@/components/site/LangToggle";
 import { club } from "@/data/club";
+import { useLocale } from "@/lib/i18n";
 
 export function Footer() {
+  const { t } = useLocale();
   return (
     <footer className="night-panel mt-auto">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
@@ -44,38 +47,38 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="font-display text-sm font-semibold">Navigation</h3>
+          <h3 className="font-display text-sm font-semibold">{t("footer.nav")}</h3>
           <ul className="mt-4 space-y-2 text-sm text-night-muted">
             <li>
               <Link to="/about" className="hover:text-accent">
-                À propos
+                {t("nav.about")}
               </Link>
             </li>
             <li>
               <Link to="/projects" className="hover:text-accent">
-                Projets
+                {t("nav.projects")}
               </Link>
             </li>
             <li>
               <Link to="/events" className="hover:text-accent">
-                Événements
+                {t("nav.events")}
               </Link>
             </li>
             <li>
               <Link to="/gallery" className="hover:text-accent">
-                Galerie
+                {t("nav.gallery")}
               </Link>
             </li>
             <li>
               <Link to="/join" className="hover:text-accent">
-                Rejoindre
+                {t("nav.join")}
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-display text-sm font-semibold">Contact</h3>
+          <h3 className="font-display text-sm font-semibold">{t("footer.contact")}</h3>
           <ul className="mt-4 space-y-2 text-sm text-night-muted">
             <li>
               <a href={`mailto:${club.email}`} className="hover:text-accent">
@@ -90,7 +93,7 @@ export function Footer() {
             <li>SUP'PTIC — Yaoundé & Buea</li>
             <li>
               <Link to="/contact" className="hover:text-accent">
-                Formulaire de contact
+                {t("footer.form")}
               </Link>
             </li>
           </ul>
@@ -99,8 +102,11 @@ export function Footer() {
 
       <div className="border-t border-night-muted/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-night-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {club.name}. Tous droits réservés.</p>
-          <p>Club étudiant reconnu par l'Administration SUP'PTIC et l'Association des Étudiants.</p>
+          <p>© {new Date().getFullYear()} {club.name}. {t("footer.rights")}</p>
+          <div className="flex items-center gap-3">
+            <p>{t("footer.legal")}</p>
+            <LangToggle inverted />
+          </div>
         </div>
       </div>
     </footer>

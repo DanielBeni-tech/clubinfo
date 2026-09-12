@@ -5,6 +5,7 @@ import { Partners } from "@/components/site/Partners";
 import { CTASection, PageHeader, SectionTitle } from "@/components/site/shared";
 import { bureau, objectives, poles } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { useLocale } from "@/lib/i18n";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import galleryJuioPrize from "@/assets/images/gallery/juio-prize.jpg";
 import galleryCollabGi from "@/assets/images/gallery/collab-club-gi.jpg";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/about")({
 });
 
 function About() {
+  const { locale, t } = useLocale();
   return (
     <div>
       <PageHeader
@@ -86,24 +88,24 @@ function About() {
       <section className="section-y bg-surface">
         <div className="mx-auto max-w-6xl px-4">
           <SectionTitle
-            eyebrow="Bureau"
-            title="L'équipe qui porte le Club"
-            lead="Le Bureau Exécutif représente les membres auprès de l'administration et coordonne la vie associative."
+            eyebrow={t("about.team.eyebrow")}
+            title={t("about.team.title")}
+            lead={t("about.team.lead")}
           />
-          <ul className="grid gap-6 sm:max-w-md">
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {bureau.map((member) => (
-              <li key={member.name}>
+              <li key={`${member.role}-${member.name}`}>
                 <article className="overflow-hidden rounded-xl border border-border bg-background shadow-[var(--shadow-card)]">
                   <img
                     src={member.image}
-                    alt={`${member.name}, ${member.role}`}
+                    alt={`${member.name}, ${locale === "en" ? member.roleEn : member.role}`}
                     width={900}
-                    height={900}
-                    className="aspect-4/5 w-full object-cover object-top"
+                    height={1200}
+                    className="aspect-3/4 w-full object-cover object-top"
                   />
-                  <div className="p-5">
-                    <h3 className="font-display text-lg">{member.name}</h3>
-                    <p className="mt-1 text-sm text-primary">{member.role}</p>
+                  <div className="p-4">
+                    <h3 className="font-display text-base">{member.name}</h3>
+                    <p className="mt-1 text-sm text-primary">{locale === "en" ? member.roleEn : member.role}</p>
                   </div>
                 </article>
               </li>
@@ -129,17 +131,26 @@ function About() {
       <section className="section-y bg-surface">
         <div className="mx-auto max-w-6xl px-4">
           <SectionTitle
-            eyebrow="Organisation"
-            title="Un bureau, trois pôles"
-            lead="Chaque membre rejoint un pôle en fonction de ses centres d'intérêt et de son temps disponible."
+            eyebrow={t("about.org.eyebrow")}
+            title={t("about.org.title")}
+            lead={t("about.org.lead")}
           />
           <ul className="grid gap-5 md:grid-cols-2">
             {poles.map((p) => (
               <li key={p.name}>
-                <Card className="h-full">
+                <Card className="h-full overflow-hidden py-0">
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt={locale === "en" ? p.nameEn : p.name}
+                      width={1280}
+                      height={960}
+                      className="aspect-4/3 w-full object-cover"
+                    />
+                  ) : null}
                   <CardContent className="p-6">
-                    <h3 className="font-display text-lg text-primary">{p.name}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{p.role}</p>
+                    <h3 className="font-display text-lg text-primary">{locale === "en" ? p.nameEn : p.name}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{locale === "en" ? p.roleEn : p.role}</p>
                   </CardContent>
                 </Card>
               </li>

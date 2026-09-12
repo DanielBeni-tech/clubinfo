@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Project } from "@/data/club";
+import { useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function PageHeader({ title, lead }: { title: string; lead: string }) {
@@ -52,6 +53,7 @@ export function StatusBadge({ status }: { status: Project["status"] }) {
 }
 
 export function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
+  const { t } = useLocale();
   const body = (
     <Card
       className={cn(
@@ -69,7 +71,7 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
       />
       <CardContent className="flex flex-col gap-3 p-6">
         <div className="flex flex-wrap items-center gap-2">
-          {featured && <Badge className="rounded-full bg-accent text-accent-foreground">Projet phare</Badge>}
+          {featured && <Badge className="rounded-full bg-accent text-accent-foreground">{t("card.featured")}</Badge>}
           <StatusBadge status={project.status} />
           <span className="text-xs text-muted-foreground">{project.domain}</span>
         </div>
@@ -90,7 +92,7 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
           {project.href ? (
             <Button asChild size="sm">
               <Link to="/projects/supone-ai">
-                Voir la fiche <ArrowRight className="size-4" />
+                {t("card.sheet")} <ArrowRight className="size-4" />
               </Link>
             </Button>
           ) : (
@@ -111,17 +113,15 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
 }
 
 export function CTASection() {
+  const { t } = useLocale();
   return (
     <section className="night-panel">
       <div className="mx-auto max-w-6xl px-4 py-16 text-center">
-        <h2 className="font-display text-2xl sm:text-3xl">Envie de construire avec nous&nbsp;?</h2>
-        <p className="mx-auto mt-4 max-w-xl text-sm text-night-muted">
-          Le Club est ouvert à tout étudiant régulièrement inscrit à SUP'PTIC, quel que soit son niveau technique.
-          Rejoins un pôle et participe à nos projets dès ce semestre.
-        </p>
+        <h2 className="font-display text-2xl sm:text-3xl">{t("cta.title")}</h2>
+        <p className="mx-auto mt-4 max-w-xl text-sm text-night-muted">{t("cta.lead")}</p>
         <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
           <Link to="/join">
-            Rejoindre le club <ArrowRight className="size-4" />
+            {t("cta.join")} <ArrowRight className="size-4" />
           </Link>
         </Button>
       </div>
