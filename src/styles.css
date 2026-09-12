@@ -161,5 +161,36 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.015em;
   }
 }
+
+@utility section-y {
+  padding-block: 4.5rem;
+}
+
+@utility night-panel {
+  background-color: var(--night);
+  color: var(--night-foreground);
+  background-image: radial-gradient(
+      circle at 15% 20%,
+      color-mix(in oklab, var(--accent) 18%, transparent),
+      transparent 45%
+    ),
+    radial-gradient(circle at 85% 0%, color-mix(in oklab, var(--primary) 45%, transparent), transparent 55%);
+}
+
+@utility dot-pattern {
+  background-image: radial-gradient(color-mix(in oklab, var(--accent) 35%, transparent) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
