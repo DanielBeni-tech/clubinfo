@@ -13,7 +13,7 @@ export const Route = createFileRoute("/projects/")({
       {
         name: "description",
         content:
-          "Les projets du Club Informatique SUP'PTIC : SUP'ONE AI, CyberVeille, Campus IoT et les réalisations de nos pôles.",
+          "Les projets du Club Informatique SUP'PTIC : SUP'ONE AI, Syntra, CyberVeille, Campus IoT et les réalisations de nos pôles.",
       },
       { property: "og:title", content: "Les projets du Club Informatique SUP'PTIC" },
       { property: "og:description", content: "SUP'ONE AI et les autres réalisations du Club." },
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,
 });
 
-const domains = ["Tous", "Intelligence Artificielle", "Cybersécurité", "Électronique & IoT"];
+const domains = ["Tous", "Intelligence Artificielle", "Développement logiciel", "Cybersécurité", "Électronique & IoT"];
 const statuses = ["Tous", "En cours", "Terminé"];
 
 function ProjectsPage() {

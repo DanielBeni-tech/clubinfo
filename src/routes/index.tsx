@@ -8,11 +8,12 @@ import {
   Network,
   Shield,
 } from "lucide-react";
-import heroBg from "@/assets/hero-bg.jpg";
+import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Partners } from "@/components/site/Partners";
+import { HeroSlideshow } from "@/components/site/HeroSlideshow";
+import { PartnerMarquee } from "@/components/site/PartnerMarquee";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
 import { club, events, expertise, gallery, projects, stats } from "@/data/club";
@@ -48,86 +49,88 @@ function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-night text-night-foreground">
-        <img
-          src={heroBg}
-          alt=""
-          aria-hidden="true"
-          width={1920}
-          height={1080}
-          className="absolute inset-0 size-full object-cover object-[center_30%]"
-        />
-        <div className="absolute inset-0 bg-linear-to-r from-night via-night/85 to-night/45" />
-        <div className="absolute inset-0 bg-night/25" />
-        <div className="relative mx-auto max-w-6xl px-4 py-24 lg:py-32">
-          <p className="animate-in fade-in slide-in-from-bottom-2 font-mono text-xs tracking-[0.25em] text-accent uppercase duration-700">
-            SUP'PTIC · Yaoundé
-          </p>
-          <h1 className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-3xl font-display text-4xl leading-tight duration-700 sm:text-5xl lg:text-6xl [animation-delay:80ms]">
-            {club.name}
-          </h1>
-          <p className="animate-in fade-in slide-in-from-bottom-3 mt-4 font-display text-lg text-accent duration-700 sm:text-xl [animation-delay:160ms]">
-            « {club.tagline} »
-          </p>
-          <p className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-2xl text-base text-night-muted duration-700 [animation-delay:240ms]">
-            Nous réunissons les étudiants passionnés de technologie autour de projets réels : intelligence
-            artificielle, développement, cybersécurité, réseaux et objets connectés. Le Club forme, expérimente et
-            livre — avec l'exigence d'une équipe tech professionnelle.
-          </p>
-          <div className="animate-in fade-in slide-in-from-bottom-3 mt-9 flex flex-col gap-3 duration-700 sm:flex-row [animation-delay:320ms]">
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link to="/about">Découvrir le club</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-night-muted/40 bg-transparent text-night-foreground hover:bg-night-foreground/10 hover:text-night-foreground"
-            >
-              <Link to="/projects">Nos projets</Link>
-            </Button>
-          </div>
-          <dl className="mt-14 grid grid-cols-2 gap-6 border-t border-night-muted/20 pt-8 sm:grid-cols-4">
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className="animate-in fade-in slide-in-from-bottom-2 duration-700"
-                style={{ animationDelay: `${400 + i * 80}ms` }}
-              >
-                <dt className="sr-only">{s.label}</dt>
-                <dd className="font-display text-2xl text-accent sm:text-3xl">{s.value}</dd>
-                <p className="mt-1 text-xs text-night-muted">{s.label}</p>
-              </div>
-            ))}
-          </dl>
+      <HeroSlideshow>
+        <p className="animate-in fade-in slide-in-from-bottom-2 font-mono text-xs tracking-[0.25em] text-accent uppercase duration-700">
+          SUP'PTIC · Yaoundé
+        </p>
+        <h1 className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-3xl font-display text-4xl leading-tight duration-700 sm:text-5xl lg:text-6xl [animation-delay:80ms]">
+          {club.name}
+        </h1>
+        <p className="animate-in fade-in slide-in-from-bottom-3 mt-4 font-display text-lg text-accent duration-700 sm:text-xl [animation-delay:160ms]">
+          « {club.tagline} »
+        </p>
+        <p className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-2xl text-base text-night-muted duration-700 [animation-delay:240ms]">
+          Nous réunissons les étudiants passionnés de technologie autour de projets réels : intelligence
+          artificielle, développement, cybersécurité, réseaux et objets connectés. Le Club forme, expérimente et
+          livre — avec l'exigence d'une équipe tech professionnelle.
+        </p>
+        <div className="animate-in fade-in slide-in-from-bottom-3 mt-9 flex flex-col gap-3 duration-700 sm:flex-row [animation-delay:320ms]">
+          <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Link to="/about">Découvrir le club</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-night-muted/40 bg-transparent text-night-foreground hover:bg-night-foreground/10 hover:text-night-foreground"
+          >
+            <Link to="/projects">Nos projets</Link>
+          </Button>
         </div>
-      </section>
+        <dl className="mt-14 grid grid-cols-2 gap-6 border-t border-night-muted/20 pt-8 sm:grid-cols-4">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="animate-in fade-in slide-in-from-bottom-2 duration-700"
+              style={{ animationDelay: `${400 + i * 80}ms` }}
+            >
+              <dt className="sr-only">{s.label}</dt>
+              <dd className="font-display text-2xl text-accent sm:text-3xl">{s.value}</dd>
+              <p className="mt-1 text-xs text-night-muted">{s.label}</p>
+            </div>
+          ))}
+        </dl>
+      </HeroSlideshow>
+      <PartnerMarquee />
 
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
-          <Reveal>
-            <SectionTitle
-              eyebrow="À propos"
-              title="Un club étudiant, une exigence professionnelle"
-              lead="Né au sein de SUP'PTIC, le Club Informatique rassemble des étudiants qui veulent apprendre en construisant. Nos pôles travaillent comme une petite structure tech : cadrage, développement, livraison et communication."
-              action={
-                <Button asChild variant="outline">
-                  <Link to="/about">
-                    En savoir plus <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-              }
-            />
-          </Reveal>
-          <ul className="grid gap-4 sm:grid-cols-3">
-            {["Apprendre par la pratique", "Partager entre pairs", "Livrer des projets utiles"].map((v, i) => (
-              <Reveal key={v} delay={i * 90}>
-                <li className="rounded-lg border border-border bg-secondary/50 p-5 font-display text-base">
-                  {v}
-                </li>
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <Reveal>
+                <SectionTitle
+                  eyebrow="À propos"
+                  title="Un club étudiant, une exigence professionnelle"
+                  lead="Né au sein de SUP'PTIC, le Club Informatique rassemble des étudiants qui veulent apprendre en construisant. Nos pôles travaillent comme une petite structure tech : cadrage, développement, livraison et communication."
+                  action={
+                    <Button asChild variant="outline">
+                      <Link to="/about">
+                        En savoir plus <ArrowRight className="size-4" />
+                      </Link>
+                    </Button>
+                  }
+                />
               </Reveal>
-            ))}
-          </ul>
+              <ul className="grid gap-4 sm:grid-cols-3">
+                {["Apprendre par la pratique", "Partager entre pairs", "Livrer des projets utiles"].map((v, i) => (
+                  <Reveal key={v} delay={i * 90}>
+                    <li className="rounded-lg border border-border bg-secondary/50 p-5 font-display text-base">
+                      {v}
+                    </li>
+                  </Reveal>
+                ))}
+              </ul>
+            </div>
+            <Reveal delay={80}>
+              <img
+                src={galleryGroup}
+                alt="Membres du Club Informatique SUP'PTIC réunis en photo de groupe"
+                width={1280}
+                height={960}
+                className="w-full rounded-xl border border-border object-cover"
+              />
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -210,7 +213,7 @@ function Home() {
             />
           </Reveal>
           <ul className="grid gap-5 md:grid-cols-3">
-            {events.slice(0, 3).map((e, i) => (
+            {events.filter((e) => e.upcoming).slice(0, 3).map((e, i) => (
               <Reveal key={e.title} delay={i * 90}>
                 <li>
                   <Card className="h-full">
@@ -263,24 +266,6 @@ function Home() {
               </Reveal>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-surface py-12">
-        <div className="mx-auto max-w-6xl px-4">
-          <Reveal>
-            <p className="text-center font-mono text-xs tracking-widest text-muted-foreground uppercase">
-              Partenaires
-            </p>
-            <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted-foreground">
-              SUP'PTIC, MINPOSTEL, CAMTEL, CAMPOST et Huawei.
-            </p>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="mt-8">
-              <Partners />
-            </div>
-          </Reveal>
         </div>
       </section>
 

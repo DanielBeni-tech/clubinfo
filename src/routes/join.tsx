@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/site/shared";
 import { club, joinForm, school } from "@/data/club";
+import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import { cn } from "@/lib/utils";
 
@@ -253,6 +254,13 @@ function JoinPage() {
           </Card>
 
           <aside className="grid h-fit gap-5 lg:sticky lg:top-24">
+            <img
+              src={galleryGroup}
+              alt="Rejoins les membres du Club Informatique SUP'PTIC"
+              width={1280}
+              height={960}
+              className="aspect-4/3 w-full rounded-xl border border-border object-cover object-[center_35%]"
+            />
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-primary">

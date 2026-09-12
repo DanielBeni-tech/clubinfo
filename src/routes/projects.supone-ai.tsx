@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Github, Globe } from "lucide-react";
-import projectSupone from "@/assets/project-supone.jpg";
-import galleryHackathon from "@/assets/gallery-hackathon.jpg";
+import projectSupone from "@/assets/images/projects/supone.jpg";
+import galleryMeeting from "@/assets/images/gallery/meeting.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -141,8 +141,8 @@ function SuponePage() {
               className="aspect-3/2 w-full rounded-lg border border-border object-cover"
             />
             <img
-              src={galleryHackathon}
-              alt="Membres du pôle Développement autour d'un ordinateur"
+              src={galleryMeeting}
+              alt="Réunion de travail du Club autour d'un projet logiciel"
               loading="lazy"
               width={1200}
               height={900}

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/events")({
   component: EventsPage,
 });
 
-const types = ["Tous", "Formation", "Conférence", "Hackathon", "Atelier", "Visite", "Collaboration"];
+const types = ["Tous", "Formation", "Conférence", "Hackathon", "Atelier", "Visite", "Collaboration", "Concours"];
 
 function EventsPage() {
   const [type, setType] = useState("Tous");

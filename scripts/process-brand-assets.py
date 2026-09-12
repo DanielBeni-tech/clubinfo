@@ -12,8 +12,8 @@ ROOT = Path("/home/daniel/clubinfo")
 PUBLIC = ROOT / "public"
 ASSETS = ROOT / "assets"
 BRAND = ROOT / "src" / "assets" / "brand"
-PHOTOS_SRC = ROOT / "src" / "assets" / "images"
-STOCK = ROOT / "src" / "assets"
+PHOTOS_SRC = ROOT / "src" / "assets" / "images" / "originals"
+IMAGES = ROOT / "src" / "assets" / "images"
 
 NAVY = (0, 27, 61, 255)
 BLUE = (0, 71, 173, 255)
@@ -251,17 +251,17 @@ def cut_ceiling(im: Image.Image, top: float = 0.22, bottom: float = 0.0) -> Imag
 
 def process_photos() -> None:
     jobs = [
-        ("IMG_2480.JPG.jpeg", STOCK / "hero-bg.jpg", 1920, 1080, 0.55, 86, 0.20),
-        ("IMG_1506.JPG.jpeg", STOCK / "project-supone.jpg", 1200, 800, 0.40, 86, 0.0),
-        ("IMG_2476.JPG.jpeg", STOCK / "project-cyber.jpg", 1200, 800, 0.70, 86, 0.26),
-        ("IMG_2477.JPG.jpeg", STOCK / "project-iot.jpg", 1200, 800, 0.62, 86, 0.22),
-        ("IMG_2478.JPG.jpeg", STOCK / "gallery-hackathon.jpg", 1200, 900, 0.55, 86, 0.16),
-        ("IMG_2476.JPG.jpeg", STOCK / "gallery-formation.jpg", 1200, 900, 0.75, 86, 0.24),
-        ("IMG_1506.JPG.jpeg", STOCK / "gallery-team.jpg", 1200, 900, 0.35, 86, 0.0),
-        ("IMG_2479.JPG.jpeg", STOCK / "gallery-conference.jpg", 1200, 900, 0.50, 86, 0.14),
-        ("IMG_2480.JPG.jpeg", STOCK / "gallery-talk.jpg", 1200, 900, 0.50, 86, 0.16),
-        ("IMG_2477.JPG.jpeg", STOCK / "gallery-speaker.jpg", 1200, 900, 0.60, 86, 0.20),
-        ("IMG_4218.PNG", STOCK / "president.jpg", 900, 900, 0.12, 88, 0.0),
+        ("IMG_2480.jpg", IMAGES / "hero" / "campus.jpg", 1920, 1080, 0.55, 86, 0.20),
+        ("IMG_1506.jpg", IMAGES / "projects" / "supone.jpg", 1200, 800, 0.40, 86, 0.0),
+        ("IMG_2476.jpg", IMAGES / "projects" / "cyberveille.jpg", 1200, 800, 0.70, 86, 0.26),
+        ("IMG_2477.jpg", IMAGES / "projects" / "campus-iot.jpg", 1200, 800, 0.62, 86, 0.22),
+        ("IMG_2478.jpg", IMAGES / "gallery" / "hackathon.jpg", 1200, 900, 0.55, 86, 0.16),
+        ("IMG_2476.jpg", IMAGES / "gallery" / "formation.jpg", 1200, 900, 0.75, 86, 0.24),
+        ("IMG_1506.jpg", IMAGES / "gallery" / "team.jpg", 1200, 900, 0.35, 86, 0.0),
+        ("IMG_2479.jpg", IMAGES / "gallery" / "conference.jpg", 1200, 900, 0.50, 86, 0.14),
+        ("IMG_2480.jpg", IMAGES / "gallery" / "talk.jpg", 1200, 900, 0.50, 86, 0.16),
+        ("IMG_2477.jpg", IMAGES / "gallery" / "speaker.jpg", 1200, 900, 0.60, 86, 0.20),
+        ("president.png", IMAGES / "people" / "president.jpg", 900, 900, 0.12, 88, 0.0),
     ]
     for src_name, dest, tw, th, bias, quality, ceiling in jobs:
         src = Image.open(PHOTOS_SRC / src_name).convert("RGB")

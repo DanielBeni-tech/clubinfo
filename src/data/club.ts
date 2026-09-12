@@ -1,19 +1,33 @@
-import projectSupone from "@/assets/project-supone.jpg";
-import projectCyber from "@/assets/project-cyber.jpg";
-import projectIot from "@/assets/project-iot.jpg";
-import galleryHackathon from "@/assets/gallery-hackathon.jpg";
-import galleryFormation from "@/assets/gallery-formation.jpg";
-import galleryTeam from "@/assets/gallery-team.jpg";
-import galleryConference from "@/assets/gallery-conference.jpg";
-import galleryTalk from "@/assets/gallery-talk.jpg";
-import gallerySpeaker from "@/assets/gallery-speaker.jpg";
-import president from "@/assets/president.jpg";
-import presidentPortrait from "@/assets/president-portrait.jpg";
-import logoSupptic from "@/assets/images/sup'ptic.jpeg";
-import logoMinpostel from "@/assets/images/minpostel.jpeg";
-import logoCamtel from "@/assets/images/Camtel.png";
-import logoCampost from "@/assets/images/campost.jpeg";
-import logoHuawei from "@/assets/images/huawei.jpeg";
+import projectSupone from "@/assets/images/projects/supone.jpg";
+import projectCyber from "@/assets/images/projects/cyberveille.jpg";
+import projectIot from "@/assets/images/projects/campus-iot.jpg";
+import galleryHackathon from "@/assets/images/gallery/hackathon.jpg";
+import galleryFormation from "@/assets/images/gallery/formation.jpg";
+import galleryTeam from "@/assets/images/gallery/team.jpg";
+import galleryConference from "@/assets/images/gallery/conference.jpg";
+import galleryTalk from "@/assets/images/gallery/talk.jpg";
+import gallerySpeaker from "@/assets/images/gallery/speaker.jpg";
+import galleryGroup from "@/assets/images/gallery/group.jpg";
+import galleryLab from "@/assets/images/gallery/lab.jpg";
+import galleryMeeting from "@/assets/images/gallery/meeting.jpg";
+import galleryCollabGi from "@/assets/images/gallery/collab-club-gi.jpg";
+import galleryCollabDelegation from "@/assets/images/gallery/collab-delegation.jpg";
+import galleryHandshake from "@/assets/images/gallery/collab-handshake.jpg";
+import galleryRackTeam from "@/assets/images/gallery/rack-team.jpg";
+import galleryJuioPrize from "@/assets/images/gallery/juio-prize.jpg";
+import galleryJuioWinners from "@/assets/images/gallery/juio-winners.jpg";
+import galleryJuioPitch from "@/assets/images/gallery/juio-pitch.jpg";
+import galleryJuioTalk from "@/assets/images/gallery/juio-talk.jpg";
+import galleryJuioLab from "@/assets/images/gallery/juio-lab.jpg";
+import galleryJuioHuddle from "@/assets/images/gallery/juio-huddle.jpg";
+import gallerySyntraPitch from "@/assets/images/gallery/syntra-pitch.jpg";
+import president from "@/assets/images/people/president.jpg";
+import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
+import logoSupptic from "@/assets/images/partners/supptic.jpeg";
+import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
+import logoCamtel from "@/assets/images/partners/camtel.png";
+import logoCampost from "@/assets/images/partners/campost.jpeg";
+import logoHuawei from "@/assets/images/partners/huawei.jpeg";
 
 export const club = {
   name: "Club Informatique SUP'PTIC",
@@ -112,6 +126,17 @@ export const projects: Project[] = [
     tags: ["ESP32", "LoRa", "MQTT", "Grafana"],
     image: projectIot,
   },
+  {
+    slug: "syntra",
+    name: "Syntra",
+    subtitle: "Le messager technique sécurisé",
+    summary:
+      "Messagerie d'entreprise en temps réel, présentée aux Journées universitaires de l'informatique 2026 : échanges sécurisés, markdown natif et prise en charge du code.",
+    status: "Terminé",
+    domain: "Développement logiciel",
+    tags: ["Temps réel", "Sécurité", "Messagerie"],
+    image: gallerySyntraPitch,
+  },
 ];
 
 export type ClubEvent = {
@@ -141,8 +166,18 @@ export const events: ClubEvent[] = [
     displayDate: "26 septembre 2026",
     type: "Formation",
     description: "Session pratique de 3 heures sur Python, pandas et les premiers modèles de classification.",
-    image: galleryFormation,
+    image: galleryLab,
     upcoming: true,
+  },
+  {
+    title: "Journées universitaires de l'informatique",
+    date: "2026-05-16",
+    displayDate: "Édition 2026",
+    type: "Concours",
+    description:
+      "Présentation des projets du Club, dont Syntra, et remise du Prix du meilleur projet (100 000 FCFA) avec le soutien de CAMPOST.",
+    image: galleryJuioPrize,
+    upcoming: false,
   },
   {
     title: "Conférence : l'IA souveraine en Afrique centrale",
@@ -177,7 +212,7 @@ export const events: ClubEvent[] = [
     displayDate: "2 mars 2026",
     type: "Collaboration",
     description: "Rencontre avec les clubs informatiques d'écoles partenaires autour de projets communs.",
-    image: galleryTeam,
+    image: galleryCollabGi,
     upcoming: false,
   },
 ];
@@ -189,6 +224,76 @@ export type GalleryItem = {
 };
 
 export const gallery: GalleryItem[] = [
+  {
+    src: galleryJuioPrize,
+    alt: "L'équipe du Club autour du Prix du meilleur projet aux Journées universitaires de l'informatique 2026",
+    category: "Événements",
+  },
+  {
+    src: galleryGroup,
+    alt: "Photo de groupe des membres du Club Informatique SUP'PTIC",
+    category: "Vie du club",
+  },
+  {
+    src: galleryJuioWinners,
+    alt: "Équipe lauréate du Prix du meilleur projet, chèque de 100 000 FCFA",
+    category: "Événements",
+  },
+  {
+    src: gallerySyntraPitch,
+    alt: "Présentation de Syntra, le messager technique sécurisé",
+    category: "Projets",
+  },
+  {
+    src: galleryJuioPitch,
+    alt: "Pitch projet devant l'amphithéâtre, écran et micros",
+    category: "Événements",
+  },
+  {
+    src: galleryJuioHuddle,
+    alt: "Travail en équipe autour d'un ordinateur pendant un hackathon",
+    category: "Projets",
+  },
+  {
+    src: galleryJuioTalk,
+    alt: "Présentation Impact social et humain en salle informatique",
+    category: "Formations",
+  },
+  {
+    src: galleryJuioLab,
+    alt: "Participants en salle informatique pendant une journée universitaire",
+    category: "Formations",
+  },
+  {
+    src: galleryCollabGi,
+    alt: "Rencontre entre le Club Informatique et un club partenaire",
+    category: "Événements",
+  },
+  {
+    src: galleryCollabDelegation,
+    alt: "Délégation du Club lors d'une rencontre inter-clubs",
+    category: "Événements",
+  },
+  {
+    src: galleryHandshake,
+    alt: "Poignée de main à l'issue d'une collaboration inter-clubs",
+    category: "Événements",
+  },
+  {
+    src: galleryMeeting,
+    alt: "Réunion de travail du Club autour d'une table, ordinateurs ouverts",
+    category: "Projets",
+  },
+  {
+    src: galleryLab,
+    alt: "Session en salle informatique : étudiants et encadrants",
+    category: "Formations",
+  },
+  {
+    src: galleryRackTeam,
+    alt: "Membres du Club devant une baie de télécommunications",
+    category: "Vie du club",
+  },
   {
     src: galleryFormation,
     alt: "Membres du Club en salle informatique pendant une session de formation",
@@ -260,6 +365,39 @@ export const objectives = [
   "Créer des ponts avec les entreprises et les communautés tech.",
   "Valoriser l'image technologique de SUP'PTIC.",
 ];
+
+export const heroSlides = [
+  {
+    src: galleryJuioPrize,
+    caption: "Prix du meilleur projet · JUIO 2026",
+    focus: "center 38%",
+  },
+  {
+    src: gallerySyntraPitch,
+    caption: "Syntra, pitch en hackathon",
+    focus: "center 22%",
+  },
+  {
+    src: galleryJuioWinners,
+    caption: "Lauréats · 100 000 FCFA",
+    focus: "center 42%",
+  },
+  {
+    src: galleryJuioPitch,
+    caption: "Présentation en amphithéâtre",
+    focus: "center 40%",
+  },
+  {
+    src: galleryJuioHuddle,
+    caption: "Équipe au travail pendant l'événement",
+    focus: "center 50%",
+  },
+  {
+    src: galleryGroup,
+    caption: "Le Club Informatique SUP'PTIC",
+    focus: "center 58%",
+  },
+] as const;
 
 export const stats = [
   { value: "2021", label: "Année de création" },

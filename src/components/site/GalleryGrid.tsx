@@ -14,7 +14,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
             <button
               type="button"
               onClick={() => setIndex(i)}
-              className="group block w-full overflow-hidden rounded-lg border border-border"
+              className="block w-full overflow-hidden rounded-lg border border-border"
               aria-label={`Agrandir : ${item.alt}`}
             >
               <img
@@ -23,7 +23,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 loading="lazy"
                 width={1200}
                 height={900}
-                className="aspect-4/3 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="aspect-4/3 w-full object-cover"
               />
             </button>
           </li>

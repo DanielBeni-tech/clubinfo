@@ -5,7 +5,9 @@ import { Partners } from "@/components/site/Partners";
 import { CTASection, PageHeader, SectionTitle } from "@/components/site/shared";
 import { bureau, objectives, poles } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
-import galleryTeam from "@/assets/gallery-team.jpg";
+import galleryGroup from "@/assets/images/gallery/group.jpg";
+import galleryJuioPrize from "@/assets/images/gallery/juio-prize.jpg";
+import galleryCollabGi from "@/assets/images/gallery/collab-club-gi.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -56,11 +58,27 @@ function About() {
             </p>
           </div>
           <img
-            src={galleryTeam}
-            alt="Membres du Club réunis autour d'un projet"
-            width={1200}
-            height={900}
+            src={galleryGroup}
+            alt="Membres du Club Informatique SUP'PTIC réunis en photo de groupe"
+            width={1280}
+            height={960}
             className="w-full rounded-xl border border-border object-cover shadow-[var(--shadow-card)]"
+          />
+        </div>
+        <div className="mx-auto mt-6 grid max-w-6xl gap-4 px-4 sm:grid-cols-2">
+          <img
+            src={galleryJuioPrize}
+            alt="Le Club aux Journées universitaires de l'informatique 2026, Prix du meilleur projet"
+            width={1280}
+            height={960}
+            className="aspect-4/3 w-full rounded-xl border border-border object-cover"
+          />
+          <img
+            src={galleryCollabGi}
+            alt="Rencontre entre le Club Informatique et un club partenaire"
+            width={1280}
+            height={960}
+            className="aspect-4/3 w-full rounded-xl border border-border object-cover"
           />
         </div>
       </section>

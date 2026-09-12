@@ -1,0 +1,19 @@
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.track {
+  animation: marquee 36s linear infinite;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}
