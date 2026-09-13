@@ -145,7 +145,7 @@ function JoinPage() {
                     <div className="grid gap-2">
                       <Label htmlFor="campus">Campus</Label>
                       <select
-                        id="campus"
+                        id="campus" name="campus"
                         required
                         value={campus}
                         onChange={(e) => onCampusChange(e.target.value as typeof campus)}
@@ -164,7 +164,7 @@ function JoinPage() {
                     <div className="grid gap-2">
                       <Label htmlFor="cycle">Cycle / diplôme</Label>
                       <select
-                        id="cycle"
+                        id="cycle" name="cycle"
                         required
                         value={cycle}
                         disabled={!campus}
@@ -185,7 +185,7 @@ function JoinPage() {
                   <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="regime">Régime</Label>
-                      <select key={`${cycle}-regime`} id="regime" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                      <select key={`${cycle}-regime`} id="regime" name="regime" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                         <option value="" disabled>
                           {cycle ? "Classique, alternance…" : "D'abord le cycle"}
                         </option>
@@ -198,7 +198,7 @@ function JoinPage() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="niveau">Niveau</Label>
-                      <select key={`${cycle}-niveau`} id="niveau" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                      <select key={`${cycle}-niveau`} id="niveau" name="niveau" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                         <option value="" disabled>
                           {cycle ? "Année en cours" : "D'abord le cycle"}
                         </option>
@@ -212,7 +212,7 @@ function JoinPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="option">Option / spécialité</Label>
-                    <select key={`${cycle}-option`} id="option" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                    <select key={`${cycle}-option`} id="option" name="option" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                       <option value="" disabled>
                         {cycle ? "IR, RT, RC, Management…" : "D'abord le cycle"}
                       </option>
@@ -228,7 +228,7 @@ function JoinPage() {
                 <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="pole">Pôle souhaité au Club</Label>
-                    <select id="pole" required defaultValue="" className={fieldClass}>
+                    <select id="pole" name="pole" required defaultValue="" className={fieldClass}>
                       <option value="" disabled>
                         Choisir un pôle
                       </option>
@@ -241,7 +241,7 @@ function JoinPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="domaine">Domaine d'intérêt principal</Label>
-                    <select id="domaine" required defaultValue="" className={fieldClass}>
+                    <select id="domaine" name="domaine" required defaultValue="" className={fieldClass}>
                       <option value="" disabled>
                         Choisir un domaine
                       </option>
