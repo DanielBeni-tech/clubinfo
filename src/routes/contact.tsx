@@ -78,31 +78,26 @@ function ContactPage() {
                   </Button>
                 </div>
               ) : (
-                <form
-                  className="grid gap-5"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSent(true);
-                  }}
-                >
+                <form className="grid gap-5" onSubmit={onSubmit}>
                   <div className="grid gap-2">
                     <Label htmlFor="c-name">Nom</Label>
-                    <Input id="c-name" required />
+                    <Input id="c-name" name="c-name" required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-email">Adresse e-mail</Label>
-                    <Input id="c-email" type="email" required />
+                    <Input id="c-email" name="c-email" type="email" required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-subject">Objet</Label>
-                    <Input id="c-subject" required placeholder="Partenariat, question, collaboration…" />
+                    <Input id="c-subject" name="c-subject" required placeholder="Partenariat, question, collaboration…" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-message">Message</Label>
-                    <Textarea id="c-message" rows={6} required />
+                    <Textarea id="c-message" name="c-message" rows={6} required />
                   </div>
-                  <Button type="submit" size="lg">
-                    Envoyer le message
+                  {error ? <p className="text-sm text-destructive">{error}</p> : null}
+                  <Button type="submit" size="lg" disabled={sending}>
+                    {sending ? "Envoi en cours…" : "Envoyer le message"}
                   </Button>
                 </form>
               )}
