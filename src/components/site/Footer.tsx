@@ -74,6 +74,11 @@ export function Footer() {
                 {t("nav.join")}
               </Link>
             </li>
+            <li>
+              <Link to="/statuts" className="hover:text-accent">
+                {t("nav.statuts")}
+              </Link>
+            </li>
           </ul>
         </div>
 

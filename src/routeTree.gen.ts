@@ -11,11 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as CharteRouteImport } from './routes/charte'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ReglementRouteImport } from './routes/reglement'
+import { Route as StatutsRouteImport } from './routes/statuts'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSuponeAiRouteImport } from './routes/projects.supone-ai'
 
@@ -27,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CharteRoute = CharteRouteImport.update({
+  id: '/charte',
+  path: '/charte',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -54,6 +62,16 @@ const ProjectsRoute = ProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReglementRoute = ReglementRouteImport.update({
+  id: '/reglement',
+  path: '/reglement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatutsRoute = StatutsRouteImport.update({
+  id: '/statuts',
+  path: '/statuts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -68,21 +86,27 @@ const ProjectsSuponeAiRoute = ProjectsSuponeAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
   '/projects': typeof ProjectsRouteWithChildren
+  '/reglement': typeof ReglementRoute
+  '/statuts': typeof StatutsRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
+  '/reglement': typeof ReglementRoute
+  '/statuts': typeof StatutsRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -90,11 +114,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
   '/projects': typeof ProjectsRouteWithChildren
+  '/reglement': typeof ReglementRoute
+  '/statuts': typeof StatutsRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -103,32 +130,41 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/charte'
     | '/contact'
     | '/events'
     | '/gallery'
     | '/join'
     | '/projects'
+    | '/reglement'
+    | '/statuts'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/charte'
     | '/contact'
     | '/events'
     | '/gallery'
     | '/join'
+    | '/reglement'
+    | '/statuts'
     | '/projects/supone-ai'
     | '/projects'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/charte'
     | '/contact'
     | '/events'
     | '/gallery'
     | '/join'
     | '/projects'
+    | '/reglement'
+    | '/statuts'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -136,11 +172,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CharteRoute: typeof CharteRoute
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
   GalleryRoute: typeof GalleryRoute
   JoinRoute: typeof JoinRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
+  ReglementRoute: typeof ReglementRoute
+  StatutsRoute: typeof StatutsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -157,6 +196,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/charte': {
+      id: '/charte'
+      path: '/charte'
+      fullPath: '/charte'
+      preLoaderRoute: typeof CharteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -194,6 +240,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reglement': {
+      id: '/reglement'
+      path: '/reglement'
+      fullPath: '/reglement'
+      preLoaderRoute: typeof ReglementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/statuts': {
+      id: '/statuts'
+      path: '/statuts'
+      fullPath: '/statuts'
+      preLoaderRoute: typeof StatutsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/'
@@ -228,11 +288,14 @@ const ProjectsRouteWithChildren = ProjectsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CharteRoute: CharteRoute,
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
   GalleryRoute: GalleryRoute,
   JoinRoute: JoinRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
+  ReglementRoute: ReglementRoute,
+  StatutsRoute: StatutsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

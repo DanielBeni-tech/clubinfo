@@ -18,6 +18,7 @@ export function Navbar() {
     { to: "/events", label: t("nav.events") },
     { to: "/gallery", label: t("nav.gallery") },
     { to: "/contact", label: t("nav.contact") },
+    { to: "/statuts", label: t("nav.statuts") },
   ] as const;
 
   useEffect(() => {

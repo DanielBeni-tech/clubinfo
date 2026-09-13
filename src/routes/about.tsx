@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Partners } from "@/components/site/Partners";
 import { CTASection, PageHeader, SectionTitle } from "@/components/site/shared";
@@ -114,9 +115,18 @@ function About() {
         </div>
       </section>
 
-      <section className="section-y">
-        <div className="mx-auto max-w-6xl px-4">
-          <SectionTitle eyebrow="Charte" title="Nos cinq objectifs" />
+      <section className="section-y">        <div className="mx-auto max-w-6xl px-4">
+          <SectionTitle
+            eyebrow="Charte"
+            title="Nos cinq objectifs"
+            action={
+              <Button asChild variant="outline" size="sm">
+                <Link to="/statuts">
+                  Statuts du Club <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            }
+          />
           <ul className="grid gap-4 sm:grid-cols-2">
             {objectives.map((o) => (
               <li key={o} className="flex gap-3 rounded-lg border border-border bg-background p-5">
