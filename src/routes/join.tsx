@@ -126,16 +126,16 @@ function JoinPage() {
               <form className="grid gap-5" onSubmit={onSubmit}>
                 <div className="grid gap-2">
                   <Label htmlFor="name">Nom et prénom</Label>
-                  <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
+                  <Input id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2 sm:gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="email">Adresse e-mail</Label>
-                    <Input id="email" type="email" required placeholder="prenom.nom@gmail.com" />
+                    <Input id="email" name="email" type="email" required placeholder="prenom.nom@gmail.com" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone">Téléphone (WhatsApp)</Label>
-                    <Input id="phone" type="tel" required placeholder="+237 6XX XX XX XX" />
+                    <Input id="phone" name="phone" type="tel" required placeholder="+237 6XX XX XX XX" />
                   </div>
                 </div>
 
@@ -256,12 +256,12 @@ function JoinPage() {
 
                 <div className="grid gap-2">
                   <Label htmlFor="skills">Compétences déjà acquises (facultatif)</Label>
-                  <Input id="skills" placeholder="Ex. Python, réseaux, Cisco, montage…" />
+                  <Input id="skills" name="skills" placeholder="Ex. Python, réseaux, Cisco, montage…" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="motivation">Motivation (facultatif)</Label>
                   <Textarea
-                    id="motivation"
+                    id="motivation" name="motivation"
                     rows={4}
                     placeholder="Ce que tu aimerais apprendre ou construire avec le Club…"
                   />
