@@ -1,4 +1,4 @@
-const siteUrl = String(import.meta.env.VITE_SITE_URL ?? "").replace(/\/$/, "");
+const siteUrl = String(import.meta.env["VITE_SITE_URL"] ?? "").replace(/\/$/, "");
 const ogImage = siteUrl ? `${siteUrl}/og-image.jpg` : "/og-image.jpg";
 
 export const brandHeadLinks = [
