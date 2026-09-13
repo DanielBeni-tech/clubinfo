@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { CheckCircle2, ExternalLink, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/site/shared";
 import { club } from "@/data/club";
+import { saveMessage } from "@/lib/supabase";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/contact")({
@@ -30,6 +31,29 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setSending(true);
+    const fd = new FormData(e.currentTarget);
+    const val = (id: string) => String(fd.get(id) ?? "").trim();
+    try {
+      await saveMessage({
+        nom: val("c-name"),
+        email: val("c-email"),
+        sujet: val("c-subject"),
+        message: val("c-message"),
+      });
+      setSent(true);
+    } catch {
+      setError("L'envoi a échoué. Vérifie ta connexion et réessaie.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <div>
