@@ -17,7 +17,7 @@ export function PartnerMarquee() {
       <div className="relative">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-background to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-background to-transparent" />
-        <ul className={`${styles.track} flex w-max items-end gap-16 px-8 py-7`}>
+        <ul className={`${styles["track"]} flex w-max items-end gap-16 px-8 py-7`}>
           {loop.map((partner, i) => (
             <li key={`${partner.name}-${i}`} className="flex w-40 shrink-0 flex-col items-center gap-2">
               {partner.logo ? (

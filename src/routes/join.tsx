@@ -10,6 +10,7 @@ import { PageHeader } from "@/components/site/shared";
 import { club, joinForm, school } from "@/data/club";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { saveCandidature } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/join")({
@@ -35,6 +36,8 @@ const fieldClass =
 
 function JoinPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [campus, setCampus] = useState<(typeof joinForm.campuses)[number] | "">("");
   const [cycle, setCycle] = useState("");
@@ -54,9 +57,33 @@ function JoinPage() {
     setCycle("");
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSending(true);
+    const fd = new FormData(e.currentTarget);
+    const val = (id: string) => String(fd.get(id) ?? "").trim();
+    try {
+      await saveCandidature({
+        nom: val("name"),
+        email: val("email"),
+        telephone: val("phone"),
+        campus: val("campus"),
+        cycle: val("cycle"),
+        regime: val("regime"),
+        niveau: val("niveau"),
+        option: val("option"),
+        pole: val("pole"),
+        domaine: val("domaine"),
+        competences: val("skills") || null,
+        motivation: val("motivation") || null,
+      });
+      setSubmitted(true);
+    } catch {
+      setError("L'envoi a échoué. Vérifie ta connexion et réessaie.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (submitted) {
@@ -99,16 +126,16 @@ function JoinPage() {
               <form className="grid gap-5" onSubmit={onSubmit}>
                 <div className="grid gap-2">
                   <Label htmlFor="name">Nom et prénom</Label>
-                  <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
+                  <Input id="name" name="name" required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2 sm:gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="email">Adresse e-mail</Label>
-                    <Input id="email" type="email" required placeholder="prenom.nom@gmail.com" />
+                    <Input id="email" name="email" type="email" required placeholder="prenom.nom@gmail.com" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="phone">Téléphone (WhatsApp)</Label>
-                    <Input id="phone" type="tel" required placeholder="+237 6XX XX XX XX" />
+                    <Input id="phone" name="phone" type="tel" required placeholder="+237 6XX XX XX XX" />
                   </div>
                 </div>
 
@@ -118,7 +145,7 @@ function JoinPage() {
                     <div className="grid gap-2">
                       <Label htmlFor="campus">Campus</Label>
                       <select
-                        id="campus"
+                        id="campus" name="campus"
                         required
                         value={campus}
                         onChange={(e) => onCampusChange(e.target.value as typeof campus)}
@@ -137,7 +164,7 @@ function JoinPage() {
                     <div className="grid gap-2">
                       <Label htmlFor="cycle">Cycle / diplôme</Label>
                       <select
-                        id="cycle"
+                        id="cycle" name="cycle"
                         required
                         value={cycle}
                         disabled={!campus}
@@ -158,7 +185,7 @@ function JoinPage() {
                   <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="regime">Régime</Label>
-                      <select key={`${cycle}-regime`} id="regime" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                      <select key={`${cycle}-regime`} id="regime" name="regime" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                         <option value="" disabled>
                           {cycle ? "Classique, alternance…" : "D'abord le cycle"}
                         </option>
@@ -171,7 +198,7 @@ function JoinPage() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="niveau">Niveau</Label>
-                      <select key={`${cycle}-niveau`} id="niveau" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                      <select key={`${cycle}-niveau`} id="niveau" name="niveau" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                         <option value="" disabled>
                           {cycle ? "Année en cours" : "D'abord le cycle"}
                         </option>
@@ -185,7 +212,7 @@ function JoinPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="option">Option / spécialité</Label>
-                    <select key={`${cycle}-option`} id="option" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
+                    <select key={`${cycle}-option`} id="option" name="option" required disabled={!cycle} defaultValue="" className={cn(fieldClass, !cycle && "opacity-60")}>
                       <option value="" disabled>
                         {cycle ? "IR, RT, RC, Management…" : "D'abord le cycle"}
                       </option>
@@ -201,7 +228,7 @@ function JoinPage() {
                 <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="pole">Pôle souhaité au Club</Label>
-                    <select id="pole" required defaultValue="" className={fieldClass}>
+                    <select id="pole" name="pole" required defaultValue="" className={fieldClass}>
                       <option value="" disabled>
                         Choisir un pôle
                       </option>
@@ -214,7 +241,7 @@ function JoinPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="domaine">Domaine d'intérêt principal</Label>
-                    <select id="domaine" required defaultValue="" className={fieldClass}>
+                    <select id="domaine" name="domaine" required defaultValue="" className={fieldClass}>
                       <option value="" disabled>
                         Choisir un domaine
                       </option>
@@ -229,18 +256,19 @@ function JoinPage() {
 
                 <div className="grid gap-2">
                   <Label htmlFor="skills">Compétences déjà acquises (facultatif)</Label>
-                  <Input id="skills" placeholder="Ex. Python, réseaux, Cisco, montage…" />
+                  <Input id="skills" name="skills" placeholder="Ex. Python, réseaux, Cisco, montage…" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="motivation">Motivation (facultatif)</Label>
                   <Textarea
-                    id="motivation"
+                    id="motivation" name="motivation"
                     rows={4}
                     placeholder="Ce que tu aimerais apprendre ou construire avec le Club…"
                   />
                 </div>
-                <Button type="submit" size="lg">
-                  Envoyer ma candidature
+                {error ? <p className="text-sm text-destructive">{error}</p> : null}
+                <Button type="submit" size="lg" disabled={sending}>
+                  {sending ? "Envoi en cours…" : "Envoyer ma candidature"}
                 </Button>
                 <p className="text-xs text-muted-foreground">
                   Les informations servent uniquement au traitement de la candidature par le Pôle Communication (

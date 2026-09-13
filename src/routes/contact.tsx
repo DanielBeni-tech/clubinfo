@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { CheckCircle2, ExternalLink, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/site/shared";
 import { club } from "@/data/club";
+import { saveMessage } from "@/lib/supabase";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/contact")({
@@ -30,6 +31,29 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setSending(true);
+    const fd = new FormData(e.currentTarget);
+    const val = (id: string) => String(fd.get(id) ?? "").trim();
+    try {
+      await saveMessage({
+        nom: val("c-name"),
+        email: val("c-email"),
+        sujet: val("c-subject"),
+        message: val("c-message"),
+      });
+      setSent(true);
+    } catch {
+      setError("L'envoi a échoué. Vérifie ta connexion et réessaie.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <div>
@@ -54,31 +78,26 @@ function ContactPage() {
                   </Button>
                 </div>
               ) : (
-                <form
-                  className="grid gap-5"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSent(true);
-                  }}
-                >
+                <form className="grid gap-5" onSubmit={onSubmit}>
                   <div className="grid gap-2">
                     <Label htmlFor="c-name">Nom</Label>
-                    <Input id="c-name" required />
+                    <Input id="c-name" name="c-name" required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-email">Adresse e-mail</Label>
-                    <Input id="c-email" type="email" required />
+                    <Input id="c-email" name="c-email" type="email" required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-subject">Objet</Label>
-                    <Input id="c-subject" required placeholder="Partenariat, question, collaboration…" />
+                    <Input id="c-subject" name="c-subject" required placeholder="Partenariat, question, collaboration…" />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="c-message">Message</Label>
-                    <Textarea id="c-message" rows={6} required />
+                    <Textarea id="c-message" name="c-message" rows={6} required />
                   </div>
-                  <Button type="submit" size="lg">
-                    Envoyer le message
+                  {error ? <p className="text-sm text-destructive">{error}</p> : null}
+                  <Button type="submit" size="lg" disabled={sending}>
+                    {sending ? "Envoi en cours…" : "Envoyer le message"}
                   </Button>
                 </form>
               )}
