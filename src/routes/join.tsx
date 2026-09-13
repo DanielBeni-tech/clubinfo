@@ -266,8 +266,9 @@ function JoinPage() {
                     placeholder="Ce que tu aimerais apprendre ou construire avec le Club…"
                   />
                 </div>
-                <Button type="submit" size="lg">
-                  Envoyer ma candidature
+                {error ? <p className="text-sm text-destructive">{error}</p> : null}
+                <Button type="submit" size="lg" disabled={sending}>
+                  {sending ? "Envoi en cours…" : "Envoyer ma candidature"}
                 </Button>
                 <p className="text-xs text-muted-foreground">
                   Les informations servent uniquement au traitement de la candidature par le Pôle Communication (
