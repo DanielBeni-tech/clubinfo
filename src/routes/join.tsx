@@ -10,6 +10,7 @@ import { PageHeader } from "@/components/site/shared";
 import { club, joinForm, school } from "@/data/club";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { saveCandidature } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/join")({
@@ -35,6 +36,8 @@ const fieldClass =
 
 function JoinPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [campus, setCampus] = useState<(typeof joinForm.campuses)[number] | "">("");
   const [cycle, setCycle] = useState("");
@@ -54,9 +57,33 @@ function JoinPage() {
     setCycle("");
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSending(true);
+    const fd = new FormData(e.currentTarget);
+    const val = (id: string) => String(fd.get(id) ?? "").trim();
+    try {
+      await saveCandidature({
+        nom: val("name"),
+        email: val("email"),
+        telephone: val("phone"),
+        campus: val("campus"),
+        cycle: val("cycle"),
+        regime: val("regime"),
+        niveau: val("niveau"),
+        option: val("option"),
+        pole: val("pole"),
+        domaine: val("domaine"),
+        competences: val("skills") || null,
+        motivation: val("motivation") || null,
+      });
+      setSubmitted(true);
+    } catch {
+      setError("L'envoi a échoué. Vérifie ta connexion et réessaie.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (submitted) {
