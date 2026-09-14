@@ -21,6 +21,9 @@ import galleryJuioTalk from "@/assets/images/gallery/juio-talk.jpg";
 import galleryJuioLab from "@/assets/images/gallery/juio-lab.jpg";
 import galleryJuioHuddle from "@/assets/images/gallery/juio-huddle.jpg";
 import gallerySyntraPitch from "@/assets/images/gallery/syntra-pitch.jpg";
+import galleryGalerie1 from "@/assets/images/gallery/galerie-1.jpg";
+import galleryGalerie2 from "@/assets/images/gallery/galerie-2.jpg";
+import galleryGalerie3 from "@/assets/images/gallery/galerie-3.jpg";
 import president from "@/assets/images/people/president.jpg";
 import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
 import memberPolo from "@/assets/images/people/member-polo.jpg";
@@ -30,6 +33,7 @@ import memberEvinaMbahoEric from "@/assets/images/people/evina-mbaho-eric.jpg";
 import memberOlamaVictoire from "@/assets/images/people/olama-victoire.jpg";
 import memberDanielBenny from "@/assets/images/people/daniel-benny.jpg";
 import memberFowaMichelleRosee from "@/assets/images/people/fowa-michelle-rosee.jpg";
+import memberMbousekeAnge from "@/assets/images/people/mbouseke-ange.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
@@ -293,16 +297,16 @@ export const events: ClubEvent[] = [
     upcoming: true,
   },
   {
-    title: "Portfolio Challenge",
-    titleEn: "Portfolio Challenge",
+    title: "SUP'ONE Challenge",
+    titleEn: "SUP'ONE Challenge",
     date: "",
     displayDate: "Date à confirmer",
     displayDateEn: "Date to be confirmed",
     type: "Concours",
     description:
-      "Un challenge pour mettre en valeur les portfolios, les compétences et les projets des membres du Club.",
+      "Un challenge pour mettre en valeur les compétences et les projets des membres du club et de l'ensemble de la communauté SUP’PTIC.",
     descriptionEn:
-      "A challenge to showcase Club members' portfolios, skills and projects.",
+      "A challenge to highlight the skills and projects of club members and the wider SUP’PTIC community.",
     image: galleryHackathon,
     upcoming: true,
   },
@@ -498,6 +502,24 @@ export const gallery: GalleryItem[] = [
     altEn: "MESSI OVAH FRED, president of the SUP'PTIC Computer Club",
     category: "Vie du club",
   },
+  {
+    src: galleryGalerie1,
+    alt: "Galerie 1 — Moments du Club Informatique SUP'PTIC",
+    altEn: "Gallery 1 — Moments from the SUP'PTIC Computer Club",
+    category: "Vie du club",
+  },
+  {
+    src: galleryGalerie2,
+    alt: "Galerie 2 — Moments du Club Informatique SUP'PTIC",
+    altEn: "Gallery 2 — Moments from the SUP'PTIC Computer Club",
+    category: "Vie du club",
+  },
+  {
+    src: galleryGalerie3,
+    alt: "Galerie 3 — Moments du Club Informatique SUP'PTIC",
+    altEn: "Gallery 3 — Moments from the SUP'PTIC Computer Club",
+    category: "Vie du club",
+  },
 ];
 
 export const bureau = [
@@ -539,9 +561,15 @@ export const bureau = [
   },
   {
     name: "NJIMONGBA ABDOU",
-    role: "Trésorier",
-    roleEn: "Treasurer",
+    role: "Chef Pôle Innovation Projet",
+    roleEn: "Head of Innovation & Projects",
     image: memberBlackTee,
+  },
+  {
+    name: "MBOUSEKE ANGE",
+    role: "Trésorière IT",
+    roleEn: "IT Treasurer",
+    image: memberMbousekeAnge,
   },
   {
     name: "DANIEL BENI",
