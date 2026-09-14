@@ -237,6 +237,7 @@ const fr = {
   "events.type.Visite": "Visite",
   "events.type.Collaboration": "Collaboration",
   "events.type.Concours": "Concours",
+  "events.type.Présentation": "Présentation",
   "gallery.title": "Galerie",
   "gallery.lead":
     "Les moments qui font le Club : sessions de travail, formations, hackathons, conférences et rencontres.",
@@ -518,6 +519,7 @@ const en: { [K in keyof typeof fr]: string } = {
   "events.type.Visite": "Visit",
   "events.type.Collaboration": "Collaboration",
   "events.type.Concours": "Contest",
+  "events.type.Présentation": "Presentation",
   "gallery.title": "Gallery",
   "gallery.lead":
     "The moments that make the Club: work sessions, training, hackathons, talks and meet-ups.",

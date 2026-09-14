@@ -1,6 +1,9 @@
-import projectSupone from "@/assets/images/projects/supone.jpg";
+import projectSupone from "@/assets/images/projects/supone.jpeg";
 import projectCyber from "@/assets/images/projects/cyberveille.jpg";
 import projectIot from "@/assets/images/projects/campus-iot.jpg";
+import projectLekki from "@/assets/images/projects/lekki.jpeg";
+import projectShopkamer from "@/assets/images/projects/shopkamer.jpeg";
+import projectSyntra from "@/assets/images/projects/syntra.jpeg";
 import galleryHackathon from "@/assets/images/gallery/hackathon.jpg";
 import galleryFormation from "@/assets/images/gallery/formation.jpg";
 import galleryTeam from "@/assets/images/gallery/team.jpg";
@@ -34,12 +37,16 @@ import memberOlamaVictoire from "@/assets/images/people/olama-victoire.jpg";
 import memberDanielBenny from "@/assets/images/people/daniel-benny.jpg";
 import memberFowaMichelleRosee from "@/assets/images/people/fowa-michelle-rosee.jpg";
 import memberMbousekeAnge from "@/assets/images/people/mbouseke-ange.jpg";
+import chargeact from "@/assets/images/people/chargeact.jpg";
+import vicepr from "@/assets/images/people/vicepr.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
 import logoCampost from "@/assets/images/partners/campost.jpeg";
 import logoHuawei from "@/assets/images/partners/huawei.jpeg";
+
 import type { L10n } from "@/lib/locale-text";
+
 
 export const club = {
   name: "Club Informatique SUP'PTIC",
@@ -163,7 +170,7 @@ export const projects: Project[] = [
     domain: "Intelligence artificielle & données",
     domainEn: "Artificial intelligence & data",
     tags: ["React", "FastAPI", "PyTorch", "PostgreSQL", "Supabase"],
-    image: projectSupone,
+    image: projectIot,
     github: "https://github.com/Ruvaifa/campusflow",
     detailedDescription: "CampusFlow unifie des sources de données de campus pour fournir une résolution d'entités en temps réel, une analyse spatiale prédictive et une détection d'anomalies.",
     approach: "La plateforme combine plusieurs modèles d'apprentissage automatique et des données issues des cartes, du WiFi, de la vidéosurveillance et des réservations de laboratoire.",
@@ -182,7 +189,7 @@ export const projects: Project[] = [
     domain: "Développement logiciel",
     domainEn: "Software development",
     tags: ["FastAPI", "React", "SQLite", "LangChain", "Gemini"],
-    image: projectSupone,
+    image: projectLekki,
     github: "https://github.com/nkoumougrinnel/Lekki",
     detailedDescription: "Lekki Wiki associe une gestion documentaire Markdown-first à un assistant IA qui répond à partir du contenu de l'organisation et cite ses sources.",
     approach: "Les documents sont découpés et indexés pour permettre une recherche plein texte et sémantique, avec plusieurs fournisseurs LLM en repli automatique.",
@@ -220,7 +227,7 @@ export const projects: Project[] = [
     domain: "Développement logiciel",
     domainEn: "Software development",
     tags: ["HTML", "CSS", "JavaScript", "PHP", "SQL"],
-    image: projectSupone,
+    image: projectShopkamer,
     github: "https://github.com/nkoumougrinnel/ShopKamer",
     detailedDescription: "ShopKamer est une plateforme e-commerce développée pendant le premier atelier du Club.",
     approach: "Le projet accompagne les débutants à travers la conception d'une interface, la gestion des produits et la persistance des données.",
@@ -258,7 +265,7 @@ export const projects: Project[] = [
     domain: "Développement logiciel",
     domainEn: "Software development",
     tags: ["React", "NestJS", "Socket.IO", "MongoDB"],
-    image: gallerySyntraPitch,
+    image: projectSyntra,
     github: "https://github.com/DanielBeni-tech/CommHQ",
   },
 ];
@@ -533,7 +540,7 @@ export const bureau = [
     name: "NKOUMOU GERMAIN",
     role: "Vice-président",
     roleEn: "Vice President",
-    image: memberPolo,
+    image: vicepr,
   },
   {
     name: "EVINA MBAHO ERIC",
@@ -576,6 +583,12 @@ export const bureau = [
     role: "Conseiller spécial",
     roleEn: "Special Advisor",
     image: memberDanielBenny,
+  },
+  {
+    name: "Soundjock Ndzana Marie",
+    role: "Conseiller spécial",
+    roleEn: "Special Advisor",
+    image: chargeact,
   },
 ];
 

@@ -114,9 +114,9 @@ function EventList({
                 <CardContent className="p-6">
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge className="rounded-full">{t(`events.type.${e.type}` as MessageKey)}</Badge>
-                    <span className="text-xs text-muted-foreground">
+                    <Badge variant="secondary" className="rounded-full">
                       {locale === "en" ? e.displayDateEn : e.displayDate}
-                    </span>
+                    </Badge>
                   </div>
                   <h3 className="mt-3 font-display text-xl">{locale === "en" ? e.titleEn : e.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
