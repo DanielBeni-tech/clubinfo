@@ -5,6 +5,7 @@ import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { CTASection, PageHeader } from "@/components/site/shared";
 import { gallery } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { useLocale, type MessageKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -27,10 +28,11 @@ export const Route = createFileRoute("/gallery")({
   component: GalleryPage,
 });
 
-const categories = ["Toutes", "Événements", "Formations", "Projets", "Vie du club"];
+const categories = ["Toutes", "Événements", "Formations", "Projets", "Vie du club"] as const;
 
 function GalleryPage() {
-  const [category, setCategory] = useState("Toutes");
+  const { t } = useLocale();
+  const [category, setCategory] = useState<(typeof categories)[number]>("Toutes");
   const items = useMemo(
     () => gallery.filter((g) => category === "Toutes" || g.category === category),
     [category],
@@ -38,10 +40,7 @@ function GalleryPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Galerie"
-        lead="Les moments qui font le Club : sessions de travail, formations, hackathons, conférences et rencontres entre membres."
-      />
+      <PageHeader title={t("gallery.title")} lead={t("gallery.lead")} />
 
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
@@ -54,7 +53,7 @@ function GalleryPage() {
                 className="rounded-full"
                 onClick={() => setCategory(c)}
               >
-                {c}
+                {t(`gallery.cat.${c}` as MessageKey)}
               </Button>
             ))}
           </div>

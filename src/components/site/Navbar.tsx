@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogIn, Menu, X, LogOut, ShieldCheck } from "lucide-react";
+import { Menu, X, LogOut, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/Logo";
 import { LangToggle } from "@/components/site/LangToggle";
@@ -91,7 +91,7 @@ export function Navbar() {
               >
                 <Link to="/admin/dashboard">
                   <ShieldCheck className="mr-1.5 size-3.5" />
-                  Espace Bureau
+                  {t("nav.bureau")}
                 </Link>
               </Button>
               <span className="hidden sm:inline text-xs text-muted-foreground">{user.email}</span>
@@ -102,28 +102,13 @@ export function Navbar() {
                 className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary"
               >
                 <LogOut className="mr-1.5 size-3.5" />
-                Déconnexion
+                {t("nav.logout")}
               </Button>
             </>
           )}
-          {!loading && !user && (
-            <>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary"
-              >
-                <Link to="/login">
-                  <LogIn className="mr-1.5 size-3.5" />
-                  {t("nav.login")}
-                </Link>
-              </Button>
-              <Button asChild size="sm" className="hidden sm:inline-flex text-xs font-semibold shadow-xs">
-                <Link to="/join">{t("nav.join")}</Link>
-              </Button>
-            </>
-          )}
+          <Button asChild size="sm" className="hidden sm:inline-flex text-xs font-semibold shadow-xs">
+            <Link to="/join">{t("nav.join")}</Link>
+          </Button>
           <button
             type="button"
             aria-label={open ? t("nav.close") : t("nav.menu")}
@@ -153,7 +138,7 @@ export function Navbar() {
             ))}
             <li className="flex flex-col gap-2.5 pt-3 border-t border-border">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-muted-foreground">Langue</span>
+                <span className="text-xs font-medium text-muted-foreground">{t("nav.language")}</span>
                 <LangToggle />
               </div>
               {!loading && user && user.email === "adminclub@supptic.cm" && (
@@ -168,7 +153,7 @@ export function Navbar() {
                   >
                     <Link to="/admin/dashboard">
                       <ShieldCheck className="mr-1.5 size-3.5" />
-                      Espace Bureau
+                      {t("nav.bureau")}
                     </Link>
                   </Button>
                   <Button
@@ -181,25 +166,15 @@ export function Navbar() {
                     }}
                   >
                     <LogOut className="mr-1.5 size-3.5" />
-                    Déconnexion
+                    {t("nav.logout")}
                   </Button>
                 </div>
               )}
-              {!loading && !user && (
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  <Button asChild variant="outline" size="sm" className="w-full text-xs">
-                    <Link to="/login" onClick={() => setOpen(false)}>
-                      <LogIn className="mr-1.5 size-3.5" />
-                      {t("nav.login")}
-                    </Link>
-                  </Button>
-                  <Button asChild size="sm" className="w-full text-xs font-semibold">
-                    <Link to="/join" onClick={() => setOpen(false)}>
-                      {t("nav.joinClub")}
-                    </Link>
-                  </Button>
-                </div>
-              )}
+              <Button asChild size="sm" className="w-full text-xs font-semibold">
+                <Link to="/join" onClick={() => setOpen(false)}>
+                  {t("nav.joinClub")}
+                </Link>
+              </Button>
             </li>
           </ul>
         </div>

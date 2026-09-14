@@ -36,34 +36,19 @@ function About() {
   const { locale, t } = useLocale();
   return (
     <div>
-      <PageHeader
-        title="À propos du Club"
-        lead="Le Club Informatique de SUP'PTIC est une association étudiante qui fédère les passionnés du numérique autour de la formation, de l'expérimentation et de projets livrés."
-      />
+      <PageHeader title={t("about.header.title")} lead={t("about.header.lead")} />
 
       <section className="section-y">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-2">
           <div>
-            <h2 className="font-display text-2xl">Notre histoire et notre mission</h2>
-            <p className="mt-4 text-muted-foreground">
-              Créé par des étudiants de SUP'PTIC, le Club est né d'un constat simple : les
-              compétences techniques se construisent en pratiquant, ensemble, sur des sujets réels.
-              Ce qui a commencé comme un groupe de travail informel est devenu une structure
-              organisée, dotée d'une charte, d'un bureau et de pôles opérationnels.
-            </p>
-            <p className="mt-4 text-muted-foreground">
-              Notre mission est de donner à chaque étudiant de l'école un espace où apprendre,
-              expérimenter et contribuer — de la première ligne de code à la mise en production d'un
-              projet utile à la communauté SUP'PTIC.
-            </p>
-            <p className="mt-4 text-muted-foreground">
-              Nos valeurs : la rigueur technique, le partage entre pairs, l'ouverture à tous les
-              niveaux et l'engagement au service de l'école.
-            </p>
+            <h2 className="font-display text-2xl">{t("about.story.title")}</h2>
+            <p className="mt-4 text-muted-foreground">{t("about.story.p1")}</p>
+            <p className="mt-4 text-muted-foreground">{t("about.story.p2")}</p>
+            <p className="mt-4 text-muted-foreground">{t("about.story.p3")}</p>
           </div>
           <img
             src={galleryGroup}
-            alt="Membres du Club Informatique SUP'PTIC réunis en photo de groupe"
+            alt={t("home.groupAlt")}
             width={1280}
             height={960}
             className="w-full rounded-xl border border-border object-cover shadow-[var(--shadow-card)]"
@@ -72,14 +57,14 @@ function About() {
         <div className="mx-auto mt-6 grid max-w-6xl gap-4 px-4 sm:grid-cols-2">
           <img
             src={galleryJuioPrize}
-            alt="Le Club aux Journées universitaires de l'informatique 2026, Prix du meilleur projet"
+            alt={t("about.alt.juio")}
             width={1280}
             height={960}
             className="aspect-4/3 w-full rounded-xl border border-border object-cover"
           />
           <img
             src={galleryCollabGi}
-            alt="Rencontre entre le Club Informatique et un club partenaire"
+            alt={t("about.alt.collab")}
             width={1280}
             height={960}
             className="aspect-4/3 w-full rounded-xl border border-border object-cover"
@@ -121,15 +106,12 @@ function About() {
       <section className="section-y">
         {" "}
         <div className="mx-auto max-w-6xl px-4">
-          <SectionTitle
-            eyebrow="Charte"
-            title="Nos cinq objectifs"
-          />
+          <SectionTitle eyebrow={t("about.charter.eyebrow")} title={t("about.charter.title")} />
           <ul className="grid gap-4 sm:grid-cols-2">
             {objectives.map((o) => (
-              <li key={o} className="flex gap-3 rounded-lg border border-border bg-background p-5">
+              <li key={o.fr} className="flex gap-3 rounded-lg border border-border bg-background p-5">
                 <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{o}</span>
+                <span className="text-sm text-muted-foreground">{locale === "en" ? o.en : o.fr}</span>
               </li>
             ))}
           </ul>
@@ -174,9 +156,9 @@ function About() {
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionTitle
-            eyebrow="Partenariats"
-            title="Un ancrage institutionnel"
-            lead="SUP'PTIC, MINPOSTEL, CAMTEL, CAMPOST et Huawei."
+            eyebrow={t("about.partners.eyebrow")}
+            title={t("about.partners.title")}
+            lead={t("about.partners.lead")}
           />
           <Partners />
         </div>

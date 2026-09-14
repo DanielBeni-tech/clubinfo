@@ -61,7 +61,7 @@ export function HeroSlideshow({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              aria-label={locale === "en" ? "Previous photo" : "Photo précédente"}
+              aria-label={t("hero.prev")}
               onClick={() => setIndex((i) => (i - 1 + count) % count)}
               className="grid size-9 place-items-center rounded-md border border-night-foreground/25"
             >
@@ -85,7 +85,7 @@ export function HeroSlideshow({ children }: { children: ReactNode }) {
             </div>
             <button
               type="button"
-              aria-label={locale === "en" ? "Next photo" : "Photo suivante"}
+              aria-label={t("hero.next")}
               onClick={() => setIndex((i) => (i + 1) % count)}
               className="grid size-9 place-items-center rounded-md border border-night-foreground/25"
             >

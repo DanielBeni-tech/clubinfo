@@ -6,7 +6,7 @@ import { club } from "@/data/club";
 import { useLocale } from "@/lib/i18n";
 
 export function Footer() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   return (
     <footer className="night-panel mt-auto">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
@@ -14,15 +14,14 @@ export function Footer() {
           <Logo inverted withWordmark={false} className="w-fit" />
           <p className="mt-3 font-display text-base font-bold">{club.name}</p>
           <p className="mt-4 max-w-sm text-sm text-night-muted">
-            {club.tagline}. Le Club Informatique fédère les étudiants de SUP'PTIC autour de projets
-            technologiques concrets.
+            {t("footer.blurb", { tagline: locale === "en" ? club.taglineEn : club.tagline })}
           </p>
           <div className="mt-5 flex gap-3">
             <a
               href={club.linkedin}
               target="_blank"
               rel="noreferrer"
-              aria-label="LinkedIn du Club"
+              aria-label={t("footer.linkedin")}
               className="grid size-9 place-items-center rounded-md border border-night-muted/30 transition-colors hover:border-accent hover:text-accent"
             >
               <Linkedin className="size-4" />
@@ -31,14 +30,14 @@ export function Footer() {
               href={club.github}
               target="_blank"
               rel="noreferrer"
-              aria-label="GitHub du Club"
+              aria-label={t("footer.github")}
               className="grid size-9 place-items-center rounded-md border border-night-muted/30 transition-colors hover:border-accent hover:text-accent"
             >
               <Github className="size-4" />
             </a>
             <a
               href={`mailto:${club.email}`}
-              aria-label="Écrire au Club"
+              aria-label={t("footer.mail")}
               className="grid size-9 place-items-center rounded-md border border-night-muted/30 transition-colors hover:border-accent hover:text-accent"
             >
               <Mail className="size-4" />
@@ -95,7 +94,7 @@ export function Footer() {
                 e-supptic.cm
               </a>
             </li>
-            <li>SUP'PTIC — Yaoundé & Buea</li>
+            <li>{t("footer.campus")}</li>
             <li>
               <Link to="/contact" className="hover:text-accent">
                 {t("footer.form")}

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CTASection, PageHeader, ProjectCard } from "@/components/site/shared";
 import { projects } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { useLocale, type MessageKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/projects/")({
@@ -24,10 +25,11 @@ export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,
 });
 
-const statuses = ["Tous", "En cours", "Terminé"];
+const statuses = ["Tous", "En cours", "Terminé"] as const;
 
 function ProjectsPage() {
-  const [status, setStatus] = useState("Tous");
+  const { t } = useLocale();
+  const [status, setStatus] = useState<(typeof statuses)[number]>("Tous");
 
   const filtered = useMemo(
     () => projects.filter((p) => status === "Tous" || p.status === status),
@@ -39,20 +41,29 @@ function ProjectsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Nos projets"
-        lead="Chaque projet est porté par une équipe de membres, du cadrage à la livraison. SUP'ONE AI est notre projet phare."
-      />
+      <PageHeader title={t("projects.title")} lead={t("projects.lead")} />
 
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-8 flex flex-col gap-4">
-            <FilterRow label="Statut" options={statuses} value={status} onChange={setStatus} />
+            <FilterRow
+              label={t("projects.status")}
+              options={statuses}
+              value={status}
+              onChange={setStatus}
+              translate={(option) =>
+                option === "Tous"
+                  ? t("filter.all")
+                  : option === "En cours"
+                    ? t("status.ongoing")
+                    : t("status.done")
+              }
+            />
           </div>
 
           {filtered.length === 0 ? (
             <p className="rounded-lg border border-border bg-surface p-8 text-center text-sm text-muted-foreground">
-              Aucun projet ne correspond à ces filtres pour le moment.
+              {t("projects.empty")}
             </p>
           ) : (
             <div className="grid gap-6">
@@ -74,16 +85,18 @@ function ProjectsPage() {
   );
 }
 
-function FilterRow({
+function FilterRow<T extends string>({
   label,
   options,
   value,
   onChange,
+  translate,
 }: {
   label: string;
-  options: string[];
-  value: string;
-  onChange: (v: string) => void;
+  options: readonly T[];
+  value: T;
+  onChange: (v: T) => void;
+  translate: (option: T) => string;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -98,7 +111,7 @@ function FilterRow({
           onClick={() => onChange(option)}
           className={cn("rounded-full")}
         >
-          {option}
+          {translate(option)}
         </Button>
       ))}
     </div>

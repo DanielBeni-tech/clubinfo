@@ -45,9 +45,10 @@ export function SectionTitle({
 }
 
 export function StatusBadge({ status }: { status: Project["status"] }) {
+  const { t } = useLocale();
   return (
     <Badge variant={status === "En cours" ? "default" : "secondary"} className="rounded-full">
-      {status}
+      {status === "En cours" ? t("status.ongoing") : t("status.done")}
     </Badge>
   );
 }
@@ -61,15 +62,15 @@ export function ProjectCard({
 }) {
   const { t } = useLocale();
   const body = (
-    <Card className="group flex h-full flex-col overflow-hidden py-0">
+    <Card className={cn("group flex h-full flex-col overflow-hidden py-0", featured && "md:grid md:grid-cols-2")}>
       <div className="relative">
         <img
           src={project.image}
-          alt={`Illustration du projet ${project.name}`}
+          alt={t("card.projectAlt", { name: project.name })}
           loading="lazy"
           width={1200}
           height={800}
-          className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          className={cn("h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]", featured && "md:h-full")}
         />
         <div className="absolute left-4 top-4 flex gap-2">
           {featured && (

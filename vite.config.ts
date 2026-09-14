@@ -6,9 +6,9 @@ import { nitro } from "nitro/vite";
 
 export default defineConfig({
   server: {
-    port: 3000,
-    host: "0.0.0.0",
-    allowedHosts: true,
+    port: 8080,
+    host: "127.0.0.1",
+    strictPort: true,
   },
   resolve: {
     tsconfigPaths: true,

@@ -26,7 +26,6 @@ import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
 import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
-import { Route as ProjectsSuponeAiRouteImport } from './routes/projects.supone-ai'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -113,11 +112,6 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
 } as any)
-const ProjectsSuponeAiRoute = ProjectsSuponeAiRouteImport.update({
-  id: '/supone-ai',
-  path: '/supone-ai',
-  getParentRoute: () => ProjectsRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -136,7 +130,6 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/$slug': typeof ProjectsSlugRoute
-  '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -155,7 +148,6 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/$slug': typeof ProjectsSlugRoute
-  '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects': typeof ProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -176,7 +168,6 @@ export interface FileRoutesById {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/$slug': typeof ProjectsSlugRoute
-  '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -198,7 +189,6 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/utilisateurs'
     | '/projects/$slug'
-    | '/projects/supone-ai'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,7 +207,6 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/utilisateurs'
     | '/projects/$slug'
-    | '/projects/supone-ai'
     | '/projects'
   id:
     | '__root__'
@@ -237,7 +226,6 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/utilisateurs'
     | '/projects/$slug'
-    | '/projects/supone-ai'
     | '/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -380,25 +368,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
     }
-    '/projects/supone-ai': {
-      id: '/projects/supone-ai'
-      path: '/supone-ai'
-      fullPath: '/projects/supone-ai'
-      preLoaderRoute: typeof ProjectsSuponeAiRouteImport
-      parentRoute: typeof ProjectsRoute
-    }
   }
 }
 
 interface ProjectsRouteChildren {
   ProjectsSlugRoute: typeof ProjectsSlugRoute
-  ProjectsSuponeAiRoute: typeof ProjectsSuponeAiRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
 
 const ProjectsRouteChildren: ProjectsRouteChildren = {
   ProjectsSlugRoute: ProjectsSlugRoute,
-  ProjectsSuponeAiRoute: ProjectsSuponeAiRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
 
