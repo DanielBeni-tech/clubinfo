@@ -45,9 +45,10 @@ export function SectionTitle({
 }
 
 export function StatusBadge({ status }: { status: Project["status"] }) {
+  const { t } = useLocale();
   return (
     <Badge variant={status === "En cours" ? "default" : "secondary"} className="rounded-full">
-      {status}
+      {status === "En cours" ? t("status.ongoing") : t("status.done")}
     </Badge>
   );
 }
@@ -59,12 +60,12 @@ export function ProjectCard({
   project: Project;
   featured?: boolean;
 }) {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   const body = (
     <Card className={cn("h-full overflow-hidden py-0", featured && "md:grid md:grid-cols-2")}>
       <img
         src={project.image}
-        alt={`Illustration du projet ${project.name}`}
+        alt={t("card.projectAlt", { name: project.name })}
         loading="lazy"
         width={1200}
         height={800}
@@ -78,11 +79,17 @@ export function ProjectCard({
             </Badge>
           )}
           <StatusBadge status={project.status} />
-          <span className="text-xs text-muted-foreground">{project.domain}</span>
+          <span className="text-xs text-muted-foreground">
+            {locale === "en" ? project.domainEn : project.domain}
+          </span>
         </div>
         <h3 className={cn("font-display text-xl", featured && "sm:text-2xl")}>{project.name}</h3>
-        <p className="text-sm font-medium text-primary">{project.subtitle}</p>
-        <p className="text-sm text-muted-foreground">{project.summary}</p>
+        <p className="text-sm font-medium text-primary">
+          {locale === "en" ? project.subtitleEn : project.subtitle}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {locale === "en" ? project.summaryEn : project.summary}
+        </p>
         <ul className="mt-1 flex flex-wrap gap-2">
           {project.tags.map((tag) => (
             <li
@@ -103,7 +110,7 @@ export function ProjectCard({
           ) : project.github ? (
             <Button asChild size="sm" variant="outline">
               <a href={project.github} target="_blank" rel="noreferrer">
-                <Github className="size-4" /> GitHub
+                <Github className="size-4" /> {t("card.github")}
               </a>
             </Button>
           ) : null}

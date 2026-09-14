@@ -9,7 +9,7 @@ import { PartnerMarquee } from "@/components/site/PartnerMarquee";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
 import { club, events, expertise, gallery, projects, stats } from "@/data/club";
-import { useLocale } from "@/lib/i18n";
+import { useLocale, type MessageKey } from "@/lib/i18n";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/")({
@@ -43,9 +43,10 @@ const icons = {
 };
 
 function Home() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   const featured = projects.find((p) => p.featured) ?? projects[0]!;
   const others = projects.filter((p) => p !== featured);
+  const values = [t("home.value.practice"), t("home.value.peers"), t("home.value.ship")];
 
   return (
     <div>
@@ -57,7 +58,7 @@ function Home() {
           {club.name}
         </h1>
         <p className="animate-in fade-in slide-in-from-bottom-3 mt-4 font-display text-lg text-accent duration-700 sm:text-xl [animation-delay:160ms]">
-          « {club.tagline} »
+          « {locale === "en" ? club.taglineEn : club.tagline} »
         </p>
         <p className="animate-in fade-in slide-in-from-bottom-3 mt-6 max-w-2xl text-base text-night-muted duration-700 [animation-delay:240ms]">
           {t("hero.lead")}
@@ -82,9 +83,9 @@ function Home() {
               className="animate-in fade-in slide-in-from-bottom-2 duration-700"
               style={{ animationDelay: `${400 + i * 80}ms` }}
             >
-              <dt className="sr-only">{s.label}</dt>
+              <dt className="sr-only">{locale === "en" ? s.labelEn : s.label}</dt>
               <dd className="font-display text-2xl text-accent sm:text-3xl">{s.value}</dd>
-              <p className="mt-1 text-xs text-night-muted">{s.label}</p>
+              <p className="mt-1 text-xs text-night-muted">{locale === "en" ? s.labelEn : s.label}</p>
             </div>
           ))}
         </dl>
@@ -97,24 +98,20 @@ function Home() {
             <div>
               <Reveal>
                 <SectionTitle
-                  eyebrow="À propos"
-                  title="Un club étudiant, une exigence professionnelle"
-                  lead="Né au sein de SUP'PTIC, le Club Informatique rassemble des étudiants qui veulent apprendre en construisant. Nos pôles travaillent comme une petite structure tech : cadrage, développement, livraison et communication."
+                  eyebrow={t("home.about.eyebrow")}
+                  title={t("home.about.title")}
+                  lead={t("home.about.lead")}
                   action={
                     <Button asChild variant="outline">
                       <Link to="/about">
-                        En savoir plus <ArrowRight className="size-4" />
+                        {t("home.about.more")} <ArrowRight className="size-4" />
                       </Link>
                     </Button>
                   }
                 />
               </Reveal>
               <ul className="grid gap-4 sm:grid-cols-3">
-                {[
-                  "Apprendre par la pratique",
-                  "Partager entre pairs",
-                  "Livrer des projets utiles",
-                ].map((v, i) => (
+                {values.map((v, i) => (
                   <Reveal key={v} delay={i * 90}>
                     <li className="rounded-lg border border-border bg-secondary/50 p-5 font-display text-base">
                       {v}
@@ -126,7 +123,7 @@ function Home() {
             <Reveal delay={80}>
               <img
                 src={galleryGroup}
-                alt="Membres du Club Informatique SUP'PTIC réunis en photo de groupe"
+                alt={t("home.groupAlt")}
                 width={1280}
                 height={960}
                 className="w-full rounded-xl border border-border object-cover"
@@ -140,9 +137,9 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <Reveal>
             <SectionTitle
-              eyebrow="Expertise"
-              title="Nos domaines d'expertise"
-              lead="Six domaines couverts par les membres du Club, en formation comme en projet."
+              eyebrow={t("home.expertise.eyebrow")}
+              title={t("home.expertise.title")}
+              lead={t("home.expertise.lead")}
             />
           </Reveal>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -156,8 +153,12 @@ function Home() {
                         <span className="grid size-11 place-items-center rounded-lg bg-secondary text-primary">
                           <Icon className="size-5" />
                         </span>
-                        <h3 className="mt-4 font-display text-lg">{item.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                        <h3 className="mt-4 font-display text-lg">
+                          {locale === "en" ? item.titleEn : item.title}
+                        </h3>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {locale === "en" ? item.descriptionEn : item.description}
+                        </p>
                       </CardContent>
                     </Card>
                   </li>
@@ -172,13 +173,13 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <Reveal>
             <SectionTitle
-              eyebrow="Projets"
-              title="Ce que nous construisons"
-              lead="Des réalisations concrètes, portées par les pôles Innovation & Projets et Développement."
+              eyebrow={t("home.projects.eyebrow")}
+              title={t("home.projects.title")}
+              lead={t("home.projects.lead")}
               action={
                 <Button asChild variant="outline">
                   <Link to="/projects">
-                    Tous les projets <ArrowRight className="size-4" />
+                    {t("home.projects.all")} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
               }
@@ -203,12 +204,12 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <Reveal>
             <SectionTitle
-              eyebrow="Activités"
-              title="Prochains rendez-vous"
+              eyebrow={t("home.events.eyebrow")}
+              title={t("home.events.title")}
               action={
                 <Button asChild variant="outline">
                   <Link to="/events">
-                    Tous les événements <ArrowRight className="size-4" />
+                    {t("home.events.all")} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
               }
@@ -225,12 +226,18 @@ function Home() {
                       <CardContent className="p-6">
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="rounded-full">
-                            {e.type}
+                            {t(`events.type.${e.type}` as MessageKey)}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">{e.displayDate}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {locale === "en" ? e.displayDateEn : e.displayDate}
+                          </span>
                         </div>
-                        <h3 className="mt-3 font-display text-lg">{e.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
+                        <h3 className="mt-3 font-display text-lg">
+                          {locale === "en" ? e.titleEn : e.title}
+                        </h3>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {locale === "en" ? e.descriptionEn : e.description}
+                        </p>
                       </CardContent>
                     </Card>
                   </li>
@@ -244,12 +251,12 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <Reveal>
             <SectionTitle
-              eyebrow="Galerie"
-              title="La vie du club"
+              eyebrow={t("home.gallery.eyebrow")}
+              title={t("home.gallery.title")}
               action={
                 <Button asChild variant="outline">
                   <Link to="/gallery">
-                    Voir la galerie <ArrowRight className="size-4" />
+                    {t("home.gallery.all")} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
               }
@@ -261,7 +268,7 @@ function Home() {
                 <li className="overflow-hidden rounded-lg border border-border">
                   <img
                     src={item.src}
-                    alt={item.alt}
+                    alt={locale === "en" ? item.altEn : item.alt}
                     loading="lazy"
                     width={1200}
                     height={900}

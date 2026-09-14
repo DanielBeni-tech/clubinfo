@@ -1,7 +1,10 @@
 import { partners, type Partner } from "@/data/club";
+import { useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 function PartnerTile({ partner }: { partner: Partner }) {
+  const { locale } = useLocale();
+  const role = locale === "en" ? partner.roleEn : partner.role;
   const inner = (
     <>
       <span className="grid h-20 place-items-center px-2">
@@ -13,7 +16,7 @@ function PartnerTile({ partner }: { partner: Partner }) {
       </span>
       <span className="mt-3 block text-center">
         <span className="block font-display text-sm font-semibold">{partner.name}</span>
-        <span className="mt-1 block text-xs text-muted-foreground">{partner.role}</span>
+        <span className="mt-1 block text-xs text-muted-foreground">{role}</span>
       </span>
     </>
   );

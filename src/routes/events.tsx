@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CTASection, PageHeader } from "@/components/site/shared";
-import { events } from "@/data/club";
+import { events, type ClubEvent } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { useLocale, type MessageKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/events")({
   head: () => ({
@@ -37,48 +38,38 @@ const types = [
   "Visite",
   "Collaboration",
   "Concours",
-];
+] as const;
 
 function EventsPage() {
-  const [type, setType] = useState("Tous");
+  const { t } = useLocale();
+  const [type, setType] = useState<(typeof types)[number]>("Tous");
   const filtered = useMemo(() => events.filter((e) => type === "Tous" || e.type === type), [type]);
   const upcoming = filtered.filter((e) => e.upcoming);
   const past = filtered.filter((e) => !e.upcoming);
 
   return (
     <div>
-      <PageHeader
-        title="Activités & événements"
-        lead="Le Club anime toute l'année des formations entre pairs, des conférences, des hackathons et des visites professionnelles, ouverts à tous les membres."
-      />
+      <PageHeader title={t("events.title")} lead={t("events.lead")} />
 
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-10 flex flex-wrap gap-2">
-            {types.map((t) => (
+            {types.map((item) => (
               <Button
-                key={t}
+                key={item}
                 size="sm"
-                variant={type === t ? "default" : "outline"}
+                variant={type === item ? "default" : "outline"}
                 className="rounded-full"
-                onClick={() => setType(t)}
+                onClick={() => setType(item)}
               >
-                {t}
+                {t(`events.type.${item}` as MessageKey)}
               </Button>
             ))}
           </div>
 
-          <EventList
-            title="À venir"
-            items={upcoming}
-            empty="Aucun événement à venir dans cette catégorie."
-          />
+          <EventList title={t("events.upcoming")} items={upcoming} empty={t("events.emptyUpcoming")} />
           <div className="mt-14">
-            <EventList
-              title="Passés"
-              items={past}
-              empty="Aucun événement passé dans cette catégorie."
-            />
+            <EventList title={t("events.past")} items={past} empty={t("events.emptyPast")} />
           </div>
         </div>
       </section>
@@ -94,9 +85,10 @@ function EventList({
   empty,
 }: {
   title: string;
-  items: typeof events;
+  items: ClubEvent[];
   empty: string;
 }) {
+  const { locale, t } = useLocale();
   return (
     <div>
       <h2 className="font-display text-2xl">{title}</h2>
@@ -112,7 +104,7 @@ function EventList({
                 {e.image ? (
                   <img
                     src={e.image}
-                    alt={e.title}
+                    alt={locale === "en" ? e.titleEn : e.title}
                     loading="lazy"
                     width={1200}
                     height={900}
@@ -123,11 +115,15 @@ function EventList({
                 )}
                 <CardContent className="p-6">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge className="rounded-full">{e.type}</Badge>
-                    <span className="text-xs text-muted-foreground">{e.displayDate}</span>
+                    <Badge className="rounded-full">{t(`events.type.${e.type}` as MessageKey)}</Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {locale === "en" ? e.displayDateEn : e.displayDate}
+                    </span>
                   </div>
-                  <h3 className="mt-3 font-display text-xl">{e.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
+                  <h3 className="mt-3 font-display text-xl">{locale === "en" ? e.titleEn : e.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {locale === "en" ? e.descriptionEn : e.description}
+                  </p>
                 </CardContent>
               </Card>
             </li>

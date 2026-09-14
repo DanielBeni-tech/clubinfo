@@ -8,8 +8,6 @@ import {
   Mail,
   MapPin,
   Clock,
-  Building2,
-  Phone,
   ArrowRight,
   Copy,
   Check,
@@ -24,6 +22,7 @@ import { PageHeader } from "@/components/site/shared";
 import { club } from "@/data/club";
 import { saveMessage } from "@/lib/supabase";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { useLocale, type MessageKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
@@ -47,30 +46,15 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const contactCategories = [
-  {
-    id: "partenariat",
-    label: "Partenariat & Sponsoring",
-    placeholder: "Proposition de partenariat, sponsoring ou collaboration",
-  },
-  {
-    id: "projet",
-    label: "Projet ou Hackathon",
-    placeholder: "Proposition de projet technique, hackathon ou concours",
-  },
-  {
-    id: "conference",
-    label: "Intervention & Conférence",
-    placeholder: "Intervention en atelier, talk technique ou formation",
-  },
-  {
-    id: "renseignement",
-    label: "Renseignements généraux",
-    placeholder: "Question générale sur les activités du Club",
-  },
-] as const;
+const contactCategoryIds = ["partenariat", "projet", "conference", "renseignement"] as const;
 
 function ContactPage() {
+  const { t } = useLocale();
+  const contactCategories = contactCategoryIds.map((id) => ({
+    id,
+    label: t(`contact.cat.${id}` as MessageKey),
+    placeholder: t(`contact.ph.${id}` as MessageKey),
+  }));
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
@@ -119,7 +103,7 @@ function ContactPage() {
       });
       setSent(true);
     } catch {
-      setError("L'envoi a échoué. Vérifiez votre connexion et réessayez.");
+      setError(t("contact.error"));
     } finally {
       setSending(false);
     }
@@ -138,10 +122,7 @@ function ContactPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Nous contacter"
-        lead="Entreprises, institutions, communautés tech ou étudiants : écrivez-nous pour un partenariat, un projet, une intervention ou toute autre question."
-      />
+      <PageHeader title={t("contact.title")} lead={t("contact.lead")} />
 
       <section className="section-y">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_350px]">
@@ -152,16 +133,14 @@ function ContactPage() {
                 <div className="py-10 text-center">
                   <CheckCircle2 className="mx-auto size-14 text-primary" />
                   <h2 className="mt-4 font-display text-2xl font-bold text-foreground">
-                    Message transmis avec succès
+                    {t("contact.sent.title")}
                   </h2>
                   <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                    Merci {nom} ! Votre message a bien été transmis au Bureau Exécutif du Club
-                    Informatique SUP'PTIC. Une réponse vous sera adressée sous 24h à 48h à l'adresse{" "}
-                    <span className="font-semibold text-foreground">{email}</span>.
+                    {t("contact.sent.body", { name: nom, email })}
                   </p>
                   <div className="mt-8 flex justify-center">
                     <Button variant="outline" onClick={resetForm}>
-                      Envoyer un nouveau message
+                      {t("contact.sent.again")}
                     </Button>
                   </div>
                 </div>
@@ -170,7 +149,7 @@ function ContactPage() {
                   {/* Choix du motif */}
                   <div className="grid gap-2.5">
                     <Label className="text-sm font-semibold text-foreground">
-                      Quel est l'objet de votre demande ?{" "}
+                      {t("contact.object")}{" "}
                       <span className="text-destructive">*</span>
                     </Label>
                     <div className="flex flex-wrap gap-2">
@@ -199,7 +178,7 @@ function ContactPage() {
                   <div className="grid gap-5 md:grid-cols-2">
                     <div className="grid gap-2 min-w-0">
                       <Label htmlFor="c-name" className="text-sm font-medium">
-                        Nom complet ou interlocuteur <span className="text-destructive">*</span>
+                        {t("contact.name")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="c-name"
@@ -213,7 +192,7 @@ function ContactPage() {
 
                     <div className="grid gap-2 min-w-0">
                       <Label htmlFor="c-email" className="text-sm font-medium">
-                        Adresse e-mail pro ou personnelle{" "}
+                        {t("contact.email")}{" "}
                         <span className="text-destructive">*</span>
                       </Label>
                       <Input
@@ -232,9 +211,9 @@ function ContactPage() {
                   <div className="grid gap-5 md:grid-cols-2">
                     <div className="grid gap-2 min-w-0">
                       <Label htmlFor="c-phone" className="text-sm font-medium">
-                        Téléphone / WhatsApp{" "}
+                        {t("contact.phone")}{" "}
                         <span className="text-xs text-muted-foreground font-normal">
-                          (optionnel)
+                          {t("contact.optional")}
                         </span>
                       </Label>
                       <div className="relative">
@@ -251,9 +230,9 @@ function ContactPage() {
 
                     <div className="grid gap-2 min-w-0">
                       <Label htmlFor="c-org" className="text-sm font-medium">
-                        Structure / Entreprise / Université{" "}
+                        {t("contact.org")}{" "}
                         <span className="text-xs text-muted-foreground font-normal">
-                          (optionnel)
+                          {t("contact.optional")}
                         </span>
                       </Label>
                       <Input
@@ -269,7 +248,7 @@ function ContactPage() {
                   {/* Objet du message */}
                   <div className="grid gap-2">
                     <Label htmlFor="c-subject">
-                      Objet précis du message <span className="text-destructive">*</span>
+                      {t("contact.subject")} <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="c-subject"
@@ -284,7 +263,7 @@ function ContactPage() {
                   {/* Corps du message */}
                   <div className="grid gap-2">
                     <Label htmlFor="c-message">
-                      Votre message <span className="text-destructive">*</span>
+                      {t("contact.message")} <span className="text-destructive">*</span>
                     </Label>
                     <Textarea
                       id="c-message"
@@ -310,7 +289,7 @@ function ContactPage() {
                     disabled={sending}
                     className="w-full text-base font-semibold"
                   >
-                    {sending ? "Envoi en cours…" : "Envoyer le message"}
+                    {sending ? t("contact.sending") : t("contact.send")}
                   </Button>
                 </form>
               )}
@@ -328,15 +307,14 @@ function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-display text-sm font-semibold text-foreground">
-                      Tu es étudiant(e) à SUP'PTIC ?
+                      {t("contact.student.title")}
                     </h3>
                     <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-                      Si tu souhaites adhérer au Club Informatique, utilise directement le
-                      formulaire d'adhésion en ligne plutôt que la messagerie générale.
+                      {t("contact.student.lead")}
                     </p>
                     <Button asChild size="sm" className="mt-3 text-xs font-semibold">
                       <Link to="/join">
-                        Rejoindre le Club <ArrowRight className="ml-1 size-3.5" />
+                        {t("contact.student.cta")} <ArrowRight className="ml-1 size-3.5" />
                       </Link>
                     </Button>
                   </div>
@@ -348,7 +326,7 @@ function ContactPage() {
             <Card className="border-border shadow-xs">
               <CardContent className="p-6">
                 <h3 className="font-display text-base font-semibold text-foreground">
-                  Canaux directs
+                  {t("contact.channels")}
                 </h3>
 
                 <ul className="mt-4 space-y-3.5 text-sm">
@@ -356,7 +334,7 @@ function ContactPage() {
                     <Mail className="mt-0.5 size-4 shrink-0 text-primary" />
                     <div className="min-w-0 flex-1">
                       <span className="block text-xs text-muted-foreground">
-                        Adresse e-mail officielle
+                        {t("contact.officialEmail")}
                       </span>
                       <div className="mt-0.5 flex items-center gap-2">
                         <a
@@ -368,7 +346,7 @@ function ContactPage() {
                         <button
                           type="button"
                           onClick={handleCopyEmail}
-                          title="Copier l'adresse"
+                          title={t("contact.copy")}
                           className="grid size-6 place-content-center rounded border border-border text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
                         >
                           {copiedEmail ? (
@@ -385,13 +363,13 @@ function ContactPage() {
                     <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
                     <div>
                       <span className="block text-xs text-muted-foreground">
-                        Siège & localisation
+                        {t("contact.location")}
                       </span>
                       <span className="font-medium text-foreground">
-                        SUP'PTIC — Campus principal de Yaoundé
+                        {t("contact.locationValue")}
                       </span>
                       <span className="block text-xs text-muted-foreground">
-                        Route de l'Aéroport, Ngoa-Ekellé · Annexe de Buea
+                        {t("contact.locationDetail")}
                       </span>
                     </div>
                   </li>
@@ -400,11 +378,11 @@ function ContactPage() {
                     <Clock className="mt-0.5 size-4 shrink-0 text-primary" />
                     <div>
                       <span className="block text-xs text-muted-foreground">
-                        Délai de traitement
+                        {t("contact.delay")}
                       </span>
-                      <span className="font-medium text-foreground">24h à 48h ouvrées</span>
+                      <span className="font-medium text-foreground">{t("contact.delayValue")}</span>
                       <span className="block text-xs text-muted-foreground">
-                        Réponse par le Secrétariat Général ou le Pôle Communication
+                        {t("contact.delayDetail")}
                       </span>
                     </div>
                   </li>
@@ -413,7 +391,7 @@ function ContactPage() {
                     <ExternalLink className="mt-0.5 size-4 shrink-0 text-primary" />
                     <div>
                       <span className="block text-xs text-muted-foreground">
-                        Portail de l'école
+                        {t("contact.school")}
                       </span>
                       <a
                         href={club.schoolUrl}
@@ -433,22 +411,21 @@ function ContactPage() {
             <Card className="border-border shadow-xs">
               <CardContent className="p-6">
                 <h3 className="font-display text-base font-semibold text-foreground">
-                  Présence en ligne
+                  {t("contact.online")}
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Suivez nos projets open-source et l'actualité de nos événements sur nos
-                  plateformes officielles :
+                  {t("contact.onlineLead")}
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2.5">
                   <Button asChild variant="outline" size="sm" className="gap-2">
                     <a href={club.linkedin} target="_blank" rel="noreferrer">
-                      <Linkedin className="size-4 text-primary" /> Page LinkedIn
+                      <Linkedin className="size-4 text-primary" /> {t("contact.linkedin")}
                     </a>
                   </Button>
                   <Button asChild variant="outline" size="sm" className="gap-2">
                     <a href={club.github} target="_blank" rel="noreferrer">
-                      <Github className="size-4" /> Organisation GitHub
+                      <Github className="size-4" /> {t("contact.github")}
                     </a>
                   </Button>
                 </div>
