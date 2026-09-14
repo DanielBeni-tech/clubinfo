@@ -24,6 +24,8 @@ import gallerySyntraPitch from "@/assets/images/gallery/syntra-pitch.jpg";
 import galleryGalerie1 from "@/assets/images/gallery/galerie-1.jpg";
 import galleryGalerie2 from "@/assets/images/gallery/galerie-2.jpg";
 import galleryGalerie3 from "@/assets/images/gallery/galerie-3.jpg";
+import galleryGalerie4 from "@/assets/images/gallery/galerie-4.jpg";
+import galleryGalerie5 from "@/assets/images/gallery/galerie-5.jpg";
 import president from "@/assets/images/people/president.jpg";
 import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
 import memberPolo from "@/assets/images/people/member-polo.jpg";
@@ -34,6 +36,7 @@ import memberOlamaVictoire from "@/assets/images/people/olama-victoire.jpg";
 import memberDanielBenny from "@/assets/images/people/daniel-benny.jpg";
 import memberFowaMichelleRosee from "@/assets/images/people/fowa-michelle-rosee.jpg";
 import memberMbousekeAnge from "@/assets/images/people/mbouseke-ange.jpg";
+import memberNkoumouTjadeGrinnel from "@/assets/images/people/nkoumou-tjade-grinnel.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
@@ -520,6 +523,18 @@ export const gallery: GalleryItem[] = [
     altEn: "Gallery 3 — Moments from the SUP'PTIC Computer Club",
     category: "Vie du club",
   },
+  {
+    src: galleryGalerie4,
+    alt: "Galerie 4 — Moments du Club Informatique SUP'PTIC",
+    altEn: "Gallery 4 — Moments from the SUP'PTIC Computer Club",
+    category: "Vie du club",
+  },
+  {
+    src: galleryGalerie5,
+    alt: "Galerie 5 — Moments du Club Informatique SUP'PTIC",
+    altEn: "Gallery 5 — Moments from the SUP'PTIC Computer Club",
+    category: "Vie du club",
+  },
 ];
 
 export const bureau = [
@@ -530,10 +545,10 @@ export const bureau = [
     image: presidentPortrait,
   },
   {
-    name: "NKOUMOU GERMAIN",
+    name: "NKOUMOU TJADE GRINNEL",
     role: "Vice-président",
     roleEn: "Vice President",
-    image: memberPolo,
+    image: memberNkoumouTjadeGrinnel,
   },
   {
     name: "EVINA MBAHO ERIC",
@@ -555,8 +570,8 @@ export const bureau = [
   },
   {
     name: "FOWA MICHELLE ROSEE",
-    role: "Chef du Pôle Communication Adjoint",
-    roleEn: "Deputy Head of Communications",
+    role: "Chargé des relations extérieures",
+    roleEn: "External Relations Officer",
     image: memberFowaMichelleRosee,
   },
   {
