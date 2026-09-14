@@ -151,8 +151,9 @@ function JoinPage() {
       });
       setSuccessData(data);
       setSubmitted(true);
-    } catch {
-      setSubmitError("L'envoi a échoué. Vérifie ta connexion et réessaye.");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "L'envoi a échoué. Vérifie ta connexion et réessaye.";
+      setSubmitError(msg);
     }
   });
 

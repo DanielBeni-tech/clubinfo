@@ -40,20 +40,48 @@ export type Candidature = {
   website?: string;
 };
 
-export async function saveCandidature(data: Candidature): Promise<void> {
-  if (!supabase) return;
-  // Protection anti-spam simple : honeypot doit être vide
-  if (data.website && data.website.trim().length > 0) {
-    throw new Error("Validation anti-spam échouée.");
+export async function saveCandidature(data: Candidature): Promise<{ id?: string }> {
+  if (!supabase || !url || !key) {
+    throw new Error(
+      "Service de candidature temporairement indisponible. Veuillez réessayer plus tard.",
+    );
   }
-  // Le statut est forcé côté service — un candidat ne peut jamais s'auto-accepter
-  const { website: _website, statut: _statut, ...rest } = data;
-  const payload = {
-    ...rest,
-    statut: "Nouveau" as const,
-  };
-  const { error } = await supabase.from("candidatures").insert(payload);
-  if (error) throw new Error(error.message);
+
+  // Appel sécurisé via Edge Function — le statut est forcé côté serveur
+  // On passe par supabase.functions.invoke pour gérer automatiquement l'auth anon
+  const { data: resData, error } = await supabase.functions.invoke(
+    "submit-candidature",
+    {
+      body: data,
+    },
+  );
+
+  if (error) {
+    // supabase-js encapsule l'erreur HTTP — on tente d'extraire le message serveur
+    // @ts-expect-error — context peut contenir la réponse
+    const context = error.context as { response?: Response } | undefined;
+    let serverMessage: string | undefined;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const body = (resData as any) ?? (context?.response ? await (context.response as Response).json?.() : null);
+      if (body && typeof body.error === "string") serverMessage = body.error;
+      else if (body && body.details) serverMessage = "Veuillez corriger les champs indiqués.";
+    } catch {
+      // ignore
+    }
+
+    // Mapping des codes HTTP courants vers messages utilisateur
+    const status = (error as unknown as { status?: number }).status;
+    if (status === 400) throw new Error(serverMessage ?? "Données invalides. Veuillez corriger le formulaire.");
+    if (status === 409) throw new Error(serverMessage ?? "Une candidature identique a déjà été reçue récemment.");
+    if (status === 429) throw new Error(serverMessage ?? "Trop de tentatives. Veuillez réessayer plus tard.");
+    if (status === 413) throw new Error("Données trop volumineuses.");
+    throw new Error(serverMessage ?? error.message ?? "Erreur lors de l'envoi. Veuillez réessayer.");
+  }
+
+  // Succès — la Edge Function retourne { success: true, id }
+  // Même le honeypot renvoie 201 succès sans insertion (comportement attendu)
+  return resData as { id?: string };
 }
 
 export type Message = {
