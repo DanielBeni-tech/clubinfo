@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CheckCircle2,
   ExternalLink,
@@ -18,6 +20,7 @@ import { PageHeader } from "@/components/site/shared";
 import { club, joinForm, school } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import { saveCandidature } from "@/lib/supabase";
+import { candidatureSchema, type CandidatureFormValues } from "@/lib/candidature.schema";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/join")({
@@ -46,93 +49,114 @@ const fieldClass =
 
 function JoinPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [successData, setSuccessData] = useState<CandidatureFormValues | null>(null);
 
-  // Form state
-  const [nom, setNom] = useState("");
-  const [prenom, setPrenom] = useState("");
-  const [email, setEmail] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [campus, setCampus] = useState<(typeof joinForm.campuses)[number] | "">("");
-  const [cycle, setCycle] = useState("");
-  const [regime, setRegime] = useState("");
-  const [niveau, setNiveau] = useState("");
-  const [option, setOption] = useState("");
-  const [domaine, setDomaine] = useState("");
-  const [experience, setExperience] = useState("Débutant");
-  const [pole, setPole] = useState("Pôle Développement");
-  const [motivation, setMotivation] = useState("");
-  const [engagement, setEngagement] = useState(false);
+  const form = useForm<CandidatureFormValues>({
+    resolver: zodResolver(candidatureSchema),
+    defaultValues: {
+      nom: "",
+      prenom: "",
+      email: "",
+      telephone: "",
+      campus: undefined as unknown as CandidatureFormValues["campus"],
+      cycle: undefined as unknown as CandidatureFormValues["cycle"],
+      regime: undefined as unknown as CandidatureFormValues["regime"],
+      niveau: undefined as unknown as CandidatureFormValues["niveau"],
+      option: undefined as unknown as CandidatureFormValues["option"],
+      domaine: undefined as unknown as CandidatureFormValues["domaine"],
+      niveau_experience: "Débutant",
+      pole: "Pôle Développement" as CandidatureFormValues["pole"],
+      motivation: "",
+      engagement_reglement: false as unknown as true,
+      website: "",
+    },
+    mode: "onBlur",
+  });
 
-  const cycles = useMemo(() => (campus ? joinForm.cyclesByCampus[campus] : []), [campus]);
-  const regimes = cycle ? (joinForm.regimesByCycle[cycle] ?? []) : [];
-  const options = cycle ? (joinForm.optionsByCycle[cycle] ?? []) : [];
-  const levels = cycle ? (joinForm.levelsByCycle[cycle] ?? []) : [];
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = form;
+
+  const campus = watch("campus");
+  const cycle = watch("cycle");
+  const domaine = watch("domaine");
+  const experience = watch("niveau_experience");
+  const pole = watch("pole");
+  const engagement = watch("engagement_reglement");
+
+  const cycles = useMemo(() => (campus ? joinForm.cyclesByCampus[campus as keyof typeof joinForm.cyclesByCampus] : []), [campus]) as typeof joinForm.cyclesByCampus[keyof typeof joinForm.cyclesByCampus];
+  const regimes = cycle ? ((joinForm.regimesByCycle[cycle as keyof typeof joinForm.regimesByCycle] ?? []) as string[]) : [];
+  const options = cycle ? ((joinForm.optionsByCycle[cycle as keyof typeof joinForm.optionsByCycle] ?? []) as string[]) : [];
+  const levels = cycle ? ((joinForm.levelsByCycle[cycle as keyof typeof joinForm.levelsByCycle] ?? []) as string[]) : [];
 
   const cycleLabel = useMemo(
-    () => cycles.find((c) => c.value === cycle)?.label ?? "",
+    () => cycles.find((c: { value: string; label: string }) => c.value === cycle)?.label ?? "",
     [cycles, cycle],
   );
 
-  function onCampusChange(value: (typeof joinForm.campuses)[number] | "") {
-    setCampus(value);
-    setCycle("");
-    setRegime("");
-    setNiveau("");
-    setOption("");
+  // Reset dépendances campus → cycle → régime/niveau/option
+  useEffect(() => {
+    // when campus changes, the cycle value is already cleared via onCampusChange
+    // this effect ensures stale values are cleared if user changes campus via RHF
+  }, [campus]);
+
+  function onCampusChange(value: string) {
+    const v = value as CandidatureFormValues["campus"];
+    setValue("campus", v, { shouldValidate: true });
+    setValue("cycle", undefined as unknown as CandidatureFormValues["cycle"], { shouldValidate: false });
+    setValue("regime", undefined as unknown as CandidatureFormValues["regime"], { shouldValidate: false });
+    setValue("niveau", undefined as unknown as CandidatureFormValues["niveau"], { shouldValidate: false });
+    setValue("option", undefined as unknown as CandidatureFormValues["option"], { shouldValidate: false });
   }
 
   function onCycleChange(value: string) {
-    setCycle(value);
-    setRegime("");
-    setNiveau("");
-    setOption("");
+    const v = value as CandidatureFormValues["cycle"];
+    setValue("cycle", v, { shouldValidate: true });
+    setValue("regime", undefined as unknown as CandidatureFormValues["regime"], { shouldValidate: false });
+    setValue("niveau", undefined as unknown as CandidatureFormValues["niveau"], { shouldValidate: false });
+    setValue("option", undefined as unknown as CandidatureFormValues["option"], { shouldValidate: false });
   }
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError("");
-
-    if (!engagement) {
-      setError(
-        "Veuillez confirmer votre engagement à respecter la Charte et le Règlement intérieur du Club.",
-      );
+  const onSubmit = handleSubmit(async (data) => {
+    setSubmitError("");
+    // Honeypot : si rempli, on simule un succès sans insérer (anti-bot silencieux)
+    if (data.website && data.website.trim().length > 0) {
+      setSuccessData(data);
+      setSubmitted(true);
       return;
     }
-
-    if (!domaine) {
-      setError("Veuillez sélectionner votre centre d'intérêt principal.");
-      return;
-    }
-
-    setSending(true);
     try {
       await saveCandidature({
-        nom: nom.trim(),
-        prenom: prenom.trim() || null,
-        email: email.trim(),
-        telephone: telephone.trim(),
-        campus,
-        cycle,
-        regime,
-        niveau,
-        option,
-        domaine,
-        niveau_experience: experience,
-        pole,
-        motivation: motivation.trim() || null,
-        engagement_reglement: engagement,
+        nom: data.nom.trim(),
+        prenom: data.prenom.trim(),
+        email: data.email.trim(),
+        telephone: data.telephone.trim(),
+        campus: data.campus,
+        cycle: data.cycle,
+        regime: data.regime,
+        niveau: data.niveau,
+        option: data.option,
+        domaine: data.domaine,
+        niveau_experience: data.niveau_experience,
+        pole: data.pole,
+        motivation: data.motivation?.trim() || null,
+        engagement_reglement: data.engagement_reglement,
+        website: data.website ?? "",
       });
+      setSuccessData(data);
       setSubmitted(true);
     } catch {
-      setError("L'envoi a échoué. Vérifie ta connexion et réessaie.");
-    } finally {
-      setSending(false);
+      setSubmitError("L'envoi a échoué. Vérifie ta connexion et réessaye.");
     }
-  }
+  });
 
-  if (submitted) {
+  if (submitted && successData) {
     return (
       <div>
         <PageHeader
@@ -145,17 +169,17 @@ function JoinPage() {
               <CardContent className="p-8 text-center sm:p-10">
                 <CheckCircle2 className="mx-auto size-12 text-primary" />
                 <h2 className="mt-4 font-display text-2xl font-bold">
-                  C'est bien enregistré{prenom ? `, ${prenom}` : nom ? `, ${nom}` : ""} !
+                  C'est bien enregistré{successData.prenom ? `, ${successData.prenom}` : successData.nom ? `, ${successData.nom}` : ""} !
                 </h2>
                 <p className="mt-3 text-muted-foreground">
                   Ta demande d'adhésion a été transmise au Bureau Exécutif.
-                  {cycleLabel ? ` (${cycleLabel}${campus ? ` · ${campus}` : ""})` : ""}
+                  {cycleLabel ? ` (${cycleLabel}${successData.campus ? ` · ${successData.campus}` : ""})` : ""}
                 </p>
                 <div className="mt-6 rounded-lg bg-surface p-4 text-left text-sm text-foreground">
                   <p className="font-semibold text-primary">Prochaines étapes :</p>
                   <ul className="mt-2 list-inside list-disc space-y-1 text-muted-foreground">
                     <li>
-                      Le Pôle Communication te contactera via WhatsApp ({telephone}) pour t'intégrer
+                      Le Pôle Communication te contactera via WhatsApp ({successData.telephone}) pour t'intégrer
                       à la communauté.
                     </li>
                     <li>
@@ -167,7 +191,14 @@ function JoinPage() {
                   <Button asChild variant="outline">
                     <Link to="/events">Découvrir les prochains événements</Link>
                   </Button>
-                  <Button variant="ghost" onClick={() => setSubmitted(false)}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setSuccessData(null);
+                      reset();
+                    }}
+                  >
                     Soumettre une autre demande
                   </Button>
                 </div>
@@ -190,7 +221,19 @@ function JoinPage() {
         <div className="mx-auto max-w-3xl px-4">
           <Card className="border-border shadow-card">
             <CardContent className="p-6 sm:p-10">
-              <form className="grid gap-8" onSubmit={onSubmit}>
+              <form className="grid gap-8" onSubmit={onSubmit} noValidate>
+                {/* Honeypot anti-spam — invisible */}
+                <div className="hidden" aria-hidden="true">
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    {...register("website")}
+                  />
+                </div>
+
                 {/* 1. Coordonnées personnelles */}
                 <div>
                   <h3 className="flex items-center gap-2 font-display text-base font-semibold text-foreground">
@@ -207,12 +250,13 @@ function JoinPage() {
                         </Label>
                         <Input
                           id="nom"
-                          name="nom"
-                          required
                           placeholder="Ex. Kouamou"
-                          value={nom}
-                          onChange={(e) => setNom(e.target.value)}
+                          aria-invalid={!!errors.nom}
+                          {...register("nom")}
                         />
+                        {errors.nom ? (
+                          <p className="text-xs text-destructive">{errors.nom.message}</p>
+                        ) : null}
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="prenom">
@@ -220,12 +264,13 @@ function JoinPage() {
                         </Label>
                         <Input
                           id="prenom"
-                          name="prenom"
-                          required
                           placeholder="Ex. Cédric"
-                          value={prenom}
-                          onChange={(e) => setPrenom(e.target.value)}
+                          aria-invalid={!!errors.prenom}
+                          {...register("prenom")}
                         />
+                        {errors.prenom ? (
+                          <p className="text-xs text-destructive">{errors.prenom.message}</p>
+                        ) : null}
                       </div>
                     </div>
 
@@ -236,13 +281,14 @@ function JoinPage() {
                         </Label>
                         <Input
                           id="email"
-                          name="email"
                           type="email"
-                          required
                           placeholder="etudiant@supptic.cm ou gmail"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          aria-invalid={!!errors.email}
+                          {...register("email")}
                         />
+                        {errors.email ? (
+                          <p className="text-xs text-destructive">{errors.email.message}</p>
+                        ) : null}
                       </div>
                       <div className="grid gap-2">
                         <Label htmlFor="telephone">
@@ -250,13 +296,14 @@ function JoinPage() {
                         </Label>
                         <Input
                           id="telephone"
-                          name="telephone"
                           type="tel"
-                          required
                           placeholder="+237 6XX XX XX XX"
-                          value={telephone}
-                          onChange={(e) => setTelephone(e.target.value)}
+                          aria-invalid={!!errors.telephone}
+                          {...register("telephone")}
                         />
+                        {errors.telephone ? (
+                          <p className="text-xs text-destructive">{errors.telephone.message}</p>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -278,11 +325,11 @@ function JoinPage() {
                         </Label>
                         <select
                           id="campus"
-                          name="campus"
                           required
-                          value={campus}
-                          onChange={(e) => onCampusChange(e.target.value as typeof campus)}
+                          value={campus ?? ""}
+                          onChange={(e) => onCampusChange(e.target.value)}
                           className={fieldClass}
+                          aria-invalid={!!errors.campus}
                         >
                           <option value="" disabled>
                             Choisir le campus
@@ -293,6 +340,9 @@ function JoinPage() {
                             </option>
                           ))}
                         </select>
+                        {errors.campus ? (
+                          <p className="text-xs text-destructive">{errors.campus.message}</p>
+                        ) : null}
                       </div>
 
                       <div className="grid gap-2">
@@ -301,12 +351,12 @@ function JoinPage() {
                         </Label>
                         <select
                           id="cycle"
-                          name="cycle"
                           required
-                          value={cycle}
+                          value={cycle ?? ""}
                           disabled={!campus}
                           onChange={(e) => onCycleChange(e.target.value)}
                           className={cn(fieldClass, !campus && "opacity-60")}
+                          aria-invalid={!!errors.cycle}
                         >
                           <option value="" disabled>
                             {campus ? "Sélectionner le cycle" : "Sélectionne d'abord le campus"}
@@ -317,6 +367,9 @@ function JoinPage() {
                             </option>
                           ))}
                         </select>
+                        {errors.cycle ? (
+                          <p className="text-xs text-destructive">{errors.cycle.message}</p>
+                        ) : null}
                       </div>
                     </div>
 
@@ -327,12 +380,12 @@ function JoinPage() {
                         </Label>
                         <select
                           id="regime"
-                          name="regime"
                           required
                           disabled={!cycle}
-                          value={regime}
-                          onChange={(e) => setRegime(e.target.value)}
+                          value={watch("regime") ?? ""}
+                          onChange={(e) => setValue("regime", e.target.value as CandidatureFormValues["regime"], { shouldValidate: true })}
                           className={cn(fieldClass, !cycle && "opacity-60")}
+                          aria-invalid={!!errors.regime}
                         >
                           <option value="" disabled>
                             {cycle ? "Classique, alternance…" : "D'abord le cycle"}
@@ -343,6 +396,9 @@ function JoinPage() {
                             </option>
                           ))}
                         </select>
+                        {errors.regime ? (
+                          <p className="text-xs text-destructive">{errors.regime.message}</p>
+                        ) : null}
                       </div>
 
                       <div className="grid gap-2">
@@ -351,12 +407,12 @@ function JoinPage() {
                         </Label>
                         <select
                           id="niveau"
-                          name="niveau"
                           required
                           disabled={!cycle}
-                          value={niveau}
-                          onChange={(e) => setNiveau(e.target.value)}
+                          value={watch("niveau") ?? ""}
+                          onChange={(e) => setValue("niveau", e.target.value as CandidatureFormValues["niveau"], { shouldValidate: true })}
                           className={cn(fieldClass, !cycle && "opacity-60")}
+                          aria-invalid={!!errors.niveau}
                         >
                           <option value="" disabled>
                             {cycle ? "Année en cours" : "D'abord le cycle"}
@@ -367,6 +423,9 @@ function JoinPage() {
                             </option>
                           ))}
                         </select>
+                        {errors.niveau ? (
+                          <p className="text-xs text-destructive">{errors.niveau.message}</p>
+                        ) : null}
                       </div>
 
                       <div className="grid gap-2">
@@ -375,12 +434,12 @@ function JoinPage() {
                         </Label>
                         <select
                           id="option"
-                          name="option"
                           required
                           disabled={!cycle}
-                          value={option}
-                          onChange={(e) => setOption(e.target.value)}
+                          value={watch("option") ?? ""}
+                          onChange={(e) => setValue("option", e.target.value as CandidatureFormValues["option"], { shouldValidate: true })}
                           className={cn(fieldClass, !cycle && "opacity-60")}
+                          aria-invalid={!!errors.option}
                         >
                           <option value="" disabled>
                             {cycle ? "IR, RT, RC, MGT…" : "D'abord le cycle"}
@@ -391,6 +450,9 @@ function JoinPage() {
                             </option>
                           ))}
                         </select>
+                        {errors.option ? (
+                          <p className="text-xs text-destructive">{errors.option.message}</p>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -422,7 +484,7 @@ function JoinPage() {
                             <button
                               key={d}
                               type="button"
-                              onClick={() => setDomaine(d)}
+                              onClick={() => setValue("domaine", d as CandidatureFormValues["domaine"], { shouldValidate: true })}
                               className={cn(
                                 "flex items-center justify-between rounded-lg border p-3 text-left text-sm transition-all",
                                 isSelected
@@ -447,13 +509,15 @@ function JoinPage() {
                           );
                         })}
                       </div>
+                      {errors.domaine ? (
+                        <p className="text-xs text-destructive">{errors.domaine.message}</p>
+                      ) : null}
                       {/* Sélecteur fallback accessible */}
                       <select
                         id="domaine"
-                        name="domaine"
                         required
-                        value={domaine}
-                        onChange={(e) => setDomaine(e.target.value)}
+                        value={domaine ?? ""}
+                        onChange={(e) => setValue("domaine", e.target.value as CandidatureFormValues["domaine"], { shouldValidate: true })}
                         className="sr-only"
                         tabIndex={-1}
                         aria-hidden="true"
@@ -479,7 +543,7 @@ function JoinPage() {
                             <button
                               key={lvl.value}
                               type="button"
-                              onClick={() => setExperience(lvl.value)}
+                              onClick={() => setValue("niveau_experience", lvl.value as CandidatureFormValues["niveau_experience"], { shouldValidate: true })}
                               className={cn(
                                 "flex flex-col justify-between rounded-xl border p-3.5 text-left transition-all",
                                 isSelected
@@ -504,6 +568,9 @@ function JoinPage() {
                           );
                         })}
                       </div>
+                      {errors.niveau_experience ? (
+                        <p className="text-xs text-destructive">{errors.niveau_experience.message}</p>
+                      ) : null}
                     </div>
 
                     {/* Pôle souhaité */}
@@ -522,7 +589,7 @@ function JoinPage() {
                             <button
                               key={p.value}
                               type="button"
-                              onClick={() => setPole(p.value)}
+                              onClick={() => setValue("pole", p.value as CandidatureFormValues["pole"], { shouldValidate: true })}
                               className={cn(
                                 "flex flex-col justify-between rounded-xl border p-3.5 text-left transition-all",
                                 isSelected
@@ -557,6 +624,9 @@ function JoinPage() {
                           );
                         })}
                       </div>
+                      {errors.pole ? (
+                        <p className="text-xs text-destructive">{errors.pole.message}</p>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -575,13 +645,15 @@ function JoinPage() {
                     </Label>
                     <Textarea
                       id="motivation"
-                      name="motivation"
                       rows={3}
-                      value={motivation}
-                      onChange={(e) => setMotivation(e.target.value)}
                       placeholder="Ex. Participer aux hackathons, apprendre l'IA avec SUP'ONE, développer un projet d'école, progresser en cybersécurité…"
                       className="resize-y"
+                      aria-invalid={!!errors.motivation}
+                      {...register("motivation")}
                     />
+                    {errors.motivation ? (
+                      <p className="text-xs text-destructive">{errors.motivation.message}</p>
+                    ) : null}
                   </div>
                 </div>
 
@@ -590,10 +662,10 @@ function JoinPage() {
                   <div className="flex items-start gap-3">
                     <Checkbox
                       id="engagement"
-                      name="engagement"
-                      checked={engagement}
-                      onCheckedChange={(c) => setEngagement(Boolean(c))}
+                      checked={!!engagement}
+                      onCheckedChange={(c) => setValue("engagement_reglement", Boolean(c) as true, { shouldValidate: true })}
                       className="mt-1"
+                      aria-invalid={!!errors.engagement_reglement}
                     />
                     <div className="grid gap-1.5">
                       <Label
@@ -624,13 +696,23 @@ function JoinPage() {
                         , et je m'engage à en respecter les principes de travail en équipe,
                         d'assiduité et de déontologie (Art. 2 du Règlement).
                       </p>
+                      {errors.engagement_reglement ? (
+                        <p className="text-xs text-destructive">{errors.engagement_reglement.message}</p>
+                      ) : null}
                     </div>
                   </div>
                 </div>
 
-                {error ? (
+                {submitError ? (
                   <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive font-medium">
-                    {error}
+                    {submitError}
+                  </div>
+                ) : null}
+
+                {/* Erreurs globales de validation non mappées */}
+                {Object.keys(errors).length > 0 && !submitError ? (
+                  <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive font-medium">
+                    Veuillez corriger les champs indiqués ci-dessus.
                   </div>
                 ) : null}
 
@@ -638,10 +720,10 @@ function JoinPage() {
                   <Button
                     type="submit"
                     size="lg"
-                    disabled={sending}
+                    disabled={isSubmitting}
                     className="w-full text-base font-semibold"
                   >
-                    {sending ? "Transmission en cours…" : "Soumettre mon adhésion"}
+                    {isSubmitting ? "Transmission en cours…" : "Soumettre mon adhésion"}
                   </Button>
                   <p className="text-center text-xs text-muted-foreground">
                     Les informations recueillies sont strictement confidentielles et réservées au

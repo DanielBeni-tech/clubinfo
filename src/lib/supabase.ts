@@ -34,11 +34,25 @@ export type Candidature = {
   pole: string;
   motivation?: string | null;
   engagement_reglement?: boolean;
+  // Ne jamais faire confiance au frontend pour le statut — forcé côté service
+  statut?: string;
+  // Honeypot (doit rester vide) — non persisté
+  website?: string;
 };
 
 export async function saveCandidature(data: Candidature): Promise<void> {
   if (!supabase) return;
-  const { error } = await supabase.from("candidatures").insert(data);
+  // Protection anti-spam simple : honeypot doit être vide
+  if (data.website && data.website.trim().length > 0) {
+    throw new Error("Validation anti-spam échouée.");
+  }
+  // Le statut est forcé côté service — un candidat ne peut jamais s'auto-accepter
+  const { website: _website, statut: _statut, ...rest } = data;
+  const payload = {
+    ...rest,
+    statut: "Nouveau" as const,
+  };
+  const { error } = await supabase.from("candidatures").insert(payload);
   if (error) throw new Error(error.message);
 }
 
