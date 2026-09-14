@@ -58,8 +58,7 @@ export async function saveCandidature(data: Candidature): Promise<{ id?: string 
 
   if (error) {
     // supabase-js encapsule l'erreur HTTP — on tente d'extraire le message serveur
-    // @ts-expect-error — context peut contenir la réponse
-    const context = error.context as { response?: Response } | undefined;
+    const context = (error as unknown as { context?: { response?: Response } }).context;
     let serverMessage: string | undefined;
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
