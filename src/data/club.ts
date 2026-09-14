@@ -26,6 +26,7 @@ import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
 import memberPolo from "@/assets/images/people/member-polo.jpg";
 import memberPlaid from "@/assets/images/people/member-plaid.jpg";
 import memberBlackTee from "@/assets/images/people/member-black-tee.jpg";
+import memberKeumekaWilfried from "@/assets/images/people/keumeka-wilfried.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
@@ -330,14 +331,14 @@ export const gallery: GalleryItem[] = [
   },
   {
     src: president,
-    alt: "Freded Messi Ovaah, président du Club Informatique SUP'PTIC",
+    alt: "Messi Ovah Fred, président du Club Informatique SUP'PTIC",
     category: "Vie du club",
   },
 ];
 
 export const bureau = [
   {
-    name: "Freded Messi Ovaah",
+    name: "Messi Ovah Fred",
     role: "Président du Club Informatique",
     roleEn: "President of the Computer Club",
     image: presidentPortrait,
@@ -359,6 +360,12 @@ export const bureau = [
     role: "Trésorier",
     roleEn: "Treasurer",
     image: memberBlackTee,
+  },
+  {
+    name: "KEUMEKA SOKING WILFRIED",
+    role: "Chef du Pôle Communication",
+    roleEn: "Head of Communications",
+    image: memberKeumekaWilfried,
   },
 ];
 
