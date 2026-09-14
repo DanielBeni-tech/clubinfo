@@ -1,7 +1,7 @@
 # CHARTE DU CLUB INFORMATIQUE SUP'PTIC
 
 **École Nationale Supérieure des Postes, des Télécommunications et des TIC**
-*Une école, un esprit, une intelligence*
+_Une école, un esprit, une intelligence_
 
 ---
 

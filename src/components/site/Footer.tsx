@@ -14,8 +14,8 @@ export function Footer() {
           <Logo inverted withWordmark={false} className="w-fit" />
           <p className="mt-3 font-display text-base font-bold">{club.name}</p>
           <p className="mt-4 max-w-sm text-sm text-night-muted">
-            {club.tagline}. Le Club Informatique fédère les étudiants de SUP'PTIC autour de projets technologiques
-            concrets.
+            {club.tagline}. Le Club Informatique fédère les étudiants de SUP'PTIC autour de projets
+            technologiques concrets.
           </p>
           <div className="mt-5 flex gap-3">
             <a
@@ -91,7 +91,12 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={club.schoolUrl} target="_blank" rel="noreferrer" className="hover:text-accent">
+              <a
+                href={club.schoolUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-accent"
+              >
                 e-supptic.cm
               </a>
             </li>
@@ -107,7 +112,9 @@ export function Footer() {
 
       <div className="border-t border-night-muted/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-night-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {club.name}. {t("footer.rights")}</p>
+          <p>
+            © {new Date().getFullYear()} {club.name}. {t("footer.rights")}
+          </p>
           <div className="flex items-center gap-3">
             <p>{t("footer.legal")}</p>
             <LangToggle inverted />

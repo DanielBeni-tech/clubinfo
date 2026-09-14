@@ -63,7 +63,9 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
               alt={current.alt}
               className="mx-auto max-h-[75vh] w-auto rounded-lg object-contain"
             />
-            <figcaption className="mt-3 text-center text-sm text-night-muted">{current.alt}</figcaption>
+            <figcaption className="mt-3 text-center text-sm text-night-muted">
+              {current.alt}
+            </figcaption>
           </figure>
           <button
             type="button"

@@ -46,18 +46,19 @@ function About() {
           <div>
             <h2 className="font-display text-2xl">Notre histoire et notre mission</h2>
             <p className="mt-4 text-muted-foreground">
-              Créé par des étudiants de SUP'PTIC, le Club est né d'un constat simple : les compétences techniques se
-              construisent en pratiquant, ensemble, sur des sujets réels. Ce qui a commencé comme un groupe de travail
-              informel est devenu une structure organisée, dotée d'une charte, d'un bureau et de pôles opérationnels.
+              Créé par des étudiants de SUP'PTIC, le Club est né d'un constat simple : les
+              compétences techniques se construisent en pratiquant, ensemble, sur des sujets réels.
+              Ce qui a commencé comme un groupe de travail informel est devenu une structure
+              organisée, dotée d'une charte, d'un bureau et de pôles opérationnels.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Notre mission est de donner à chaque étudiant de l'école un espace où apprendre, expérimenter et
-              contribuer — de la première ligne de code à la mise en production d'un projet utile à la communauté
-              SUP'PTIC.
+              Notre mission est de donner à chaque étudiant de l'école un espace où apprendre,
+              expérimenter et contribuer — de la première ligne de code à la mise en production d'un
+              projet utile à la communauté SUP'PTIC.
             </p>
             <p className="mt-4 text-muted-foreground">
-              Nos valeurs : la rigueur technique, le partage entre pairs, l'ouverture à tous les niveaux et
-              l'engagement au service de l'école.
+              Nos valeurs : la rigueur technique, le partage entre pairs, l'ouverture à tous les
+              niveaux et l'engagement au service de l'école.
             </p>
           </div>
           <img
@@ -106,7 +107,9 @@ function About() {
                   />
                   <div className="p-4">
                     <h3 className="font-display text-base">{member.name}</h3>
-                    <p className="mt-1 text-sm text-primary">{locale === "en" ? member.roleEn : member.role}</p>
+                    <p className="mt-1 text-sm text-primary">
+                      {locale === "en" ? member.roleEn : member.role}
+                    </p>
                   </div>
                 </article>
               </li>
@@ -115,7 +118,9 @@ function About() {
         </div>
       </section>
 
-      <section className="section-y">        <div className="mx-auto max-w-6xl px-4">
+      <section className="section-y">
+        {" "}
+        <div className="mx-auto max-w-6xl px-4">
           <SectionTitle
             eyebrow="Charte"
             title="Nos cinq objectifs"
@@ -159,8 +164,12 @@ function About() {
                     />
                   ) : null}
                   <CardContent className="p-6">
-                    <h3 className="font-display text-lg text-primary">{locale === "en" ? p.nameEn : p.name}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{locale === "en" ? p.roleEn : p.role}</p>
+                    <h3 className="font-display text-lg text-primary">
+                      {locale === "en" ? p.nameEn : p.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {locale === "en" ? p.roleEn : p.role}
+                    </p>
                   </CardContent>
                 </Card>
               </li>

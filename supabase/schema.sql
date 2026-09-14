@@ -8,6 +8,7 @@ create table if not exists public.candidatures (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   nom text not null,
+  prenom text,
   email text not null,
   telephone text not null,
   campus text not null,
@@ -15,10 +16,11 @@ create table if not exists public.candidatures (
   regime text not null,
   niveau text not null,
   option text not null,
-  pole text not null,
   domaine text not null,
-  competences text,
+  niveau_experience text,
+  pole text not null,
   motivation text,
+  engagement_reglement boolean not null default true,
   statut text not null default 'Nouveau' -- Nouveau / Contacté / Accepté / Refusé
 );
 
@@ -28,6 +30,9 @@ create table if not exists public.messages (
   created_at timestamptz not null default now(),
   nom text not null,
   email text not null,
+  telephone text,
+  organisation text,
+  categorie text,
   sujet text not null,
   message text not null,
   traite boolean not null default false

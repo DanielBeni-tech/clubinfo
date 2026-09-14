@@ -28,7 +28,12 @@ export function Logo({ inverted = false, withWordmark = true, className, onClick
           )}
         >
           Club Info
-          <span className={cn("block text-xs font-medium", inverted ? "text-night-muted" : "text-muted-foreground")}>
+          <span
+            className={cn(
+              "block text-xs font-medium",
+              inverted ? "text-night-muted" : "text-muted-foreground",
+            )}
+          >
             SUP'PTIC
           </span>
         </span>

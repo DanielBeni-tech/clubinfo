@@ -36,7 +36,8 @@ const messages = {
     "footer.contact": "Contact",
     "footer.form": "Formulaire de contact",
     "footer.rights": "Tous droits réservés.",
-    "footer.legal": "Club étudiant reconnu par l'Administration SUP'PTIC et l'Association des Étudiants.",
+    "footer.legal":
+      "Club étudiant reconnu par l'Administration SUP'PTIC et l'Association des Étudiants.",
     "cta.title": "Envie de construire avec nous ?",
     "cta.lead":
       "Le Club est ouvert à tout étudiant régulièrement inscrit à SUP'PTIC, quel que soit son niveau technique. Rejoins un pôle et participe à nos projets dès ce semestre.",
@@ -78,7 +79,8 @@ const messages = {
     "footer.contact": "Contact",
     "footer.form": "Contact form",
     "footer.rights": "All rights reserved.",
-    "footer.legal": "Student club recognised by the SUP'PTIC Administration and the Students' Association.",
+    "footer.legal":
+      "Student club recognised by the SUP'PTIC Administration and the Students' Association.",
     "cta.title": "Want to build with us?",
     "cta.lead":
       "The Club is open to every regularly enrolled SUP'PTIC student, whatever their technical level. Join a unit and take part in our projects this semester.",

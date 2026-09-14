@@ -87,7 +87,7 @@ export function MarkdownPage({ title, lead, content, meta }: MarkdownPageProps) 
       <PageHeader title={title} lead={lead} />
 
       <section className="section-y">
-        <article className="mx-auto max-w-4xl px-4 prose-custom">{/* eslint-disable-line react/no-danger */}
+        <article className="mx-auto max-w-4xl px-4 prose-custom">
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </article>
       </section>

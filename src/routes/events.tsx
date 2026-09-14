@@ -17,7 +17,10 @@ export const Route = createFileRoute("/events")({
           "Formations, conférences, hackathons, ateliers et visites organisés par le Club Informatique SUP'PTIC.",
       },
       { property: "og:title", content: "Activités & événements du Club Informatique SUP'PTIC" },
-      { property: "og:description", content: "Le calendrier des formations, hackathons et conférences du Club." },
+      {
+        property: "og:description",
+        content: "Le calendrier des formations, hackathons et conférences du Club.",
+      },
       ...brandSocialMeta,
     ],
     links: [...brandHeadLinks],
@@ -25,7 +28,16 @@ export const Route = createFileRoute("/events")({
   component: EventsPage,
 });
 
-const types = ["Tous", "Formation", "Conférence", "Hackathon", "Atelier", "Visite", "Collaboration", "Concours"];
+const types = [
+  "Tous",
+  "Formation",
+  "Conférence",
+  "Hackathon",
+  "Atelier",
+  "Visite",
+  "Collaboration",
+  "Concours",
+];
 
 function EventsPage() {
   const [type, setType] = useState("Tous");
@@ -56,9 +68,17 @@ function EventsPage() {
             ))}
           </div>
 
-          <EventList title="À venir" items={upcoming} empty="Aucun événement à venir dans cette catégorie." />
+          <EventList
+            title="À venir"
+            items={upcoming}
+            empty="Aucun événement à venir dans cette catégorie."
+          />
           <div className="mt-14">
-            <EventList title="Passés" items={past} empty="Aucun événement passé dans cette catégorie." />
+            <EventList
+              title="Passés"
+              items={past}
+              empty="Aucun événement passé dans cette catégorie."
+            />
           </div>
         </div>
       </section>
@@ -81,7 +101,9 @@ function EventList({
     <div>
       <h2 className="font-display text-2xl">{title}</h2>
       {items.length === 0 ? (
-        <p className="mt-4 rounded-lg border border-border bg-surface p-6 text-sm text-muted-foreground">{empty}</p>
+        <p className="mt-4 rounded-lg border border-border bg-surface p-6 text-sm text-muted-foreground">
+          {empty}
+        </p>
       ) : (
         <ul className="mt-6 grid gap-5">
           {items.map((e) => (

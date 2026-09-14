@@ -54,27 +54,32 @@ export const expertise = [
   {
     icon: "code",
     title: "Développement logiciel",
-    description: "Applications web et mobiles, du prototype au produit livré, avec des méthodes de travail en équipe.",
+    description:
+      "Applications web et mobiles, du prototype au produit livré, avec des méthodes de travail en équipe.",
   },
   {
     icon: "shield",
     title: "Cybersécurité",
-    description: "Sensibilisation, audit, CTF et bonnes pratiques de sécurité des systèmes d'information.",
+    description:
+      "Sensibilisation, audit, CTF et bonnes pratiques de sécurité des systèmes d'information.",
   },
   {
     icon: "network",
     title: "Réseaux & Télécommunications",
-    description: "Administration réseau, protocoles et infrastructures, cœur historique de la formation SUP'PTIC.",
+    description:
+      "Administration réseau, protocoles et infrastructures, cœur historique de la formation SUP'PTIC.",
   },
   {
     icon: "cpu",
     title: "Électronique & IoT",
-    description: "Objets connectés, capteurs et systèmes embarqués conçus et assemblés par les membres du Club.",
+    description:
+      "Objets connectés, capteurs et systèmes embarqués conçus et assemblés par les membres du Club.",
   },
   {
     icon: "lightbulb",
     title: "Innovation & Recherche",
-    description: "Veille technologique, expérimentations et projets de recherche appliquée portés par les pôles.",
+    description:
+      "Veille technologique, expérimentations et projets de recherche appliquée portés par les pôles.",
   },
 ] as const;
 
@@ -147,7 +152,8 @@ export type ClubEvent = {
   title: string;
   date: string;
   displayDate: string;
-  type: "Formation" | "Conférence" | "Hackathon" | "Atelier" | "Concours" | "Visite" | "Collaboration";
+  type:
+    "Formation" | "Conférence" | "Hackathon" | "Atelier" | "Concours" | "Visite" | "Collaboration";
   description: string;
   image?: string;
   upcoming: boolean;
@@ -169,7 +175,8 @@ export const events: ClubEvent[] = [
     date: "2026-09-26",
     displayDate: "26 septembre 2026",
     type: "Formation",
-    description: "Session pratique de 3 heures sur Python, pandas et les premiers modèles de classification.",
+    description:
+      "Session pratique de 3 heures sur Python, pandas et les premiers modèles de classification.",
     image: galleryLab,
     upcoming: true,
   },
@@ -188,7 +195,8 @@ export const events: ClubEvent[] = [
     date: "2026-08-14",
     displayDate: "14 août 2026",
     type: "Conférence",
-    description: "Table ronde avec des professionnels du secteur sur les enjeux de souveraineté numérique.",
+    description:
+      "Table ronde avec des professionnels du secteur sur les enjeux de souveraineté numérique.",
     image: galleryConference,
     upcoming: false,
   },
@@ -206,7 +214,8 @@ export const events: ClubEvent[] = [
     date: "2026-04-19",
     displayDate: "19 avril 2026",
     type: "Visite",
-    description: "Découverte d'un centre d'exploitation réseau et échange avec les ingénieurs sur site.",
+    description:
+      "Découverte d'un centre d'exploitation réseau et échange avec les ingénieurs sur site.",
     image: gallerySpeaker,
     upcoming: false,
   },
@@ -215,7 +224,8 @@ export const events: ClubEvent[] = [
     date: "2026-03-02",
     displayDate: "2 mars 2026",
     type: "Collaboration",
-    description: "Rencontre avec les clubs informatiques d'écoles partenaires autour de projets communs.",
+    description:
+      "Rencontre avec les clubs informatiques d'écoles partenaires autour de projets communs.",
     image: galleryCollabGi,
     upcoming: false,
   },
@@ -367,7 +377,8 @@ export const poles = [
     name: "Bureau Exécutif",
     nameEn: "Executive Board",
     role: "Coordonne la vie du Club, représente les membres auprès de l'administration et garantit le respect de la Charte.",
-    roleEn: "Coordinates club life, represents members to the administration and upholds the Charter.",
+    roleEn:
+      "Coordinates club life, represents members to the administration and upholds the Charter.",
     image: galleryRackTeam,
   },
   {
@@ -496,7 +507,45 @@ export const school = {
 
 export const joinForm = {
   campuses: ["Yaoundé", "Buea"] as const,
-  poles: ["Pôle Innovation & Projets", "Pôle Développement", "Pôle Communication", "Je ne sais pas encore"] as const,
+  poles: [
+    {
+      value: "Pôle Innovation & Projets",
+      label: "Pôle Innovation & Projets",
+      desc: "Idéation, montage de projets, hackathons, pitchs et veille technologique.",
+    },
+    {
+      value: "Pôle Développement",
+      label: "Pôle Développement",
+      desc: "Conception technique, programmation logicielle/web/mobile, IA, IoT et sécurité.",
+    },
+    {
+      value: "Pôle Communication",
+      label: "Pôle Communication",
+      desc: "Visibilité, médias, relations extérieures, design graphique et événementiel.",
+    },
+    {
+      value: "Découverte & Ateliers",
+      label: "Découverte & Ateliers",
+      desc: "Assister aux formations, découvrir les activités avant de choisir un pôle.",
+    },
+  ],
+  experienceLevels: [
+    {
+      value: "Débutant",
+      label: "Débutant / Curieux d'apprendre",
+      desc: "Aucune expérience requise, envie d'apprendre et de progresser avec le Club.",
+    },
+    {
+      value: "Intermédiaire",
+      label: "Intermédiaire",
+      desc: "Bases solides ou projets académiques/personnels déjà réalisés.",
+    },
+    {
+      value: "Avancé",
+      label: "Avancé / Expérimenté",
+      desc: "Bonne maîtrise pratique, capable de contribuer ou de guider des projets.",
+    },
+  ],
   domains: [
     "Intelligence Artificielle",
     "Développement logiciel",
@@ -545,7 +594,11 @@ export const joinForm = {
       "Logistique et Transport (LT)",
       "Commerce et distribution",
     ],
-    MIT: ["Tronc commun", "Sécurité des réseaux et systèmes (SERES)", "Services et Radiomobiles (SRM)"],
+    MIT: [
+      "Tronc commun",
+      "Sécurité des réseaux et systèmes (SERES)",
+      "Services et Radiomobiles (SRM)",
+    ],
     MAPT: ["Tronc commun", "Spécialité à préciser"],
     TT: ["Parcours technique télécoms"],
     CPT: ["Contrôle et exploitation des P&T"],

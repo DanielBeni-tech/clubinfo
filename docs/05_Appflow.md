@@ -1,4 +1,5 @@
 # Appflow — Parcours utilisateurs
+
 ## Site officiel du Club Informatique SUP'PTIC
 
 ---
@@ -18,15 +19,15 @@ flowchart LR
     H --> I[Pôle Communication recontacte l'étudiant]
 ```
 
-| Étape | Page / action | Objectif |
-|---|---|---|
-| 1 | Accueil | Découvrir le Club et sa personnalité en quelques secondes |
-| 2 | À propos | Comprendre la mission, les valeurs et la structure en pôles |
-| 3 | Domaines d'expertise (accueil ou about) | Identifier le domaine technique qui l'intéresse |
-| 4 | Projets → SUP'ONE AI | Voir une réalisation concrète et crédible, se projeter |
-| 5 | Rejoindre | Remplir le formulaire d'adhésion avec le pôle/domaine d'intérêt |
-| 6 | Confirmation | Recevoir une confirmation immédiate + e-mail automatique |
-| 7 | Suivi (hors site) | Le Pôle Communication traite la candidature |
+| Étape | Page / action                           | Objectif                                                        |
+| ----- | --------------------------------------- | --------------------------------------------------------------- |
+| 1     | Accueil                                 | Découvrir le Club et sa personnalité en quelques secondes       |
+| 2     | À propos                                | Comprendre la mission, les valeurs et la structure en pôles     |
+| 3     | Domaines d'expertise (accueil ou about) | Identifier le domaine technique qui l'intéresse                 |
+| 4     | Projets → SUP'ONE AI                    | Voir une réalisation concrète et crédible, se projeter          |
+| 5     | Rejoindre                               | Remplir le formulaire d'adhésion avec le pôle/domaine d'intérêt |
+| 6     | Confirmation                            | Recevoir une confirmation immédiate + e-mail automatique        |
+| 7     | Suivi (hors site)                       | Le Pôle Communication traite la candidature                     |
 
 ## 2. Parcours « Entreprise / partenaire potentiel »
 

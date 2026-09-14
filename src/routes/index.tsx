@@ -1,13 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Brain,
-  Code2,
-  Cpu,
-  Lightbulb,
-  Network,
-  Shield,
-} from "lucide-react";
+import { ArrowRight, Brain, Code2, Cpu, Lightbulb, Network, Shield } from "lucide-react";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,13 +33,19 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const icons = { brain: Brain, code: Code2, shield: Shield, network: Network, cpu: Cpu, lightbulb: Lightbulb };
+const icons = {
+  brain: Brain,
+  code: Code2,
+  shield: Shield,
+  network: Network,
+  cpu: Cpu,
+  lightbulb: Lightbulb,
+};
 
 function Home() {
   const { t } = useLocale();
   const featured = projects.find((p) => p.featured) ?? projects[0]!;
   const others = projects.filter((p) => p !== featured);
-
 
   return (
     <div>
@@ -112,7 +110,11 @@ function Home() {
                 />
               </Reveal>
               <ul className="grid gap-4 sm:grid-cols-3">
-                {["Apprendre par la pratique", "Partager entre pairs", "Livrer des projets utiles"].map((v, i) => (
+                {[
+                  "Apprendre par la pratique",
+                  "Partager entre pairs",
+                  "Livrer des projets utiles",
+                ].map((v, i) => (
                   <Reveal key={v} delay={i * 90}>
                     <li className="rounded-lg border border-border bg-secondary/50 p-5 font-display text-base">
                       {v}
@@ -213,24 +215,27 @@ function Home() {
             />
           </Reveal>
           <ul className="grid gap-5 md:grid-cols-3">
-            {events.filter((e) => e.upcoming).slice(0, 3).map((e, i) => (
-              <Reveal key={e.title} delay={i * 90}>
-                <li>
-                  <Card className="h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="rounded-full">
-                          {e.type}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">{e.displayDate}</span>
-                      </div>
-                      <h3 className="mt-3 font-display text-lg">{e.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
-                    </CardContent>
-                  </Card>
-                </li>
-              </Reveal>
-            ))}
+            {events
+              .filter((e) => e.upcoming)
+              .slice(0, 3)
+              .map((e, i) => (
+                <Reveal key={e.title} delay={i * 90}>
+                  <li>
+                    <Card className="h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="rounded-full">
+                            {e.type}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{e.displayDate}</span>
+                        </div>
+                        <h3 className="mt-3 font-display text-lg">{e.title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
+                      </CardContent>
+                    </Card>
+                  </li>
+                </Reveal>
+              ))}
           </ul>
         </div>
       </section>

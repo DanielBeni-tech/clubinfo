@@ -52,15 +52,16 @@ export function StatusBadge({ status }: { status: Project["status"] }) {
   );
 }
 
-export function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
+export function ProjectCard({
+  project,
+  featured = false,
+}: {
+  project: Project;
+  featured?: boolean;
+}) {
   const { t } = useLocale();
   const body = (
-    <Card
-      className={cn(
-        "h-full overflow-hidden py-0",
-        featured && "md:grid md:grid-cols-2",
-      )}
-    >
+    <Card className={cn("h-full overflow-hidden py-0", featured && "md:grid md:grid-cols-2")}>
       <img
         src={project.image}
         alt={`Illustration du projet ${project.name}`}
@@ -71,7 +72,11 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
       />
       <CardContent className="flex flex-col gap-3 p-6">
         <div className="flex flex-wrap items-center gap-2">
-          {featured && <Badge className="rounded-full bg-accent text-accent-foreground">{t("card.featured")}</Badge>}
+          {featured && (
+            <Badge className="rounded-full bg-accent text-accent-foreground">
+              {t("card.featured")}
+            </Badge>
+          )}
           <StatusBadge status={project.status} />
           <span className="text-xs text-muted-foreground">{project.domain}</span>
         </div>
@@ -95,15 +100,13 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
                 {t("card.sheet")} <ArrowRight className="size-4" />
               </Link>
             </Button>
-          ) : (
-            project.github ? (
-              <Button asChild size="sm" variant="outline">
-                <a href={project.github} target="_blank" rel="noreferrer">
-                  <Github className="size-4" /> GitHub
-                </a>
-              </Button>
-            ) : null
-          )}
+          ) : project.github ? (
+            <Button asChild size="sm" variant="outline">
+              <a href={project.github} target="_blank" rel="noreferrer">
+                <Github className="size-4" /> GitHub
+              </a>
+            </Button>
+          ) : null}
         </div>
       </CardContent>
     </Card>
@@ -119,7 +122,11 @@ export function CTASection() {
       <div className="mx-auto max-w-6xl px-4 py-16 text-center">
         <h2 className="font-display text-2xl sm:text-3xl">{t("cta.title")}</h2>
         <p className="mx-auto mt-4 max-w-xl text-sm text-night-muted">{t("cta.lead")}</p>
-        <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
+        <Button
+          asChild
+          size="lg"
+          className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
+        >
           <Link to="/join">
             {t("cta.join")} <ArrowRight className="size-4" />
           </Link>

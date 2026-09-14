@@ -24,7 +24,13 @@ export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,
 });
 
-const domains = ["Tous", "Intelligence Artificielle", "Développement logiciel", "Cybersécurité", "Électronique & IoT"];
+const domains = [
+  "Tous",
+  "Intelligence Artificielle",
+  "Développement logiciel",
+  "Cybersécurité",
+  "Électronique & IoT",
+];
 const statuses = ["Tous", "En cours", "Terminé"];
 
 function ProjectsPage() {
@@ -34,7 +40,8 @@ function ProjectsPage() {
   const filtered = useMemo(
     () =>
       projects.filter(
-        (p) => (domain === "Tous" || p.domain === domain) && (status === "Tous" || p.status === status),
+        (p) =>
+          (domain === "Tous" || p.domain === domain) && (status === "Tous" || p.status === status),
       ),
     [domain, status],
   );
@@ -93,7 +100,9 @@ function FilterRow({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="mr-1 font-mono text-xs tracking-widest text-muted-foreground uppercase">{label}</span>
+      <span className="mr-1 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+        {label}
+      </span>
       {options.map((option) => (
         <Button
           key={option}

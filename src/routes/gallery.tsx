@@ -12,10 +12,14 @@ export const Route = createFileRoute("/gallery")({
       { title: "Galerie — Club Informatique SUP'PTIC" },
       {
         name: "description",
-        content: "Photos des événements, formations, projets et de la vie du Club Informatique SUP'PTIC.",
+        content:
+          "Photos des événements, formations, projets et de la vie du Club Informatique SUP'PTIC.",
       },
       { property: "og:title", content: "Galerie du Club Informatique SUP'PTIC" },
-      { property: "og:description", content: "La vie du Club en images : événements, formations et projets." },
+      {
+        property: "og:description",
+        content: "La vie du Club en images : événements, formations et projets.",
+      },
       ...brandSocialMeta,
     ],
     links: [...brandHeadLinks],

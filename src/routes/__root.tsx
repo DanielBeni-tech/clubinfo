@@ -14,7 +14,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -83,13 +82,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Club Informatique SUP'PTIC" },
       {
         name: "description",
-        content: "Site officiel du Club Informatique de SUP'PTIC : projets, formations et événements tech.",
+        content:
+          "Site officiel du Club Informatique de SUP'PTIC : projets, formations et événements tech.",
       },
       { name: "author", content: "Club Informatique SUP'PTIC" },
       { property: "og:title", content: "Club Informatique SUP'PTIC" },
       {
         property: "og:description",
-        content: "Site officiel du Club Informatique de SUP'PTIC : projets, formations et événements tech.",
+        content:
+          "Site officiel du Club Informatique de SUP'PTIC : projets, formations et événements tech.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -143,6 +144,5 @@ function RootComponent() {
         <Footer />
       </div>
     </QueryClientProvider>
-
   );
 }

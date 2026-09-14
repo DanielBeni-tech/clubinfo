@@ -21,6 +21,7 @@ export const supabase: SupabaseClient | null =
 
 export type Candidature = {
   nom: string;
+  prenom?: string | null;
   email: string;
   telephone: string;
   campus: string;
@@ -28,10 +29,11 @@ export type Candidature = {
   regime: string;
   niveau: string;
   option: string;
-  pole: string;
   domaine: string;
-  competences?: string | null;
+  niveau_experience?: string | null;
+  pole: string;
   motivation?: string | null;
+  engagement_reglement?: boolean;
 };
 
 export async function saveCandidature(data: Candidature): Promise<void> {
@@ -43,6 +45,9 @@ export async function saveCandidature(data: Candidature): Promise<void> {
 export type Message = {
   nom: string;
   email: string;
+  telephone?: string | null;
+  organisation?: string | null;
+  categorie?: string | null;
   sujet: string;
   message: string;
 };
