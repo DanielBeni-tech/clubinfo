@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -61,52 +61,35 @@ export function ProjectCard({
 }) {
   const { t } = useLocale();
   const body = (
-    <Card className={cn("h-full overflow-hidden py-0", featured && "md:grid md:grid-cols-2")}>
-      <img
-        src={project.image}
-        alt={`Illustration du projet ${project.name}`}
-        loading="lazy"
-        width={1200}
-        height={800}
-        className={cn("h-48 w-full object-cover", featured && "md:h-full")}
-      />
-      <CardContent className="flex flex-col gap-3 p-6">
-        <div className="flex flex-wrap items-center gap-2">
+    <Card className="group flex h-full flex-col overflow-hidden py-0">
+      <div className="relative">
+        <img
+          src={project.image}
+          alt={`Illustration du projet ${project.name}`}
+          loading="lazy"
+          width={1200}
+          height={800}
+          className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+        <div className="absolute left-4 top-4 flex gap-2">
           {featured && (
             <Badge className="rounded-full bg-accent text-accent-foreground">
               {t("card.featured")}
             </Badge>
           )}
           <StatusBadge status={project.status} />
-          <span className="text-xs text-muted-foreground">{project.domain}</span>
         </div>
-        <h3 className={cn("font-display text-xl", featured && "sm:text-2xl")}>{project.name}</h3>
+      </div>
+      <CardContent className="flex flex-1 flex-col gap-3 p-6">
+        <h3 className="font-display text-xl">{project.name}</h3>
         <p className="text-sm font-medium text-primary">{project.subtitle}</p>
         <p className="text-sm text-muted-foreground">{project.summary}</p>
-        <ul className="mt-1 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <li
-              key={tag}
-              className="rounded-md bg-secondary px-2 py-1 font-mono text-[11px] text-secondary-foreground"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {project.href ? (
-            <Button asChild size="sm">
-              <Link to="/projects/supone-ai">
-                {t("card.sheet")} <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-          ) : project.github ? (
-            <Button asChild size="sm" variant="outline">
-              <a href={project.github} target="_blank" rel="noreferrer">
-                <Github className="size-4" /> GitHub
-              </a>
-            </Button>
-          ) : null}
+        <div className="mt-auto flex justify-end pt-4">
+          <Button asChild size="sm">
+            <Link to="/projects/$slug" params={{ slug: project.slug }}>
+              {t("card.sheet")} <ArrowRight className="size-4" />
+            </Link>
+          </Button>
         </div>
       </CardContent>
     </Card>

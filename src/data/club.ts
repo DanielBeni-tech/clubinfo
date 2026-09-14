@@ -50,40 +50,40 @@ export const club = {
 
 export const expertise = [
   {
-    icon: "brain",
-    title: "Intelligence Artificielle",
-    description:
-      "Machine learning, traitement du langage et vision par ordinateur appliqués à des cas d'usage camerounais.",
-  },
-  {
     icon: "code",
     title: "Développement logiciel",
     description:
-      "Applications web et mobiles, du prototype au produit livré, avec des méthodes de travail en équipe.",
+      "Conception d'applications web, d'API et de plateformes complètes, du prototype au déploiement.",
+  },
+  {
+    icon: "brain",
+    title: "Intelligence artificielle & données",
+    description:
+      "RAG, assistants intelligents, machine learning et analyse de données appliqués à des problèmes concrets.",
   },
   {
     icon: "shield",
     title: "Cybersécurité",
     description:
-      "Sensibilisation, audit, CTF et bonnes pratiques de sécurité des systèmes d'information.",
+      "Sensibilisation à la cybersécurité, développement sécurisé, authentification et protection des données.",
   },
   {
     icon: "network",
-    title: "Réseaux & Télécommunications",
+    title: "Réseaux & systèmes",
     description:
-      "Administration réseau, protocoles et infrastructures, cœur historique de la formation SUP'PTIC.",
+      "Infrastructures, protocoles, services réseau et systèmes connectés au service des applications.",
   },
   {
     icon: "cpu",
     title: "Électronique & IoT",
     description:
-      "Objets connectés, capteurs et systèmes embarqués conçus et assemblés par les membres du Club.",
+      "Exploration des capteurs, systèmes embarqués et objets connectés à travers des prototypes appliqués.",
   },
   {
     icon: "lightbulb",
-    title: "Innovation & Recherche",
+    title: "Innovation appliquée",
     description:
-      "Veille technologique, expérimentations et projets de recherche appliquée portés par les pôles.",
+      "Prototypage rapide et transformation de problèmes locaux en solutions numériques utiles.",
   },
 ] as const;
 
@@ -99,6 +99,9 @@ export type Project = {
   featured?: boolean;
   href?: string;
   github?: string;
+  detailedDescription?: string;
+  approach?: string;
+  features?: string[];
 };
 
 export const projects: Project[] = [
@@ -107,48 +110,122 @@ export const projects: Project[] = [
     name: "SUP'ONE AI",
     subtitle: "L'assistant intelligent des étudiants de SUP'PTIC",
     summary:
-      "Un assistant conversationnel qui centralise l'information académique de l'école et répond aux questions des étudiants en langage naturel.",
+      "Un assistant conversationnel qui centralise l'information académique de l'école et répond aux questions des étudiants en langage naturel via une architecture RAG.",
     status: "En cours",
     domain: "Intelligence Artificielle",
-    tags: ["Python", "LLM", "RAG", "React", "FastAPI"],
+    tags: ["Python", "LLM", "RAG", "React", "FastAPI", "PostgreSQL"],
     image: projectSupone,
     featured: true,
     href: "/projects/supone-ai",
     github: "https://github.com/nkoumougrinnel/SupOneAI",
+    detailedDescription:
+      "Un assistant conversationnel qui centralise l'information académique officielle de SUP'PTIC et répond aux questions des étudiants en français, avec des sources vérifiables.",
+    approach:
+      "SUP'ONE AI s'appuie sur une architecture RAG : les documents sont découpés, vectorisés puis interrogés avant qu'un modèle de langage ne formule une réponse ancrée dans les extraits pertinents.",
+    features: ["Recherche documentaire", "Réponses citées", "API REST", "Interface responsive"],
   },
   {
-    slug: "cyberveille",
-    name: "CyberVeille",
-    subtitle: "Tableau de bord de sensibilisation à la cybersécurité",
+    slug: "campusflow",
+    name: "CampusFlow",
+    subtitle: "Intelligence et sécurité pour campus intelligents",
     summary:
-      "Une plateforme de sensibilisation et de suivi des bonnes pratiques de sécurité, utilisée lors des ateliers du Club.",
+      "Plateforme de sécurité alimentée par l'IA qui unifie les données d'identité (cartes, WiFi, CCTV) avec résolution d'entités, détection d'anomalies et analyse spatiale prédictive.",
     status: "En cours",
-    domain: "Cybersécurité",
-    tags: ["Next.js", "PostgreSQL", "OSINT"],
-    image: projectCyber,
+    domain: "Intelligence Artificielle",
+    tags: ["React", "FastAPI", "PyTorch", "PostgreSQL", "Supabase"],
+    image: projectSupone,
+    github: "https://github.com/Ruvaifa/campusflow",
+    detailedDescription:
+      "CampusFlow unifie des sources de données de campus pour fournir une résolution d'entités en temps réel, une analyse spatiale prédictive et une détection d'anomalies.",
+    approach:
+      "La plateforme combine plusieurs modèles d'apprentissage automatique et des données issues des cartes, du WiFi, de la vidéosurveillance et des réservations de laboratoire.",
+    features: ["Fusion multi-sources", "Détection d'anomalies", "Carte interactive", "Alertes intelligentes"],
   },
   {
-    slug: "campus-iot",
-    name: "Campus IoT",
-    subtitle: "Réseau de capteurs pour le campus",
+    slug: "lekki-wiki",
+    name: "Lekki Wiki",
+    subtitle: "Base de connaissances d'entreprise avec assistant IA",
     summary:
-      "Un prototype de capteurs connectés mesurant température, énergie et occupation des salles, conçu au laboratoire du Club.",
+      "Gestion documentaire Markdown-first avec assistant Lekki AI capable de répondre aux questions en citant ses sources, grâce à une architecture RAG complète.",
+    status: "En cours",
+    domain: "Développement logiciel",
+    tags: ["FastAPI", "React", "SQLite", "LangChain", "Gemini"],
+    image: projectSupone,
+    github: "https://github.com/nkoumougrinnel/Lekki",
+    detailedDescription:
+      "Lekki Wiki associe une gestion documentaire Markdown-first à un assistant IA qui répond à partir du contenu de l'organisation et cite ses sources.",
+    approach:
+      "Les documents sont découpés et indexés pour permettre une recherche plein texte et une recherche sémantique, avec plusieurs fournisseurs LLM en repli automatique.",
+    features: ["Pages Markdown", "Assistant avec sources", "Recherche FTS5", "Gestion des rôles"],
+  },
+  {
+    slug: "healthmesh",
+    name: "HealthMesh",
+    subtitle: "Triage médical d'urgence par IA pour zones rurales",
+    summary:
+      "Application de triage d'urgence pour agents de santé en zones rurales, avec moteur d'analyse intelligente, synchronisation hors-ligne et tableau de bord pour spécialistes.",
+    status: "En cours",
+    domain: "Intelligence Artificielle",
+    tags: ["Node.js", "React", "PostgreSQL", "Socket.IO", "Docker"],
+    image: projectSupone,
+    github: "https://github.com/nkoumougrinnel/HealthMesh",
+    detailedDescription:
+      "HealthMesh est une application de triage médical d'urgence conçue pour les zones rurales, avec une application pour les agents de santé et un tableau de bord pour les spécialistes.",
+    approach:
+      "Un moteur de règles hors-ligne analyse les constantes critiques et peut être enrichi par un modèle de langage, tandis que la synchronisation conserve le fonctionnement dans les zones à connectivité limitée.",
+    features: ["Triage hors-ligne", "Alertes colorées", "Suivi des patients", "Synchronisation temps réel"],
+  },
+  {
+    slug: "shopkamer",
+    name: "ShopKamer",
+    subtitle: "Plateforme de e-commerce",
+    summary:
+      "Site web de e-commerce développé dans le cadre du premier atelier du club informatique. Projet idéal pour les débutants dans le développement web.",
     status: "Terminé",
-    domain: "Électronique & IoT",
-    tags: ["ESP32", "LoRa", "MQTT", "Grafana"],
-    image: projectIot,
+    domain: "Développement logiciel",
+    tags: ["HTML", "CSS", "JavaScript", "PHP", "SQL"],
+    image: projectSupone,
+    github: "https://github.com/nkoumougrinnel/ShopKamer",
+    detailedDescription:
+      "ShopKamer est une plateforme e-commerce développée pendant le premier atelier du Club pour mettre en pratique les bases du développement web.",
+    approach:
+      "Le projet accompagne les débutants à travers la conception d'une interface, la gestion des produits et la persistance des données.",
+    features: ["Catalogue produits", "Interface web", "Gestion des données", "Projet pédagogique"],
+  },
+  {
+    slug: "sango",
+    name: "Sango",
+    subtitle: "Routage intelligent pour véhicules de secours",
+    summary:
+      "Système de routage en temps réel pour ambulances et pompiers capable de s'adapter aux conditions changeantes et d'expliquer chaque décision. Hackathon Hackverse 2026.",
+    status: "En cours",
+    domain: "Intelligence Artificielle",
+    tags: ["React", "TypeScript", "Python", "Vite"],
+    image: projectSupone,
+    github: "https://github.com/nkoumougrinnel/Sango",
+    detailedDescription:
+      "Sango explore le routage intelligent pour les véhicules de secours, en tenant compte du trafic, de la météo, des incidents et de la qualité variable des routes.",
+    approach:
+      "Le système prend des décisions dans un environnement incertain, réévalue le meilleur itinéraire quand les conditions changent et explique les choix effectués.",
+    features: ["Routage dynamique", "Adaptation aux incidents", "Décisions explicables", "Scénarios de simulation"],
   },
   {
     slug: "syntra",
-    name: "Syntra",
-    subtitle: "Le messager technique sécurisé",
+    name: "CommHQ / Syntra",
+    subtitle: "Messagerie technique d'entreprise sécurisée",
     summary:
-      "CommHQ — messagerie d'entreprise en temps réel (canaux, Markdown, code, bot IA), présentée aux Journées universitaires de l'informatique 2026.",
+      "Plateforme de chat temps réel avec espaces, canaux, rendu Markdown/code professionnel et assistant IA pour résumer les discussions. Présentée aux JUI 2026.",
     status: "Terminé",
     domain: "Développement logiciel",
-    tags: ["React", "NestJS", "Socket.IO", "MongoDB"],
+    tags: ["React", "NestJS", "Socket.IO", "MongoDB", "TypeScript"],
     image: gallerySyntraPitch,
-    github: "https://github.com/DanielBeni-tech/CommHQ",
+    href: "https://comm-hq.vercel.app",
+    github: "https://github.com/DanielBeni-tech/Syntra",
+    detailedDescription:
+      "CommHQ, aussi appelé Syntra, est une messagerie technique sécurisée avec espaces de travail, canaux, messages directs, rendu Markdown et assistant IA.",
+    approach:
+      "L'application utilise une architecture temps réel avec Socket.IO, une API NestJS et MongoDB, avec une double protection contre les contenus XSS.",
+    features: ["Chat temps réel", "Markdown et code", "Bot de résumé IA", "Invitations et rôles"],
   },
 ];
 
@@ -157,7 +234,11 @@ export type ClubEvent = {
   date: string;
   displayDate: string;
   type:
-    "Formation" | "Conférence" | "Hackathon" | "Atelier" | "Concours" | "Visite" | "Collaboration";
+    | "Formation"
+    | "Atelier"
+    | "Concours"
+    | "Présentation"
+    | "Collaboration";
   description: string;
   image?: string;
   upcoming: boolean;
@@ -165,71 +246,62 @@ export type ClubEvent = {
 
 export const events: ClubEvent[] = [
   {
-    title: "Hackathon SUP'ONE 48h",
-    date: "2026-10-17",
-    displayDate: "17 – 19 octobre 2026",
-    type: "Hackathon",
+    title: "Journée de présentation des projets",
+    date: "",
+    displayDate: "Date à confirmer",
+    type: "Présentation",
     description:
-      "Deux jours et deux nuits pour construire une solution numérique utile au campus, en équipes pluridisciplinaires.",
+      "Une journée dédiée à la présentation des projets portés par les membres du Club et à la découverte des solutions développées par les équipes.",
+    image: galleryJuioPitch,
+    upcoming: true,
+  },
+  {
+    title: "Portfolio Challenge",
+    date: "",
+    displayDate: "Date à confirmer",
+    type: "Concours",
+    description:
+      "Un challenge pour mettre en valeur les portfolios, les compétences et les projets des membres du Club.",
     image: galleryHackathon,
     upcoming: true,
   },
   {
-    title: "Formation : introduction au machine learning",
-    date: "2026-09-26",
-    displayDate: "26 septembre 2026",
-    type: "Formation",
-    description:
-      "Session pratique de 3 heures sur Python, pandas et les premiers modèles de classification.",
-    image: galleryLab,
-    upcoming: true,
-  },
-  {
-    title: "Journées universitaires de l'informatique",
-    date: "2026-05-16",
-    displayDate: "Édition 2026",
+    title: "Journées universitaires de l'informatique (JUIN)",
+    date: "",
+    displayDate: "Édition passée",
     type: "Concours",
     description:
-      "Présentation des projets du Club, dont Syntra, et remise du Prix du meilleur projet (100 000 FCFA) avec le soutien de CAMPOST.",
+      "Participation du Club aux Journées universitaires de l'informatique, avec présentation des projets et échanges autour de l'innovation numérique.",
     image: galleryJuioPrize,
     upcoming: false,
   },
   {
-    title: "Conférence : l'IA souveraine en Afrique centrale",
-    date: "2026-08-14",
-    displayDate: "14 août 2026",
-    type: "Conférence",
-    description:
-      "Table ronde avec des professionnels du secteur sur les enjeux de souveraineté numérique.",
-    image: galleryConference,
-    upcoming: false,
-  },
-  {
-    title: "Atelier Capture The Flag",
-    date: "2026-06-08",
-    displayDate: "8 juin 2026",
+    title: "Atelier ShopKamer",
+    date: "",
+    displayDate: "Édition passée",
     type: "Atelier",
-    description: "Initiation aux challenges de cybersécurité : web, forensic et cryptographie.",
-    image: galleryTalk,
-    upcoming: false,
-  },
-  {
-    title: "Visite d'un opérateur télécom",
-    date: "2026-04-19",
-    displayDate: "19 avril 2026",
-    type: "Visite",
     description:
-      "Découverte d'un centre d'exploitation réseau et échange avec les ingénieurs sur site.",
-    image: gallerySpeaker,
+      "Atelier pratique consacré à la réalisation de ShopKamer, une plateforme e-commerce permettant aux membres de travailler les bases du développement web.",
+    image: galleryLab,
     upcoming: false,
   },
   {
-    title: "Collaboration inter-clubs tech",
-    date: "2026-03-02",
-    displayDate: "2 mars 2026",
+    title: "Première présentation du projet chatbot",
+    date: "",
+    displayDate: "Édition passée",
+    type: "Présentation",
+    description:
+      "Présentation du projet chatbot aux membres du Club, suivie d'un échange sur ses objectifs et ses prochaines évolutions.",
+    image: galleryMeeting,
+    upcoming: false,
+  },
+  {
+    title: "Rencontre entre le Club Informatique et le Club GI",
+    date: "",
+    displayDate: "Édition passée",
     type: "Collaboration",
     description:
-      "Rencontre avec les clubs informatiques d'écoles partenaires autour de projets communs.",
+      "Rencontre entre le Club Informatique et le Club GI pour partager les expériences, rapprocher les membres et explorer des pistes de collaboration.",
     image: galleryCollabGi,
     upcoming: false,
   },
@@ -482,7 +554,7 @@ export const heroSlides = [
 export const stats = [
   { value: "2021", label: "Année de création" },
   { value: "120+", label: "Membres actifs" },
-  { value: "15", label: "Projets menés" },
+  { value: String(projects.length), label: "Projets présentés" },
   { value: "3", label: "Pôles opérationnels" },
 ];
 

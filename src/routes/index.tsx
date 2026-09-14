@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Brain, Code2, Cpu, Lightbulb, Network, Shield } from "lucide-react";
+import {
+  ArrowRight,
+  Brain,
+  CheckCircle2,
+  Code2,
+  Cpu,
+  Lightbulb,
+  Network,
+  Shield,
+} from "lucide-react";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -100,28 +109,29 @@ function Home() {
                   eyebrow="À propos"
                   title="Un club étudiant, une exigence professionnelle"
                   lead="Né au sein de SUP'PTIC, le Club Informatique rassemble des étudiants qui veulent apprendre en construisant. Nos pôles travaillent comme une petite structure tech : cadrage, développement, livraison et communication."
-                  action={
-                    <Button asChild variant="outline">
-                      <Link to="/about">
-                        En savoir plus <ArrowRight className="size-4" />
-                      </Link>
-                    </Button>
-                  }
                 />
               </Reveal>
-              <ul className="grid gap-4 sm:grid-cols-3">
+              <ul className="grid gap-3 sm:grid-cols-3">
                 {[
-                  "Apprendre par la pratique",
-                  "Partager entre pairs",
-                  "Livrer des projets utiles",
-                ].map((v, i) => (
-                  <Reveal key={v} delay={i * 90}>
-                    <li className="rounded-lg border border-border bg-secondary/50 p-5 font-display text-base">
-                      {v}
+                  { label: "Apprendre par la pratique", icon: Code2 },
+                  { label: "Partager entre pairs", icon: CheckCircle2 },
+                  { label: "Livrer des projets utiles", icon: ArrowRight },
+                ].map(({ label, icon: Icon }, i) => (
+                  <Reveal key={label} delay={i * 90}>
+                    <li className="flex h-full min-h-32 flex-col justify-between rounded-lg border border-border bg-secondary/50 p-5">
+                      <Icon className="size-5 text-primary" />
+                      <span className="mt-8 font-display text-base leading-snug">{label}</span>
                     </li>
                   </Reveal>
                 ))}
               </ul>
+              <div className="mt-5 flex justify-end">
+                <Button asChild variant="outline">
+                  <Link to="/about">
+                    En savoir plus <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
             <Reveal delay={80}>
               <img

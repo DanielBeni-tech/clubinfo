@@ -31,12 +31,10 @@ export const Route = createFileRoute("/events")({
 const types = [
   "Tous",
   "Formation",
-  "Conférence",
-  "Hackathon",
   "Atelier",
-  "Visite",
-  "Collaboration",
   "Concours",
+  "Présentation",
+  "Collaboration",
 ];
 
 function EventsPage() {

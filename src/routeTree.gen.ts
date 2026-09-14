@@ -25,6 +25,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
 import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 import { Route as ProjectsSuponeAiRouteImport } from './routes/projects.supone-ai'
 
 const IndexRoute = IndexRouteImport.update({
@@ -107,6 +108,11 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ProjectsRoute,
 } as any)
+const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProjectsRoute,
+} as any)
 const ProjectsSuponeAiRoute = ProjectsSuponeAiRouteImport.update({
   id: '/supone-ai',
   path: '/supone-ai',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/utilisateurs'
+    | '/projects/$slug'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/utilisateurs'
+    | '/projects/$slug'
     | '/projects/supone-ai'
     | '/projects'
   id:
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/utilisateurs'
+    | '/projects/$slug'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -361,6 +373,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof ProjectsRoute
     }
+    '/projects/$slug': {
+      id: '/projects/$slug'
+      path: '/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ProjectsSlugRouteImport
+      parentRoute: typeof ProjectsRoute
+    }
     '/projects/supone-ai': {
       id: '/projects/supone-ai'
       path: '/supone-ai'
@@ -372,11 +391,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProjectsRouteChildren {
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
   ProjectsSuponeAiRoute: typeof ProjectsSuponeAiRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
 
 const ProjectsRouteChildren: ProjectsRouteChildren = {
+  ProjectsSlugRoute: ProjectsSlugRoute,
   ProjectsSuponeAiRoute: ProjectsSuponeAiRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }

@@ -24,26 +24,14 @@ export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,
 });
 
-const domains = [
-  "Tous",
-  "Intelligence Artificielle",
-  "Développement logiciel",
-  "Cybersécurité",
-  "Électronique & IoT",
-];
 const statuses = ["Tous", "En cours", "Terminé"];
 
 function ProjectsPage() {
-  const [domain, setDomain] = useState("Tous");
   const [status, setStatus] = useState("Tous");
 
   const filtered = useMemo(
-    () =>
-      projects.filter(
-        (p) =>
-          (domain === "Tous" || p.domain === domain) && (status === "Tous" || p.status === status),
-      ),
-    [domain, status],
+    () => projects.filter((p) => status === "Tous" || p.status === status),
+    [status],
   );
 
   const featured = filtered.find((p) => p.featured);
@@ -59,7 +47,6 @@ function ProjectsPage() {
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-8 flex flex-col gap-4">
-            <FilterRow label="Domaine" options={domains} value={domain} onChange={setDomain} />
             <FilterRow label="Statut" options={statuses} value={status} onChange={setStatus} />
           </div>
 
