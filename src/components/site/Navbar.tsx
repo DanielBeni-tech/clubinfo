@@ -1,15 +1,19 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { LogIn, Menu, X, LogOut, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/Logo";
 import { LangToggle } from "@/components/site/LangToggle";
 import { useLocale } from "@/lib/i18n";
+import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const { t } = useLocale();
   const links = [
     { to: "/", label: t("nav.home") },
@@ -18,8 +22,11 @@ export function Navbar() {
     { to: "/events", label: t("nav.events") },
     { to: "/gallery", label: t("nav.gallery") },
     { to: "/contact", label: t("nav.contact") },
-    { to: "/statuts", label: t("nav.statuts") },
   ] as const;
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -27,6 +34,24 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  async function checkSession() {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    setUser(session?.user || null);
+    setLoading(false);
+  }
+
+  async function handleLogout() {
+    if (!supabase) return;
+    await supabase.auth.signOut();
+    setUser(null);
+    await navigate({ to: "/" });
+  }
 
   return (
     <header
@@ -54,11 +79,51 @@ export function Navbar() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <LangToggle />
-          <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link to="/join">{t("nav.join")}</Link>
-          </Button>
+          {!loading && user && user.email === "adminclub@supptic.cm" && (
+            <>
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex text-xs font-semibold text-primary hover:text-primary hover:bg-secondary"
+              >
+                <Link to="/admin/dashboard">
+                  <ShieldCheck className="mr-1.5 size-3.5" />
+                  Espace Bureau
+                </Link>
+              </Button>
+              <span className="hidden sm:inline text-xs text-muted-foreground">{user.email}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary"
+              >
+                <LogOut className="mr-1.5 size-3.5" />
+                Déconnexion
+              </Button>
+            </>
+          )}
+          {!loading && !user && (
+            <>
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary"
+              >
+                <Link to="/login">
+                  <LogIn className="mr-1.5 size-3.5" />
+                  {t("nav.login")}
+                </Link>
+              </Button>
+              <Button asChild size="sm" className="hidden sm:inline-flex text-xs font-semibold shadow-xs">
+                <Link to="/join">{t("nav.join")}</Link>
+              </Button>
+            </>
+          )}
           <button
             type="button"
             aria-label={open ? t("nav.close") : t("nav.menu")}
@@ -86,13 +151,55 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
-            <li className="flex items-center justify-between pt-2">
-              <LangToggle />
-              <Button asChild className="flex-1 sm:hidden">
-                <Link to="/join" onClick={() => setOpen(false)}>
-                  {t("nav.joinClub")}
-                </Link>
-              </Button>
+            <li className="flex flex-col gap-2.5 pt-3 border-t border-border">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground">Langue</span>
+                <LangToggle />
+              </div>
+              {!loading && user && user.email === "adminclub@supptic.cm" && (
+                <div className="space-y-2">
+                  <div className="text-xs text-muted-foreground">{user.email}</div>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Link to="/admin/dashboard">
+                      <ShieldCheck className="mr-1.5 size-3.5" />
+                      Espace Bureau
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => {
+                      handleLogout();
+                      setOpen(false);
+                    }}
+                  >
+                    <LogOut className="mr-1.5 size-3.5" />
+                    Déconnexion
+                  </Button>
+                </div>
+              )}
+              {!loading && !user && (
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  <Button asChild variant="outline" size="sm" className="w-full text-xs">
+                    <Link to="/login" onClick={() => setOpen(false)}>
+                      <LogIn className="mr-1.5 size-3.5" />
+                      {t("nav.login")}
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" className="w-full text-xs font-semibold">
+                    <Link to="/join" onClick={() => setOpen(false)}>
+                      {t("nav.joinClub")}
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </li>
           </ul>
         </div>

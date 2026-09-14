@@ -6,8 +6,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  *   VITE_SUPABASE_URL=https://xxxx.supabase.co
  *   VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_... (ou la anon key JWT)
  *
- * Si non configuré (ex. aperçu local), `supabase` est null et les
- * formulaires retombent sur une simple confirmation à l'écran.
+ * Si la configuration est absente, les actions dépendantes de Supabase
+ * affichent une erreur explicite à l'utilisateur.
  */
 const url = import.meta.env["VITE_SUPABASE_URL"] as string | undefined;
 const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string | undefined;
@@ -15,7 +15,7 @@ const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string | undefin
 export const supabase: SupabaseClient | null =
   url && key
     ? createClient(url, key, {
-        auth: { persistSession: false, autoRefreshToken: false },
+        auth: { persistSession: true, autoRefreshToken: true },
       })
     : null;
 

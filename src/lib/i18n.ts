@@ -16,6 +16,7 @@ const messages = {
     "nav.joinClub": "Rejoindre le club",
     "nav.menu": "Ouvrir le menu",
     "nav.close": "Fermer le menu",
+    "nav.login": "Connexion",
     "hero.kicker": "SUP'PTIC · Yaoundé",
     "hero.lead":
       "Nous réunissons les étudiants passionnés de technologie autour de projets réels : intelligence artificielle, développement, cybersécurité, réseaux et objets connectés. Le Club forme, expérimente et livre — avec l'exigence d'une équipe tech professionnelle.",
@@ -43,7 +44,6 @@ const messages = {
       "Le Club est ouvert à tout étudiant régulièrement inscrit à SUP'PTIC, quel que soit son niveau technique. Rejoins un pôle et participe à nos projets dès ce semestre.",
     "cta.join": "Rejoindre le club",
     "card.featured": "Projet phare",
-    "nav.statuts": "Statuts",
     "card.sheet": "Voir la fiche",
     "lang.fr": "FR",
     "lang.en": "EN",
@@ -60,6 +60,7 @@ const messages = {
     "nav.joinClub": "Join the club",
     "nav.menu": "Open menu",
     "nav.close": "Close menu",
+    "nav.login": "Sign in",
     "hero.kicker": "SUP'PTIC · Yaoundé",
     "hero.lead":
       "We bring together students who love technology around real projects: AI, software, cybersecurity, networks and IoT. The Club trains, experiments and ships — with the standards of a professional tech team.",
@@ -86,7 +87,6 @@ const messages = {
       "The Club is open to every regularly enrolled SUP'PTIC student, whatever their technical level. Join a unit and take part in our projects this semester.",
     "cta.join": "Join the club",
     "card.featured": "Flagship project",
-    "nav.statuts": "Statutes",
     "card.sheet": "View details",
     "lang.fr": "FR",
     "lang.en": "EN",

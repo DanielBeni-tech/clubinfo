@@ -7,8 +7,8 @@ export function LangToggle({ inverted = false }: { inverted?: boolean }) {
   return (
     <div
       className={cn(
-        "inline-flex rounded-md border p-0.5 text-xs font-semibold tracking-wide",
-        inverted ? "border-night-muted/30" : "border-border",
+        "inline-flex items-center rounded-full border p-0.5 text-xs transition-colors",
+        inverted ? "border-white/15 bg-white/5" : "border-border/80 bg-muted/30",
       )}
       role="group"
       aria-label={t("lang.toggle")}
@@ -17,14 +17,14 @@ export function LangToggle({ inverted = false }: { inverted?: boolean }) {
         type="button"
         onClick={() => setLocale("fr")}
         className={cn(
-          "rounded-sm px-2 py-1",
+          "rounded-full px-2 py-0.5 text-[11px] transition-all",
           locale === "fr"
             ? inverted
-              ? "bg-accent text-accent-foreground"
-              : "bg-primary text-primary-foreground"
+              ? "bg-white/20 text-white font-semibold shadow-xs"
+              : "bg-background text-foreground font-semibold shadow-xs"
             : inverted
-              ? "text-night-muted"
-              : "text-muted-foreground",
+              ? "text-white/60 hover:text-white"
+              : "text-muted-foreground hover:text-foreground",
         )}
       >
         {t("lang.fr")}
@@ -33,14 +33,14 @@ export function LangToggle({ inverted = false }: { inverted?: boolean }) {
         type="button"
         onClick={() => setLocale("en")}
         className={cn(
-          "rounded-sm px-2 py-1",
+          "rounded-full px-2 py-0.5 text-[11px] transition-all",
           locale === "en"
             ? inverted
-              ? "bg-accent text-accent-foreground"
-              : "bg-primary text-primary-foreground"
+              ? "bg-white/20 text-white font-semibold shadow-xs"
+              : "bg-background text-foreground font-semibold shadow-xs"
             : inverted
-              ? "text-night-muted"
-              : "text-muted-foreground",
+              ? "text-white/60 hover:text-white"
+              : "text-muted-foreground hover:text-foreground",
         )}
       >
         {t("lang.en")}

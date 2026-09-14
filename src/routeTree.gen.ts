@@ -16,9 +16,14 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as JoinRouteImport } from './routes/join'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ReglementRouteImport } from './routes/reglement'
-import { Route as StatutsRouteImport } from './routes/statuts'
+import { Route as AdminCandidaturesRouteImport } from './routes/admin/candidatures'
+import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
+import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSuponeAiRouteImport } from './routes/projects.supone-ai'
 
@@ -57,6 +62,11 @@ const JoinRoute = JoinRouteImport.update({
   path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
   path: '/projects',
@@ -67,9 +77,29 @@ const ReglementRoute = ReglementRouteImport.update({
   path: '/reglement',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StatutsRoute = StatutsRouteImport.update({
-  id: '/statuts',
-  path: '/statuts',
+const AdminCandidaturesRoute = AdminCandidaturesRouteImport.update({
+  id: '/admin/candidatures',
+  path: '/admin/candidatures',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/admin/messages',
+  path: '/admin/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUtilisateursRoute = AdminUtilisateursRouteImport.update({
+  id: '/admin/utilisateurs',
+  path: '/admin/utilisateurs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
@@ -91,9 +121,14 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
+  '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
-  '/statuts': typeof StatutsRoute
+  '/admin/candidatures': typeof AdminCandidaturesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -105,8 +140,13 @@ export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
+  '/login': typeof LoginRoute
   '/reglement': typeof ReglementRoute
-  '/statuts': typeof StatutsRoute
+  '/admin/candidatures': typeof AdminCandidaturesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -119,9 +159,14 @@ export interface FileRoutesById {
   '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
+  '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
-  '/statuts': typeof StatutsRoute
+  '/admin/candidatures': typeof AdminCandidaturesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/projects/supone-ai': typeof ProjectsSuponeAiRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -135,9 +180,14 @@ export interface FileRouteTypes {
     | '/events'
     | '/gallery'
     | '/join'
+    | '/login'
     | '/projects'
     | '/reglement'
-    | '/statuts'
+    | '/admin/candidatures'
+    | '/admin/dashboard'
+    | '/admin/login'
+    | '/admin/messages'
+    | '/admin/utilisateurs'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -149,8 +199,13 @@ export interface FileRouteTypes {
     | '/events'
     | '/gallery'
     | '/join'
+    | '/login'
     | '/reglement'
-    | '/statuts'
+    | '/admin/candidatures'
+    | '/admin/dashboard'
+    | '/admin/login'
+    | '/admin/messages'
+    | '/admin/utilisateurs'
     | '/projects/supone-ai'
     | '/projects'
   id:
@@ -162,9 +217,14 @@ export interface FileRouteTypes {
     | '/events'
     | '/gallery'
     | '/join'
+    | '/login'
     | '/projects'
     | '/reglement'
-    | '/statuts'
+    | '/admin/candidatures'
+    | '/admin/dashboard'
+    | '/admin/login'
+    | '/admin/messages'
+    | '/admin/utilisateurs'
     | '/projects/supone-ai'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -177,9 +237,14 @@ export interface RootRouteChildren {
   EventsRoute: typeof EventsRoute
   GalleryRoute: typeof GalleryRoute
   JoinRoute: typeof JoinRoute
+  LoginRoute: typeof LoginRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
   ReglementRoute: typeof ReglementRoute
-  StatutsRoute: typeof StatutsRoute
+  AdminCandidaturesRoute: typeof AdminCandidaturesRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminUtilisateursRoute: typeof AdminUtilisateursRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -233,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects': {
       id: '/projects'
       path: '/projects'
@@ -247,11 +319,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReglementRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/statuts': {
-      id: '/statuts'
-      path: '/statuts'
-      fullPath: '/statuts'
-      preLoaderRoute: typeof StatutsRouteImport
+    '/admin/candidatures': {
+      id: '/admin/candidatures'
+      path: '/admin/candidatures'
+      fullPath: '/admin/candidatures'
+      preLoaderRoute: typeof AdminCandidaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/admin/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/utilisateurs': {
+      id: '/admin/utilisateurs'
+      path: '/admin/utilisateurs'
+      fullPath: '/admin/utilisateurs'
+      preLoaderRoute: typeof AdminUtilisateursRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/': {
@@ -293,9 +393,14 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRoute: EventsRoute,
   GalleryRoute: GalleryRoute,
   JoinRoute: JoinRoute,
+  LoginRoute: LoginRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
   ReglementRoute: ReglementRoute,
-  StatutsRoute: StatutsRoute,
+  AdminCandidaturesRoute: AdminCandidaturesRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
+  AdminUtilisateursRoute: AdminUtilisateursRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -124,13 +124,6 @@ function About() {
           <SectionTitle
             eyebrow="Charte"
             title="Nos cinq objectifs"
-            action={
-              <Button asChild variant="outline" size="sm">
-                <Link to="/statuts">
-                  Statuts du Club <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-            }
           />
           <ul className="grid gap-4 sm:grid-cols-2">
             {objectives.map((o) => (

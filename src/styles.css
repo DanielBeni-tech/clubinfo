@@ -201,9 +201,6 @@
   background-size: 26px 26px;
 }
 
-/*
- * Statuts page animations
- */
 @keyframes gradientShift {
   0%,
   100% {
