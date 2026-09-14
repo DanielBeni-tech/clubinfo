@@ -24,9 +24,12 @@ import gallerySyntraPitch from "@/assets/images/gallery/syntra-pitch.jpg";
 import president from "@/assets/images/people/president.jpg";
 import presidentPortrait from "@/assets/images/people/president-portrait.jpg";
 import memberPolo from "@/assets/images/people/member-polo.jpg";
-import memberPlaid from "@/assets/images/people/member-plaid.jpg";
 import memberBlackTee from "@/assets/images/people/member-black-tee.jpg";
 import memberKeumekaWilfried from "@/assets/images/people/keumeka-wilfried.jpg";
+import memberEvinaMbahoEric from "@/assets/images/people/evina-mbaho-eric.jpg";
+import memberOlamaVictoire from "@/assets/images/people/olama-victoire.jpg";
+import memberDanielBenny from "@/assets/images/people/daniel-benny.jpg";
+import memberFowaMichelleRosee from "@/assets/images/people/fowa-michelle-rosee.jpg";
 import logoSupptic from "@/assets/images/partners/supptic.jpeg";
 import logoMinpostel from "@/assets/images/partners/minpostel.jpeg";
 import logoCamtel from "@/assets/images/partners/camtel.png";
@@ -341,41 +344,59 @@ export const gallery: GalleryItem[] = [
   },
   {
     src: president,
-    alt: "Messi Ovah Fred, président du Club Informatique SUP'PTIC",
+    alt: "MESSI OVAH FRED, président du Club Informatique SUP'PTIC",
     category: "Vie du club",
   },
 ];
 
 export const bureau = [
   {
-    name: "Messi Ovah Fred",
+    name: "MESSI OVAH FRED",
     role: "Président du Club Informatique",
     roleEn: "President of the Computer Club",
     image: presidentPortrait,
   },
   {
-    name: "Membre du Bureau",
+    name: "NKOUMOU GERMAIN",
     role: "Vice-président",
-    roleEn: "Vice-president",
+    roleEn: "Vice President",
     image: memberPolo,
   },
   {
-    name: "Membre du Bureau",
+    name: "EVINA MBAHO ERIC",
     role: "Secrétaire général",
-    roleEn: "Secretary-general",
-    image: memberPlaid,
+    roleEn: "Secretary General",
+    image: memberEvinaMbahoEric,
   },
   {
-    name: "Membre du Bureau",
-    role: "Trésorier",
-    roleEn: "Treasurer",
-    image: memberBlackTee,
+    name: "OLAMA VICTOIRE",
+    role: "Chef du Pôle Développement",
+    roleEn: "Head of Development",
+    image: memberOlamaVictoire,
   },
   {
     name: "KEUMEKA SOKING WILFRIED",
     role: "Chef du Pôle Communication",
     roleEn: "Head of Communications",
     image: memberKeumekaWilfried,
+  },
+  {
+    name: "FOWA MICHELLE ROSEE",
+    role: "Chef du Pôle Communication Adjoint",
+    roleEn: "Deputy Head of Communications",
+    image: memberFowaMichelleRosee,
+  },
+  {
+    name: "NJIMONGBA ABDOU",
+    role: "Trésorier",
+    roleEn: "Treasurer",
+    image: memberBlackTee,
+  },
+  {
+    name: "DANIEL BENI",
+    role: "Conseiller spécial",
+    roleEn: "Special Advisor",
+    image: memberDanielBenny,
   },
 ];
 
