@@ -595,17 +595,18 @@ export const bureau = [
     image: memberMbousekeAnge,
   },
   {
+    name: "Soundjock Ndzana Marie",
+    role: "Chargé des activités",
+    roleEn: "Activities Manager",
+    image: chargeact,
+  },
+  {
     name: "DANIEL BENI",
     role: "Conseiller spécial",
     roleEn: "Special Advisor",
     image: memberDanielBenny,
   },
-  {
-    name: "Soundjock Ndzana Marie",
-    role: "Conseiller spécial",
-    roleEn: "Special Advisor",
-    image: chargeact,
-  },
+  
 ];
 
 export const poles = [
