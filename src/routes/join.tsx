@@ -14,6 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageHeader } from "@/components/site/shared";
 import { club, joinChoiceLabels, joinForm, joinProfile, school } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
@@ -44,7 +51,13 @@ export const Route = createFileRoute("/join")({
 });
 
 const fieldClass =
-  "h-10 rounded-md border border-input bg-background px-3 text-sm shadow-xs outline-none transition-shadow focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
+  "h-10 w-full min-w-0 max-w-full truncate rounded-md border border-input bg-background px-3 text-base shadow-xs outline-none transition-shadow focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:text-sm";
+
+const selectClass =
+  "h-10 w-full min-w-0 rounded-md border border-input bg-background px-3 text-base shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:text-sm";
+
+const selectContentClass = "w-[var(--radix-select-trigger-width)]";
+const selectItemClass = "truncate";
 
 function choiceLabel(value: string, locale: "fr" | "en") {
   return loc(joinChoiceLabels[value] ?? { fr: value, en: value }, locale);
@@ -252,107 +265,97 @@ function JoinPage() {
 
                 <FormStep n={2} title={t("join.step2")}>
                   <div className="grid gap-4 rounded-xl border border-border/80 bg-surface/50 p-4 sm:p-5">
-                    <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="grid min-w-0 gap-4 sm:grid-cols-2">
                       <Field id="campus" label={t("join.campus")} required>
-                        <select
-                          id="campus"
-                          name="campus"
-                          required
-                          value={campus}
-                          onChange={(e) => onCampusChange(e.target.value as typeof campus)}
-                          className={fieldClass}
+                        <Select
+                          value={campus || undefined}
+                          onValueChange={(v) => onCampusChange(v as typeof campus)}
                         >
-                          <option value="" disabled>
-                            {t("join.campusChoose")}
-                          </option>
-                          {joinForm.campuses.map((c) => (
-                            <option key={c} value={c}>
-                              {t("join.campusOf", { name: c })}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger id="campus" className={selectClass}>
+                            <SelectValue placeholder={t("join.campusChoose")} />
+                          </SelectTrigger>
+                          <SelectContent className={selectContentClass}>
+                            {joinForm.campuses.map((c) => (
+                              <SelectItem key={c} value={c} className={selectItemClass}>
+                                {t("join.campusOf", { name: c })}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </Field>
                       <Field id="cycle" label={t("join.cycle")} required>
-                        <select
-                          id="cycle"
-                          name="cycle"
-                          required
-                          value={cycle}
+                        <Select
+                          value={cycle || undefined}
+                          onValueChange={onCycleChange}
                           disabled={!campus}
-                          onChange={(e) => onCycleChange(e.target.value)}
-                          className={cn(fieldClass, !campus && "opacity-60")}
                         >
-                          <option value="" disabled>
-                            {campus ? t("join.cycleChoose") : t("join.cycleNeedCampus")}
-                          </option>
-                          {cycles.map((c) => (
-                            <option key={c.value} value={c.value}>
-                              {loc(c.label, locale)}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger id="cycle" className={cn(selectClass, !campus && "opacity-60")}>
+                            <SelectValue placeholder={campus ? t("join.cycleChoose") : t("join.cycleNeedCampus")} />
+                          </SelectTrigger>
+                          <SelectContent className={selectContentClass}>
+                            {cycles.map((c) => (
+                              <SelectItem key={c.value} value={c.value} className={selectItemClass}>
+                                {loc(c.label, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </Field>
                     </div>
-                    <div className="grid gap-4 sm:grid-cols-3">
+                    <div className="grid min-w-0 gap-4 sm:grid-cols-3">
                       <Field id="regime" label={t("join.regime")} required>
-                        <select
-                          id="regime"
-                          name="regime"
-                          required
+                        <Select
+                          value={regime || undefined}
+                          onValueChange={setRegime}
                           disabled={!cycle}
-                          value={regime}
-                          onChange={(e) => setRegime(e.target.value)}
-                          className={cn(fieldClass, !cycle && "opacity-60")}
                         >
-                          <option value="" disabled>
-                            {cycle ? t("join.regimeChoose") : t("join.needCycle")}
-                          </option>
-                          {regimes.map((r) => (
-                            <option key={r} value={r}>
-                              {choiceLabel(r, locale)}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger id="regime" className={cn(selectClass, !cycle && "opacity-60")}>
+                            <SelectValue placeholder={cycle ? t("join.regimeChoose") : t("join.needCycle")} />
+                          </SelectTrigger>
+                          <SelectContent className={selectContentClass}>
+                            {regimes.map((r) => (
+                              <SelectItem key={r} value={r} className={selectItemClass}>
+                                {choiceLabel(r, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </Field>
                       <Field id="niveau" label={t("join.level")} required>
-                        <select
-                          id="niveau"
-                          name="niveau"
-                          required
+                        <Select
+                          value={niveau || undefined}
+                          onValueChange={setNiveau}
                           disabled={!cycle}
-                          value={niveau}
-                          onChange={(e) => setNiveau(e.target.value)}
-                          className={cn(fieldClass, !cycle && "opacity-60")}
                         >
-                          <option value="" disabled>
-                            {cycle ? t("join.levelChoose") : t("join.needCycle")}
-                          </option>
-                          {levels.map((n) => (
-                            <option key={n} value={n}>
-                              {choiceLabel(n, locale)}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger id="niveau" className={cn(selectClass, !cycle && "opacity-60")}>
+                            <SelectValue placeholder={cycle ? t("join.levelChoose") : t("join.needCycle")} />
+                          </SelectTrigger>
+                          <SelectContent className={selectContentClass}>
+                            {levels.map((n) => (
+                              <SelectItem key={n} value={n} className={selectItemClass}>
+                                {choiceLabel(n, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </Field>
                       <Field id="option" label={t("join.option")} required>
-                        <select
-                          id="option"
-                          name="option"
-                          required
+                        <Select
+                          value={option || undefined}
+                          onValueChange={setOption}
                           disabled={!cycle}
-                          value={option}
-                          onChange={(e) => setOption(e.target.value)}
-                          className={cn(fieldClass, !cycle && "opacity-60")}
                         >
-                          <option value="" disabled>
-                            {cycle ? t("join.optionChoose") : t("join.needCycle")}
-                          </option>
-                          {options.map((o) => (
-                            <option key={o} value={o}>
-                              {choiceLabel(o, locale)}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger id="option" className={cn(selectClass, !cycle && "opacity-60")}>
+                            <SelectValue placeholder={cycle ? t("join.optionChoose") : t("join.needCycle")} />
+                          </SelectTrigger>
+                          <SelectContent className={selectContentClass}>
+                            {options.map((o) => (
+                              <SelectItem key={o} value={o} className={selectItemClass}>
+                                {choiceLabel(o, locale)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </Field>
                     </div>
                   </div>
@@ -687,7 +690,7 @@ function Field({
   children: ReactNode;
 }) {
   return (
-    <div className="grid gap-2">
+    <div className="grid min-w-0 gap-2">
       <Label htmlFor={id}>
         {label} {required ? <span className="text-destructive">*</span> : null}
       </Label>

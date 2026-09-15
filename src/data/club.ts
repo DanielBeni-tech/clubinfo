@@ -4,6 +4,7 @@ import projectIot from "@/assets/images/projects/campus-iot.jpg";
 import projectLekki from "@/assets/images/projects/lekki.jpeg";
 import projectShopkamer from "@/assets/images/projects/shopkamer.jpeg";
 import projectSyntra from "@/assets/images/projects/syntra.jpeg";
+import sango from "@/assets/images/projects/sango.jpeg";
 import galleryHackathon from "@/assets/images/gallery/hackathon.jpg";
 import galleryFormation from "@/assets/images/gallery/formation.jpg";
 import galleryTeam from "@/assets/images/gallery/team.jpg";
@@ -249,7 +250,7 @@ export const projects: Project[] = [
     domain: "Intelligence artificielle & données",
     domainEn: "Artificial intelligence & data",
     tags: ["React", "TypeScript", "Python", "Vite"],
-    image: projectSupone,
+    image: sango,
     github: "https://github.com/nkoumougrinnel/Sango",
     detailedDescription: "Sango explore le routage intelligent pour les véhicules de secours, en tenant compte du trafic, de la météo, des incidents et de la qualité variable des routes.",
     approach: "Le système réévalue le meilleur itinéraire quand les conditions changent et explique les choix effectués.",
