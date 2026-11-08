@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CharteRouteImport } from './routes/charte'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as EventsRouteImport } from './routes/events'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as LoginRouteImport } from './routes/login'
@@ -23,6 +22,9 @@ import { Route as EspaceBureauCandidaturesRouteImport } from './routes/espace-bu
 import { Route as EspaceBureauDashboardRouteImport } from './routes/espace-bureau/dashboard'
 import { Route as EspaceBureauLoginRouteImport } from './routes/espace-bureau/login'
 import { Route as EspaceBureauMessagesRouteImport } from './routes/espace-bureau/messages'
+import { Route as EspaceBureauMotDePasseRouteImport } from './routes/espace-bureau/mot-de-passe'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
+import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 
@@ -44,11 +46,6 @@ const CharteRoute = CharteRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EventsRoute = EventsRouteImport.update({
-  id: '/events',
-  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -97,6 +94,21 @@ const EspaceBureauMessagesRoute = EspaceBureauMessagesRouteImport.update({
   path: '/espace-bureau/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceBureauMotDePasseRoute = EspaceBureauMotDePasseRouteImport.update({
+  id: '/espace-bureau/mot-de-passe',
+  path: '/espace-bureau/mot-de-passe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsSlugRoute = EventsSlugRouteImport.update({
+  id: '/events/$slug',
+  path: '/events/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -113,7 +125,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
   '/login': typeof LoginRoute
@@ -123,7 +134,10 @@ export interface FileRoutesByFullPath {
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
+  '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/events/': typeof EventsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -131,7 +145,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
   '/login': typeof LoginRoute
@@ -140,7 +153,10 @@ export interface FileRoutesByTo {
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
+  '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/events': typeof EventsIndexRoute
   '/projects': typeof ProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -149,7 +165,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/charte': typeof CharteRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gallery': typeof GalleryRoute
   '/join': typeof JoinRoute
   '/login': typeof LoginRoute
@@ -159,7 +174,10 @@ export interface FileRoutesById {
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
+  '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/events/': typeof EventsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -169,7 +187,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/charte'
     | '/contact'
-    | '/events'
     | '/gallery'
     | '/join'
     | '/login'
@@ -179,7 +196,10 @@ export interface FileRouteTypes {
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
     | '/espace-bureau/messages'
+    | '/espace-bureau/mot-de-passe'
+    | '/events/$slug'
     | '/projects/$slug'
+    | '/events/'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,7 +207,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/charte'
     | '/contact'
-    | '/events'
     | '/gallery'
     | '/join'
     | '/login'
@@ -196,7 +215,10 @@ export interface FileRouteTypes {
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
     | '/espace-bureau/messages'
+    | '/espace-bureau/mot-de-passe'
+    | '/events/$slug'
     | '/projects/$slug'
+    | '/events'
     | '/projects'
   id:
     | '__root__'
@@ -204,7 +226,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/charte'
     | '/contact'
-    | '/events'
     | '/gallery'
     | '/join'
     | '/login'
@@ -214,7 +235,10 @@ export interface FileRouteTypes {
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
     | '/espace-bureau/messages'
+    | '/espace-bureau/mot-de-passe'
+    | '/events/$slug'
     | '/projects/$slug'
+    | '/events/'
     | '/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -223,7 +247,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CharteRoute: typeof CharteRoute
   ContactRoute: typeof ContactRoute
-  EventsRoute: typeof EventsRoute
   GalleryRoute: typeof GalleryRoute
   JoinRoute: typeof JoinRoute
   LoginRoute: typeof LoginRoute
@@ -233,6 +256,9 @@ export interface RootRouteChildren {
   EspaceBureauDashboardRoute: typeof EspaceBureauDashboardRoute
   EspaceBureauLoginRoute: typeof EspaceBureauLoginRoute
   EspaceBureauMessagesRoute: typeof EspaceBureauMessagesRoute
+  EspaceBureauMotDePasseRoute: typeof EspaceBureauMotDePasseRoute
+  EventsSlugRoute: typeof EventsSlugRoute
+  EventsIndexRoute: typeof EventsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -263,13 +289,6 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/events': {
-      id: '/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -335,6 +354,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EspaceBureauMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace-bureau/mot-de-passe': {
+      id: '/espace-bureau/mot-de-passe'
+      path: '/espace-bureau/mot-de-passe'
+      fullPath: '/espace-bureau/mot-de-passe'
+      preLoaderRoute: typeof EspaceBureauMotDePasseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/': {
+      id: '/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events/$slug': {
+      id: '/events/$slug'
+      path: '/events/$slug'
+      fullPath: '/events/$slug'
+      preLoaderRoute: typeof EventsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/'
@@ -371,7 +411,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CharteRoute: CharteRoute,
   ContactRoute: ContactRoute,
-  EventsRoute: EventsRoute,
   GalleryRoute: GalleryRoute,
   JoinRoute: JoinRoute,
   LoginRoute: LoginRoute,
@@ -381,6 +420,9 @@ const rootRouteChildren: RootRouteChildren = {
   EspaceBureauDashboardRoute: EspaceBureauDashboardRoute,
   EspaceBureauLoginRoute: EspaceBureauLoginRoute,
   EspaceBureauMessagesRoute: EspaceBureauMessagesRoute,
+  EspaceBureauMotDePasseRoute: EspaceBureauMotDePasseRoute,
+  EventsSlugRoute: EventsSlugRoute,
+  EventsIndexRoute: EventsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

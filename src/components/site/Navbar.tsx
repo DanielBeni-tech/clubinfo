@@ -14,7 +14,7 @@ import { Logo } from "@/components/site/Logo";
 import { LangToggle } from "@/components/site/LangToggle";
 import { useLocale } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
-import { isBureauAdmin } from "@/lib/admin-auth";
+import { BUREAU_PASSWORD, isBureauAdmin } from "@/lib/admin-auth";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -37,7 +37,11 @@ export function Navbar() {
   useEffect(() => {
     checkSession();
     if (!supabase) return;
-    const { data } = supabase.auth.onAuthStateChange(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      // Filet de sécurité : la redirection principale se fait dans lib/supabase.ts
+      if (event === "PASSWORD_RECOVERY" && window.location.pathname !== BUREAU_PASSWORD) {
+        setTimeout(() => void navigate({ to: BUREAU_PASSWORD }), 0);
+      }
       // Pas d'appel Supabase directement dans ce callback (risque de blocage) : on diffère.
       setTimeout(() => void checkSession(), 0);
     });

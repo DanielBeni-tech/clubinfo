@@ -5,6 +5,8 @@ import { supabase } from "./supabase";
 
 /** Chemin de la page de connexion de l'espace Bureau. */
 export const BUREAU_LOGIN = "/espace-bureau/login" as const;
+/** Page où l'on choisit son mot de passe après un lien de réinitialisation. */
+export const BUREAU_PASSWORD = "/espace-bureau/mot-de-passe" as const;
 
 /**
  * Vérifie côté base (fonction SQL `is_bureau_admin`) que l'utilisateur connecté

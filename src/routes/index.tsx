@@ -7,6 +7,7 @@ import {
   Cpu,
   Hammer,
   Lightbulb,
+  MapPin,
   Network,
   Rocket,
   Shield,
@@ -19,7 +20,17 @@ import { HeroSlideshow } from "@/components/site/HeroSlideshow";
 import { PartnerMarquee } from "@/components/site/PartnerMarquee";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
-import { club, events, expertise, gallery, joinForm, projects, stats } from "@/data/club";
+import {
+  club,
+  events,
+  expertise,
+  gallery,
+  isUpcoming,
+  joinForm,
+  projects,
+  stats,
+} from "@/data/club";
+import { eventDateParts } from "@/lib/event-utils";
 import { useLocale, type MessageKey } from "@/lib/i18n";
 import { loc } from "@/lib/locale-text";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
@@ -64,7 +75,10 @@ function Home() {
     { icon: Rocket, title: t("home.value.ship"), desc: t("home.value.shipDesc") },
   ];
   const poles = joinForm.poles.slice(0, 3);
-  const upcoming = events.filter((e) => e.upcoming).slice(0, 3);
+  const upcoming = events
+    .filter((e) => isUpcoming(e))
+    .sort((a, b) => (a.date || "9").localeCompare(b.date || "9"))
+    .slice(0, 3);
 
   return (
     <div>
@@ -270,22 +284,24 @@ function Home() {
           ) : (
             <ul className="grid gap-4">
               {upcoming.map((e, i) => {
-                const date = e.date ? new Date(e.date) : null;
-                const valid = date && !Number.isNaN(date.getTime());
+                const parts = eventDateParts(e, locale);
                 return (
-                  <li key={e.title}>
+                  <li key={e.slug}>
                     <Reveal
                       delay={i * 90}
-                      className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs sm:grid-cols-[auto_minmax(0,1fr)_220px]"
+                      className="group relative grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-colors hover:border-primary/40 sm:grid-cols-[auto_minmax(0,1fr)_220px]"
                     >
                       <div className="flex items-center gap-3 border-b border-border bg-secondary/50 px-5 py-3 sm:w-32 sm:flex-col sm:justify-center sm:gap-1 sm:border-r sm:border-b-0 sm:py-6 sm:text-center">
-                        {valid ? (
+                        {parts ? (
                           <>
                             <span className="font-display text-3xl leading-none text-primary">
-                              {date.toLocaleDateString(locale, { day: "2-digit" })}
+                              {parts.day}
                             </span>
                             <span className="text-xs font-semibold tracking-wide text-primary uppercase">
-                              {date.toLocaleDateString(locale, { month: "short", year: "numeric" })}
+                              {parts.month} {parts.year}
+                            </span>
+                            <span className="text-xs font-medium text-muted-foreground sm:mt-1">
+                              {parts.time}
                             </span>
                           </>
                         ) : (
@@ -302,11 +318,28 @@ function Home() {
                           {t(`events.type.${e.type}` as MessageKey)}
                         </Badge>
                         <h3 className="mt-3 font-display text-lg leading-snug">
-                          {locale === "en" ? e.titleEn : e.title}
+                          <Link
+                            to="/events/$slug"
+                            params={{ slug: e.slug }}
+                            className="after:absolute after:inset-0 group-hover:text-primary"
+                          >
+                            {locale === "en" ? e.titleEn : e.title}
+                          </Link>
                         </h3>
                         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                           {locale === "en" ? e.descriptionEn : e.description}
                         </p>
+                        {e.location ? (
+                          <p className="mt-3 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                            <MapPin className="size-4 text-primary" />
+                            {loc(e.location, locale)}
+                            {e.locationDetail ? (
+                              <span className="font-normal text-muted-foreground">
+                                · {loc(e.locationDetail, locale)}
+                              </span>
+                            ) : null}
+                          </p>
+                        ) : null}
                       </div>
                       {e.image ? (
                         <img

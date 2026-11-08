@@ -277,12 +277,22 @@ export const projects: Project[] = [
 ];
 
 export type ClubEvent = {
+  /** Identifiant dans l'adresse de la fiche : /events/<slug> */
+  slug: string;
   title: string;
   titleEn: string;
+  /**
+   * Date et heure au format ISO avec fuseau, ex. "2026-11-12T16:40:00+01:00".
+   * Laisser vide si la date n'est pas connue : `upcoming` est alors utilisé.
+   */
   date: string;
+  /** Durée prévue, pour l'ajout à l'agenda (2 h par défaut). */
+  durationMinutes?: number;
+  /** Texte affiché quand `date` est vide (ex. « Édition passée »). */
   displayDate: string;
   displayDateEn: string;
   type:
+    | "Cérémonie"
     | "Formation"
     | "Atelier"
     | "Concours"
@@ -290,40 +300,50 @@ export type ClubEvent = {
     | "Collaboration";
   description: string;
   descriptionEn: string;
+  location?: L10n;
+  locationDetail?: L10n;
+  audience?: L10n;
+  /** Photo d'illustration (paysage). */
   image?: string;
+  /** Affiche officielle, servie depuis /public (ex. "/events/mon-affiche.jpg"). */
+  poster?: string;
+  /** Utilisé seulement quand `date` est vide. */
   upcoming: boolean;
 };
 
+/** Un événement daté est « à venir » jusqu'à la fin prévue de sa tenue. */
+export function isUpcoming(e: ClubEvent, now = Date.now()): boolean {
+  if (!e.date) return e.upcoming;
+  const end = new Date(e.date).getTime() + (e.durationMinutes ?? 120) * 60_000;
+  return end >= now;
+}
+
 export const events: ClubEvent[] = [
   {
-    title: "Journée de présentation des projets",
-    titleEn: "Project presentation day",
-    date: "",
-    displayDate: "Date à confirmer",
-    displayDateEn: "Date to be confirmed",
-    type: "Présentation",
+    slug: "lancement-activites-2026",
+    title: "Cérémonie de lancement des activités",
+    titleEn: "Activities launch ceremony",
+    date: "2026-11-12T16:40:00+01:00",
+    durationMinutes: 120,
+    displayDate: "",
+    displayDateEn: "",
+    type: "Cérémonie",
     description:
-      "Une journée dédiée à la présentation des projets portés par les membres du Club et à la découverte des solutions développées par les équipes.",
+      "Le Club Info SUP'PTIC lance officiellement ses activités. Membres de la communauté SUP'PTIC, prenons part au lancement !",
     descriptionEn:
-      "A day dedicated to presenting projects built by Club members and discovering the solutions developed by the teams.",
-    image: galleryJuioPitch,
+      "The SUP'PTIC Computer Club officially launches its activities. Members of the SUP'PTIC community, join us for the launch!",
+    location: { fr: "Campus de SUP'PTIC", en: "SUP'PTIC campus" },
+    locationDetail: { fr: "Salle communiquée ultérieurement", en: "Room to be announced" },
+    audience: {
+      fr: "Ouvert à toute la communauté SUP'PTIC",
+      en: "Open to the whole SUP'PTIC community",
+    },
+    image: galleryGroup,
+    poster: "/events/lancement-activites-2026.jpg",
     upcoming: true,
   },
   {
-    title: "SUP'ONE Challenge",
-    titleEn: "SUP'ONE Challenge",
-    date: "",
-    displayDate: "Date à confirmer",
-    displayDateEn: "Date to be confirmed",
-    type: "Concours",
-    description:
-      "Un challenge pour mettre en valeur les compétences et les projets des membres du club et de l'ensemble de la communauté SUP’PTIC.",
-    descriptionEn:
-      "A challenge to highlight the skills and projects of club members and the wider SUP’PTIC community.",
-    image: galleryHackathon,
-    upcoming: true,
-  },
-  {
+    slug: "juin-2026",
     title: "Journées universitaires de l'informatique (JUIN)",
     titleEn: "University Computer Days",
     date: "",
@@ -338,6 +358,7 @@ export const events: ClubEvent[] = [
     upcoming: false,
   },
   {
+    slug: "atelier-shopkamer",
     title: "Atelier ShopKamer",
     titleEn: "ShopKamer workshop",
     date: "",
@@ -352,6 +373,7 @@ export const events: ClubEvent[] = [
     upcoming: false,
   },
   {
+    slug: "presentation-chatbot",
     title: "Première présentation du projet chatbot",
     titleEn: "First chatbot project presentation",
     date: "",
@@ -366,6 +388,7 @@ export const events: ClubEvent[] = [
     upcoming: false,
   },
   {
+    slug: "rencontre-club-gi",
     title: "Rencontre entre le Club Informatique et le Club GI",
     titleEn: "Meeting between the Computer Club and the GI Club",
     date: "",

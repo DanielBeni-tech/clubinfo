@@ -12,6 +12,22 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 const url = import.meta.env["VITE_SUPABASE_URL"] as string | undefined;
 const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string | undefined;
 
+/** Page où l'on choisit son mot de passe après un lien de réinitialisation. */
+const PASSWORD_PAGE = "/espace-bureau/mot-de-passe";
+
+/*
+ * Les liens « réinitialiser le mot de passe » envoyés par Supabase ramènent sur la
+ * page d'accueil du site. On redirige immédiatement vers la page du mot de passe,
+ * en conservant le jeton (#...), avant que l'application ne démarre.
+ */
+if (
+  typeof window !== "undefined" &&
+  /(^|[#&])type=recovery(&|$)/.test(window.location.hash) &&
+  window.location.pathname !== PASSWORD_PAGE
+) {
+  window.location.replace(PASSWORD_PAGE + window.location.hash);
+}
+
 export const supabase: SupabaseClient | null =
   url && key
     ? createClient(url, key, {
