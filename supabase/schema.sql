@@ -2,6 +2,8 @@
 -- Backend du site clubinfo.vercel.app — Club Informatique SUP'PTIC
 -- À exécuter une seule fois dans Supabase > SQL Editor.
 -- ============================================================
+-- ⚠ Exécuter ensuite supabase/securite-bureau.sql : il remplace les droits
+--   ci-dessous (sections 3 à 7) pour réserver les données au seul Bureau.
 
 -- 1. Candidatures d'adhésion (formulaire /join)
 create table if not exists public.candidatures (
@@ -13,13 +15,13 @@ create table if not exists public.candidatures (
   telephone text not null,
   campus text not null,
   cycle text not null,
-  regime text not null,
-  niveau text not null,
-  option text not null,
-  domaine text not null,
-  niveau_experience text,
-  pole text not null,
-  motivation text,
+  regime text not null default '',        -- retiré du formulaire (conservé pour l'historique)
+  niveau text not null default '',        -- facultatif, saisie libre
+  option text not null default '',        -- facultatif, saisie libre
+  domaine text not null,                  -- centres d'intérêt (1 à 3, séparés par « ; »)
+  niveau_experience text,                 -- description libre de l'expérience (facultatif)
+  pole text not null,                     -- pôle souhaité en priorité (préférence, pas une affectation)
+  motivation text,                        -- motivation, idée de projet et disponibilités
   engagement_reglement boolean not null default true,
   statut text not null default 'Nouveau' -- Nouveau / Contacté / Accepté / Refusé
 );

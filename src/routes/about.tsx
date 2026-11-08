@@ -1,5 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  GraduationCap,
+  Lightbulb,
+  MapPinned,
+  Megaphone,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Partners } from "@/components/site/Partners";
@@ -7,6 +14,7 @@ import { CTASection, PageHeader, SectionTitle } from "@/components/site/shared";
 import { bureau, objectives, poles } from "@/data/club";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 import { useLocale } from "@/lib/i18n";
+import { loc } from "@/lib/locale-text";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import galleryJuioPrize from "@/assets/images/gallery/juio-prize.jpg";
 import galleryCollabGi from "@/assets/images/gallery/collab-club-gi.jpg";
@@ -31,6 +39,15 @@ export const Route = createFileRoute("/about")({
   }),
   component: About,
 });
+
+
+const objectiveIcons = {
+  megaphone: Megaphone,
+  learn: GraduationCap,
+  innovate: Lightbulb,
+  career: BriefcaseBusiness,
+  local: MapPinned,
+};
 
 function About() {
   const { locale, t } = useLocale();
@@ -104,17 +121,42 @@ function About() {
       </section>
 
       <section className="section-y">
-        {" "}
-        <div className="mx-auto max-w-6xl px-4">
-          <SectionTitle eyebrow={t("about.charter.eyebrow")} title={t("about.charter.title")} />
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {objectives.map((o) => (
-              <li key={o.fr} className="flex gap-3 rounded-lg border border-border bg-background p-5">
-                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" />
-                <span className="text-sm text-muted-foreground">{locale === "en" ? o.en : o.fr}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <SectionTitle
+              eyebrow={t("about.charter.eyebrow")}
+              title={t("about.charter.title")}
+              lead={t("about.charter.lead")}
+            />
+            <Button asChild variant="outline" className="-mt-4">
+              <Link to="/charte">
+                {t("about.charter.read")} <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
+          <ol className="divide-y divide-border border-y border-border">
+            {objectives.map((o, i) => {
+              const Icon = objectiveIcons[o.icon];
+              return (
+                <li key={o.title.fr} className="group grid grid-cols-[auto_minmax(0,1fr)] gap-5 py-6">
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="grid size-12 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                      <Icon className="size-5" />
+                    </span>
+                    <span className="font-mono text-xs text-muted-foreground/70">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div className="pt-1">
+                    <h3 className="font-display text-lg leading-snug">{loc(o.title, locale)}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {loc(o.text, locale)}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </section>
 

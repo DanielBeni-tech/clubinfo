@@ -19,11 +19,10 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ReglementRouteImport } from './routes/reglement'
-import { Route as AdminCandidaturesRouteImport } from './routes/admin/candidatures'
-import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
-import { Route as AdminLoginRouteImport } from './routes/admin/login'
-import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
-import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
+import { Route as EspaceBureauCandidaturesRouteImport } from './routes/espace-bureau/candidatures'
+import { Route as EspaceBureauDashboardRouteImport } from './routes/espace-bureau/dashboard'
+import { Route as EspaceBureauLoginRouteImport } from './routes/espace-bureau/login'
+import { Route as EspaceBureauMessagesRouteImport } from './routes/espace-bureau/messages'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
 
@@ -77,29 +76,25 @@ const ReglementRoute = ReglementRouteImport.update({
   path: '/reglement',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCandidaturesRoute = AdminCandidaturesRouteImport.update({
-  id: '/admin/candidatures',
-  path: '/admin/candidatures',
+const EspaceBureauCandidaturesRoute =
+  EspaceBureauCandidaturesRouteImport.update({
+    id: '/espace-bureau/candidatures',
+    path: '/espace-bureau/candidatures',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EspaceBureauDashboardRoute = EspaceBureauDashboardRouteImport.update({
+  id: '/espace-bureau/dashboard',
+  path: '/espace-bureau/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminDashboardRoute = AdminDashboardRouteImport.update({
-  id: '/admin/dashboard',
-  path: '/admin/dashboard',
+const EspaceBureauLoginRoute = EspaceBureauLoginRouteImport.update({
+  id: '/espace-bureau/login',
+  path: '/espace-bureau/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminMessagesRoute = AdminMessagesRouteImport.update({
-  id: '/admin/messages',
-  path: '/admin/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminUtilisateursRoute = AdminUtilisateursRouteImport.update({
-  id: '/admin/utilisateurs',
-  path: '/admin/utilisateurs',
+const EspaceBureauMessagesRoute = EspaceBureauMessagesRouteImport.update({
+  id: '/espace-bureau/messages',
+  path: '/espace-bureau/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
@@ -124,11 +119,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
-  '/admin/candidatures': typeof AdminCandidaturesRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
+  '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
+  '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -142,11 +136,10 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/login': typeof LoginRoute
   '/reglement': typeof ReglementRoute
-  '/admin/candidatures': typeof AdminCandidaturesRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
+  '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
+  '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -162,11 +155,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
-  '/admin/candidatures': typeof AdminCandidaturesRoute
-  '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
+  '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
+  '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -183,11 +175,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/projects'
     | '/reglement'
-    | '/admin/candidatures'
-    | '/admin/dashboard'
-    | '/admin/login'
-    | '/admin/messages'
-    | '/admin/utilisateurs'
+    | '/espace-bureau/candidatures'
+    | '/espace-bureau/dashboard'
+    | '/espace-bureau/login'
+    | '/espace-bureau/messages'
     | '/projects/$slug'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -201,11 +192,10 @@ export interface FileRouteTypes {
     | '/join'
     | '/login'
     | '/reglement'
-    | '/admin/candidatures'
-    | '/admin/dashboard'
-    | '/admin/login'
-    | '/admin/messages'
-    | '/admin/utilisateurs'
+    | '/espace-bureau/candidatures'
+    | '/espace-bureau/dashboard'
+    | '/espace-bureau/login'
+    | '/espace-bureau/messages'
     | '/projects/$slug'
     | '/projects'
   id:
@@ -220,11 +210,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/projects'
     | '/reglement'
-    | '/admin/candidatures'
-    | '/admin/dashboard'
-    | '/admin/login'
-    | '/admin/messages'
-    | '/admin/utilisateurs'
+    | '/espace-bureau/candidatures'
+    | '/espace-bureau/dashboard'
+    | '/espace-bureau/login'
+    | '/espace-bureau/messages'
     | '/projects/$slug'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -240,11 +229,10 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
   ReglementRoute: typeof ReglementRoute
-  AdminCandidaturesRoute: typeof AdminCandidaturesRoute
-  AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminMessagesRoute: typeof AdminMessagesRoute
-  AdminUtilisateursRoute: typeof AdminUtilisateursRoute
+  EspaceBureauCandidaturesRoute: typeof EspaceBureauCandidaturesRoute
+  EspaceBureauDashboardRoute: typeof EspaceBureauDashboardRoute
+  EspaceBureauLoginRoute: typeof EspaceBureauLoginRoute
+  EspaceBureauMessagesRoute: typeof EspaceBureauMessagesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -319,39 +307,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReglementRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/candidatures': {
-      id: '/admin/candidatures'
-      path: '/admin/candidatures'
-      fullPath: '/admin/candidatures'
-      preLoaderRoute: typeof AdminCandidaturesRouteImport
+    '/espace-bureau/candidatures': {
+      id: '/espace-bureau/candidatures'
+      path: '/espace-bureau/candidatures'
+      fullPath: '/espace-bureau/candidatures'
+      preLoaderRoute: typeof EspaceBureauCandidaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/dashboard': {
-      id: '/admin/dashboard'
-      path: '/admin/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AdminDashboardRouteImport
+    '/espace-bureau/dashboard': {
+      id: '/espace-bureau/dashboard'
+      path: '/espace-bureau/dashboard'
+      fullPath: '/espace-bureau/dashboard'
+      preLoaderRoute: typeof EspaceBureauDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
+    '/espace-bureau/login': {
+      id: '/espace-bureau/login'
+      path: '/espace-bureau/login'
+      fullPath: '/espace-bureau/login'
+      preLoaderRoute: typeof EspaceBureauLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/messages': {
-      id: '/admin/messages'
-      path: '/admin/messages'
-      fullPath: '/admin/messages'
-      preLoaderRoute: typeof AdminMessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/utilisateurs': {
-      id: '/admin/utilisateurs'
-      path: '/admin/utilisateurs'
-      fullPath: '/admin/utilisateurs'
-      preLoaderRoute: typeof AdminUtilisateursRouteImport
+    '/espace-bureau/messages': {
+      id: '/espace-bureau/messages'
+      path: '/espace-bureau/messages'
+      fullPath: '/espace-bureau/messages'
+      preLoaderRoute: typeof EspaceBureauMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/': {
@@ -396,11 +377,10 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
   ReglementRoute: ReglementRoute,
-  AdminCandidaturesRoute: AdminCandidaturesRoute,
-  AdminDashboardRoute: AdminDashboardRoute,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminMessagesRoute: AdminMessagesRoute,
-  AdminUtilisateursRoute: AdminUtilisateursRoute,
+  EspaceBureauCandidaturesRoute: EspaceBureauCandidaturesRoute,
+  EspaceBureauDashboardRoute: EspaceBureauDashboardRoute,
+  EspaceBureauLoginRoute: EspaceBureauLoginRoute,
+  EspaceBureauMessagesRoute: EspaceBureauMessagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

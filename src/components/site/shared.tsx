@@ -62,7 +62,12 @@ export function ProjectCard({
 }) {
   const { t } = useLocale();
   const body = (
-    <Card className={cn("group flex h-full flex-col overflow-hidden py-0", featured && "md:grid md:grid-cols-2")}>
+    <Card
+      className={cn(
+        "group flex h-full flex-col overflow-hidden py-0",
+        featured && "md:grid md:grid-cols-2",
+      )}
+    >
       <div className="relative">
         <img
           src={project.image}
@@ -70,7 +75,10 @@ export function ProjectCard({
           loading="lazy"
           width={1200}
           height={800}
-          className={cn("h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]", featured && "md:h-full")}
+          className={cn(
+            "h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]",
+            featured && "md:h-full",
+          )}
         />
         <div className="absolute left-4 top-4 flex gap-2">
           {featured && (
@@ -101,20 +109,56 @@ export function ProjectCard({
 
 export function CTASection() {
   const { t } = useLocale();
+  const steps = [
+    { title: t("cta.step1"), desc: t("cta.step1Desc") },
+    { title: t("cta.step2"), desc: t("cta.step2Desc") },
+    { title: t("cta.step3"), desc: t("cta.step3Desc") },
+  ];
   return (
     <section className="night-panel">
-      <div className="mx-auto max-w-6xl px-4 py-16 text-center">
-        <h2 className="font-display text-2xl sm:text-3xl">{t("cta.title")}</h2>
-        <p className="mx-auto mt-4 max-w-xl text-sm text-night-muted">{t("cta.lead")}</p>
-        <Button
-          asChild
-          size="lg"
-          className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
-        >
-          <Link to="/join">
-            {t("cta.join")} <ArrowRight className="size-4" />
-          </Link>
-        </Button>
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+        <div>
+          <p className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+            {t("cta.eyebrow")}
+          </p>
+          <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">{t("cta.title")}</h2>
+          <p className="mt-4 max-w-lg text-base text-night-muted">{t("cta.lead")}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button
+              asChild
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
+            >
+              <Link to="/join">
+                {t("cta.join")} <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-night-muted/40 bg-transparent text-night-foreground hover:bg-night-foreground/10 hover:text-night-foreground"
+            >
+              <Link to="/contact">{t("cta.contact")}</Link>
+            </Button>
+          </div>
+        </div>
+        <ol className="grid gap-3">
+          {steps.map((step, i) => (
+            <li
+              key={step.title}
+              className="flex gap-4 rounded-xl border border-night-foreground/10 bg-night-foreground/5 p-4 sm:p-5"
+            >
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-display text-sm text-accent-foreground">
+                {i + 1}
+              </span>
+              <div>
+                <p className="font-display text-base text-night-foreground">{step.title}</p>
+                <p className="mt-0.5 text-sm text-night-muted">{step.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

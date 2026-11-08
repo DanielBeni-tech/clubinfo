@@ -37,7 +37,7 @@ export type Candidature = {
 };
 
 export async function saveCandidature(data: Candidature): Promise<void> {
-  if (!supabase) return;
+  if (!supabase) throw new Error("Supabase n'est pas configuré.");
   const { error } = await supabase.from("candidatures").insert(data);
   if (error) throw new Error(error.message);
 }
@@ -53,7 +53,7 @@ export type Message = {
 };
 
 export async function saveMessage(data: Message): Promise<void> {
-  if (!supabase) return;
+  if (!supabase) throw new Error("Supabase n'est pas configuré.");
   const { error } = await supabase.from("messages").insert(data);
   if (error) throw new Error(error.message);
 }

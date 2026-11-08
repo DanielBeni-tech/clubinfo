@@ -22,7 +22,7 @@ import { PageHeader } from "@/components/site/shared";
 import { club } from "@/data/club";
 import { saveMessage } from "@/lib/supabase";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
-import { useLocale, type MessageKey } from "@/lib/i18n";
+import { t as translate, useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
@@ -47,21 +47,22 @@ export const Route = createFileRoute("/contact")({
 });
 
 const contactCategoryIds = ["partenariat", "projet", "conference", "renseignement"] as const;
+type ContactCategory = (typeof contactCategoryIds)[number];
 
 function ContactPage() {
   const { t } = useLocale();
   const contactCategories = contactCategoryIds.map((id) => ({
     id,
-    label: t(`contact.cat.${id}` as MessageKey),
-    placeholder: t(`contact.ph.${id}` as MessageKey),
+    label: t(`contact.cat.${id}`),
+    placeholder: t(`contact.ph.${id}`),
+    hint: id === "partenariat" ? t("contact.hint.partenariat") : "",
   }));
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  // Form states
-  const [categorie, setCategorie] = useState<string>("partenariat");
+  const [categorie, setCategorie] = useState<ContactCategory | "">("");
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -69,35 +70,37 @@ function ContactPage() {
   const [sujet, setSujet] = useState("");
   const [message, setMessage] = useState("");
 
-  function onSelectCategory(catId: string) {
-    setCategorie(catId);
-    const cat = contactCategories.find((c) => c.id === catId);
-    if (cat && !sujet) {
-      setSujet(cat.placeholder);
-    }
-  }
+  const selected = contactCategories.find((c) => c.id === categorie);
 
   function handleCopyEmail() {
-    navigator.clipboard.writeText(club.email).then(() => {
-      setCopiedEmail(true);
-      setTimeout(() => setCopiedEmail(false), 2000);
-    });
+    navigator.clipboard
+      ?.writeText(club.email)
+      .then(() => {
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 2000);
+      })
+      .catch(() => {
+        // Presse-papiers indisponible (http, permissions) : le lien mailto reste utilisable.
+      });
   }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+    if (!categorie) {
+      setError(t("contact.error.category"));
+      return;
+    }
+
     setSending(true);
-
-    const selectedCatLabel = contactCategories.find((c) => c.id === categorie)?.label ?? categorie;
-
     try {
       await saveMessage({
         nom: nom.trim(),
         email: email.trim(),
         telephone: telephone.trim() || null,
         organisation: organisation.trim() || null,
-        categorie: selectedCatLabel,
+        // Libellé français stable, quelle que soit la langue d'affichage.
+        categorie: translate(`contact.cat.${categorie}`, "fr"),
         sujet: sujet.trim(),
         message: message.trim(),
       });
@@ -117,7 +120,7 @@ function ContactPage() {
     setOrganisation("");
     setSujet("");
     setMessage("");
-    setCategorie("partenariat");
+    setCategorie("");
   }
 
   return (
@@ -148,18 +151,23 @@ function ContactPage() {
                 <form className="grid gap-6" onSubmit={onSubmit}>
                   {/* Choix du motif */}
                   <div className="grid gap-2.5">
-                    <Label className="text-sm font-semibold text-foreground">
-                      {t("contact.object")}{" "}
-                      <span className="text-destructive">*</span>
+                    <Label id="c-category" className="text-sm font-semibold text-foreground">
+                      {t("contact.object")} <span className="text-destructive">*</span>
                     </Label>
-                    <div className="flex flex-wrap gap-2">
+                    <div
+                      className="flex flex-wrap gap-2"
+                      role="radiogroup"
+                      aria-labelledby="c-category"
+                    >
                       {contactCategories.map((cat) => {
                         const isSelected = categorie === cat.id;
                         return (
                           <button
                             key={cat.id}
                             type="button"
-                            onClick={() => onSelectCategory(cat.id)}
+                            role="radio"
+                            aria-checked={isSelected}
+                            onClick={() => setCategorie(cat.id)}
                             className={cn(
                               "rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all",
                               isSelected
@@ -172,6 +180,11 @@ function ContactPage() {
                         );
                       })}
                     </div>
+                    {selected?.hint ? (
+                      <p className="text-xs leading-relaxed text-muted-foreground">
+                        {selected.hint}
+                      </p>
+                    ) : null}
                   </div>
 
                   {/* Coordonnées de base */}
@@ -184,25 +197,26 @@ function ContactPage() {
                         id="c-name"
                         name="c-name"
                         required
+                        autoComplete="name"
                         value={nom}
                         onChange={(e) => setNom(e.target.value)}
-                        placeholder="Ex. Dr. Jean Dupont / Awa Ngo"
+                        placeholder={t("contact.ph.name")}
                       />
                     </div>
 
                     <div className="grid gap-2 min-w-0">
                       <Label htmlFor="c-email" className="text-sm font-medium">
-                        {t("contact.email")}{" "}
-                        <span className="text-destructive">*</span>
+                        {t("contact.email")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="c-email"
                         name="c-email"
                         type="email"
                         required
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="contact@organisation.com"
+                        placeholder={t("contact.ph.email")}
                       />
                     </div>
                   </div>
@@ -216,16 +230,15 @@ function ContactPage() {
                           {t("contact.optional")}
                         </span>
                       </Label>
-                      <div className="relative">
-                        <Input
-                          id="c-phone"
-                          name="c-phone"
-                          type="tel"
-                          value={telephone}
-                          onChange={(e) => setTelephone(e.target.value)}
-                          placeholder="+237 6XX XX XX XX"
-                        />
-                      </div>
+                      <Input
+                        id="c-phone"
+                        name="c-phone"
+                        type="tel"
+                        autoComplete="tel"
+                        value={telephone}
+                        onChange={(e) => setTelephone(e.target.value)}
+                        placeholder="+237 6XX XX XX XX"
+                      />
                     </div>
 
                     <div className="grid gap-2 min-w-0">
@@ -240,7 +253,7 @@ function ContactPage() {
                         name="c-org"
                         value={organisation}
                         onChange={(e) => setOrganisation(e.target.value)}
-                        placeholder="Ex. Huawei, Camtel, Startup, SUP'PTIC…"
+                        placeholder={t("contact.ph.org")}
                       />
                     </div>
                   </div>
@@ -256,7 +269,7 @@ function ContactPage() {
                       required
                       value={sujet}
                       onChange={(e) => setSujet(e.target.value)}
-                      placeholder="Ex. Proposition d'atelier cybersécurité pour les étudiants"
+                      placeholder={selected?.placeholder ?? t("contact.ph.subject")}
                     />
                   </div>
 
@@ -272,13 +285,16 @@ function ContactPage() {
                       required
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Détaillez votre proposition, vos objectifs, les dates envisagées ou vos questions…"
+                      placeholder={t("contact.ph.message")}
                       className="resize-y"
                     />
                   </div>
 
                   {error ? (
-                    <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive font-medium">
+                    <div
+                      role="alert"
+                      className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive font-medium"
+                    >
                       {error}
                     </div>
                   ) : null}
@@ -291,6 +307,9 @@ function ContactPage() {
                   >
                     {sending ? t("contact.sending") : t("contact.send")}
                   </Button>
+                  <p className="text-center text-xs leading-relaxed text-muted-foreground">
+                    {t("contact.privacy", { email: club.email })}
+                  </p>
                 </form>
               )}
             </CardContent>
@@ -413,9 +432,7 @@ function ContactPage() {
                 <h3 className="font-display text-base font-semibold text-foreground">
                   {t("contact.online")}
                 </h3>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {t("contact.onlineLead")}
-                </p>
+                <p className="mt-1 text-xs text-muted-foreground">{t("contact.onlineLead")}</p>
 
                 <div className="mt-4 flex flex-wrap gap-2.5">
                   <Button asChild variant="outline" size="sm" className="gap-2">

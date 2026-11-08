@@ -104,21 +104,24 @@ function ProjectDetailPage() {
             <p className="mt-4 text-muted-foreground">
               {project.approach ?? "Une équipe du Club construit ce projet par itérations, du cadrage au prototype puis à la démonstration."}
             </p>
-            <h2 className="mt-10 font-display text-2xl">Fonctionnalités</h2>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              {(project.features ?? []).map((feature, index) => (
-                <li
-                  key={feature}
-                  className="group flex min-h-20 items-start gap-3 rounded-lg border border-border bg-surface p-4 transition-colors hover:border-primary/40"
-                >
-                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="flex-1 pt-1 text-sm font-medium text-foreground">{feature}</span>
-                  <Check className="mt-1 size-4 shrink-0 text-primary/60 transition-colors group-hover:text-primary" />
-                </li>
-              ))}
-            </ul>
+            {project.features && project.features.length > 0 ? (
+              <>
+                <h2 className="mt-10 font-display text-2xl">Fonctionnalités clés</h2>
+                <ul className="mt-5 grid gap-x-8 gap-y-1 rounded-2xl border border-border bg-surface/60 p-3 sm:grid-cols-2 sm:p-4">
+                  {project.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground"
+                    >
+                      <span className="grid size-6 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
+                        <Check className="size-3.5" strokeWidth={3} />
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
           </div>
 
           <Card className="h-fit">

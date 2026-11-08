@@ -1,11 +1,20 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, LogOut, ShieldCheck } from "lucide-react";
+import { ChevronDown, Menu, X, LogOut, ShieldCheck } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/Logo";
 import { LangToggle } from "@/components/site/LangToggle";
 import { useLocale } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
+import { isBureauAdmin } from "@/lib/admin-auth";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -14,6 +23,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { t } = useLocale();
   const links = [
     { to: "/", label: t("nav.home") },
@@ -26,6 +36,12 @@ export function Navbar() {
 
   useEffect(() => {
     checkSession();
+    if (!supabase) return;
+    const { data } = supabase.auth.onAuthStateChange(() => {
+      // Pas d'appel Supabase directement dans ce callback (risque de blocage) : on diffère.
+      setTimeout(() => void checkSession(), 0);
+    });
+    return () => data.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -43,6 +59,7 @@ export function Navbar() {
 
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user || null);
+    setIsAdmin(session ? await isBureauAdmin() : false);
     setLoading(false);
   }
 
@@ -50,6 +67,7 @@ export function Navbar() {
     if (!supabase) return;
     await supabase.auth.signOut();
     setUser(null);
+    setIsAdmin(false);
     await navigate({ to: "/" });
   }
 
@@ -70,7 +88,7 @@ export function Navbar() {
               <Link
                 to={link.to}
                 activeOptions={{ exact: link.to === "/" }}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-primary"
+                className="whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-primary"
                 activeProps={{ className: "text-primary bg-secondary" }}
               >
                 {link.label}
@@ -81,34 +99,42 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-2.5">
           <LangToggle />
-          {!loading && user && user.email === "adminclub@supptic.cm" && (
-            <>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="hidden sm:inline-flex text-xs font-semibold text-primary hover:text-primary hover:bg-secondary"
-              >
-                <Link to="/admin/dashboard">
-                  <ShieldCheck className="mr-1.5 size-3.5" />
-                  {t("nav.bureau")}
-                </Link>
-              </Button>
-              <span className="hidden sm:inline text-xs text-muted-foreground">{user.email}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogout}
-                className="hidden sm:inline-flex text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary"
-              >
-                <LogOut className="mr-1.5 size-3.5" />
-                {t("nav.logout")}
-              </Button>
-            </>
+          {!loading && user && isAdmin ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden gap-1.5 text-xs font-semibold text-primary hover:bg-secondary hover:text-primary sm:inline-flex"
+                  aria-label={t("nav.bureau")}
+                >
+                  <ShieldCheck className="size-4" />
+                  <span className="hidden xl:inline">{t("nav.bureau")}</span>
+                  <ChevronDown className="size-3.5 opacity-70" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuLabel className="truncate text-xs font-normal text-muted-foreground">
+                  {user.email}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/espace-bureau/dashboard">
+                    <ShieldCheck className="size-4" />
+                    {t("nav.bureau")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => void handleLogout()}>
+                  <LogOut className="size-4" />
+                  {t("nav.logout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button asChild size="sm" className="hidden sm:inline-flex text-xs font-semibold shadow-xs">
+              <Link to="/join">{t("nav.join")}</Link>
+            </Button>
           )}
-          <Button asChild size="sm" className="hidden sm:inline-flex text-xs font-semibold shadow-xs">
-            <Link to="/join">{t("nav.join")}</Link>
-          </Button>
           <button
             type="button"
             aria-label={open ? t("nav.close") : t("nav.menu")}
@@ -141,7 +167,7 @@ export function Navbar() {
                 <span className="text-xs font-medium text-muted-foreground">{t("nav.language")}</span>
                 <LangToggle />
               </div>
-              {!loading && user && user.email === "adminclub@supptic.cm" && (
+              {!loading && user && isAdmin && (
                 <div className="space-y-2">
                   <div className="text-xs text-muted-foreground">{user.email}</div>
                   <Button
@@ -151,7 +177,7 @@ export function Navbar() {
                     className="w-full text-xs"
                     onClick={() => setOpen(false)}
                   >
-                    <Link to="/admin/dashboard">
+                    <Link to="/espace-bureau/dashboard">
                       <ShieldCheck className="mr-1.5 size-3.5" />
                       {t("nav.bureau")}
                     </Link>

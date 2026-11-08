@@ -2,23 +2,26 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   Brain,
-  CheckCircle2,
+  CalendarClock,
   Code2,
   Cpu,
+  Hammer,
   Lightbulb,
   Network,
+  Rocket,
   Shield,
+  Users,
 } from "lucide-react";
 import galleryGroup from "@/assets/images/gallery/group.jpg";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HeroSlideshow } from "@/components/site/HeroSlideshow";
 import { PartnerMarquee } from "@/components/site/PartnerMarquee";
 import { Reveal } from "@/components/site/Reveal";
 import { CTASection, ProjectCard, SectionTitle } from "@/components/site/shared";
-import { club, events, expertise, gallery, projects, stats } from "@/data/club";
+import { club, events, expertise, gallery, joinForm, projects, stats } from "@/data/club";
 import { useLocale, type MessageKey } from "@/lib/i18n";
+import { loc } from "@/lib/locale-text";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
 
 export const Route = createFileRoute("/")({
@@ -55,7 +58,13 @@ function Home() {
   const { locale, t } = useLocale();
   const featured = projects.find((p) => p.featured) ?? projects[0]!;
   const others = projects.filter((p) => p !== featured);
-  const values = [t("home.value.practice"), t("home.value.peers"), t("home.value.ship")];
+  const values = [
+    { icon: Hammer, title: t("home.value.practice"), desc: t("home.value.practiceDesc") },
+    { icon: Users, title: t("home.value.peers"), desc: t("home.value.peersDesc") },
+    { icon: Rocket, title: t("home.value.ship"), desc: t("home.value.shipDesc") },
+  ];
+  const poles = joinForm.poles.slice(0, 3);
+  const upcoming = events.filter((e) => e.upcoming).slice(0, 3);
 
   return (
     <div>
@@ -94,7 +103,9 @@ function Home() {
             >
               <dt className="sr-only">{locale === "en" ? s.labelEn : s.label}</dt>
               <dd className="font-display text-2xl text-accent sm:text-3xl">{s.value}</dd>
-              <p className="mt-1 text-xs text-night-muted">{locale === "en" ? s.labelEn : s.label}</p>
+              <p className="mt-1 text-xs text-night-muted">
+                {locale === "en" ? s.labelEn : s.label}
+              </p>
             </div>
           ))}
         </dl>
@@ -103,7 +114,7 @@ function Home() {
 
       <section className="section-y">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
             <div>
               <Reveal>
                 <SectionTitle
@@ -112,32 +123,54 @@ function Home() {
                   lead={t("home.about.lead")}
                 />
               </Reveal>
-              <ul className="grid gap-3 sm:grid-cols-3">
-                {values.map((label, i) => (
-                  <Reveal key={label} delay={i * 90}>
-                    <li className="flex h-full min-h-32 flex-col justify-between rounded-lg border border-border bg-secondary/50 p-5">
-                      <CheckCircle2 className="size-5 text-primary" />
-                      <span className="mt-8 font-display text-base leading-snug">{label}</span>
-                    </li>
-                  </Reveal>
+              <ul className="-mt-2 divide-y divide-border border-y border-border">
+                {values.map(({ icon: Icon, title, desc }, i) => (
+                  <li key={title}>
+                    <Reveal delay={i * 90} className="flex gap-4 py-4">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
+                        <Icon className="size-5" />
+                      </span>
+                      <div>
+                        <p className="font-display text-base leading-snug text-foreground">
+                          {title}
+                        </p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">{desc}</p>
+                      </div>
+                    </Reveal>
+                  </li>
                 ))}
               </ul>
-              <div className="mt-5 flex justify-end">
-                <Button asChild variant="outline">
-                  <Link to="/about">
-                    {t("home.about.more")} <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-              </div>
+              <Button asChild variant="outline" className="mt-6">
+                <Link to="/about">
+                  {t("home.about.more")} <ArrowRight className="size-4" />
+                </Link>
+              </Button>
             </div>
             <Reveal delay={80}>
-              <img
-                src={galleryGroup}
-                alt={t("home.groupAlt")}
-                width={1280}
-                height={960}
-                className="w-full rounded-xl border border-border object-cover"
-              />
+              <figure className="relative">
+                <img
+                  src={galleryGroup}
+                  alt={t("home.groupAlt")}
+                  width={1280}
+                  height={960}
+                  className="aspect-4/3 w-full rounded-2xl object-cover shadow-card"
+                />
+                <figcaption className="mt-3 rounded-xl border border-border bg-card p-3 shadow-xs sm:absolute sm:bottom-5 sm:left-5 sm:mt-0 sm:max-w-sm sm:border-white/20 sm:bg-background/90 sm:p-4 sm:shadow-card sm:backdrop-blur">
+                  <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
+                    {t("home.about.poles")}
+                  </p>
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
+                    {poles.map((p) => (
+                      <li
+                        key={p.value}
+                        className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-foreground"
+                      >
+                        {loc(p.label, locale)}
+                      </li>
+                    ))}
+                  </ul>
+                </figcaption>
+              </figure>
             </Reveal>
           </div>
         </div>
@@ -152,27 +185,32 @@ function Home() {
               lead={t("home.expertise.lead")}
             />
           </Reveal>
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border shadow-xs sm:grid-cols-2 lg:grid-cols-3">
             {expertise.map((item, i) => {
               const Icon = icons[item.icon];
               return (
-                <Reveal key={item.title} delay={i * 70}>
-                  <li>
-                    <Card className="h-full">
-                      <CardContent className="p-6">
-                        <span className="grid size-11 place-items-center rounded-lg bg-secondary text-primary">
+                <li key={item.title} className="bg-card">
+                  <Reveal delay={i * 60} className="h-full">
+                    <div className="group flex h-full gap-4 p-5 transition-colors hover:bg-secondary/40 sm:block sm:p-7">
+                      <div className="flex shrink-0 items-center justify-between self-start">
+                        <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                           <Icon className="size-5" />
                         </span>
-                        <h3 className="mt-4 font-display text-lg">
+                        <span className="hidden font-mono text-xs text-muted-foreground/70 sm:inline">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="font-display text-lg leading-snug sm:mt-5">
                           {locale === "en" ? item.titleEn : item.title}
                         </h3>
-                        <p className="mt-2 text-sm text-muted-foreground">
+                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:mt-2">
                           {locale === "en" ? item.descriptionEn : item.description}
                         </p>
-                      </CardContent>
-                    </Card>
-                  </li>
-                </Reveal>
+                      </div>
+                    </div>
+                  </Reveal>
+                </li>
               );
             })}
           </ul>
@@ -225,35 +263,67 @@ function Home() {
               }
             />
           </Reveal>
-          <ul className="grid gap-5 md:grid-cols-3">
-            {events
-              .filter((e) => e.upcoming)
-              .slice(0, 3)
-              .map((e, i) => (
-                <Reveal key={e.title} delay={i * 90}>
-                  <li>
-                    <Card className="h-full">
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="rounded-full">
-                            {t(`events.type.${e.type}` as MessageKey)}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">
-                            {locale === "en" ? e.displayDateEn : e.displayDate}
-                          </span>
-                        </div>
-                        <h3 className="mt-3 font-display text-lg">
+          {upcoming.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
+              {t("home.events.none")}
+            </p>
+          ) : (
+            <ul className="grid gap-4">
+              {upcoming.map((e, i) => {
+                const date = e.date ? new Date(e.date) : null;
+                const valid = date && !Number.isNaN(date.getTime());
+                return (
+                  <li key={e.title}>
+                    <Reveal
+                      delay={i * 90}
+                      className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs sm:grid-cols-[auto_minmax(0,1fr)_220px]"
+                    >
+                      <div className="flex items-center gap-3 border-b border-border bg-secondary/50 px-5 py-3 sm:w-32 sm:flex-col sm:justify-center sm:gap-1 sm:border-r sm:border-b-0 sm:py-6 sm:text-center">
+                        {valid ? (
+                          <>
+                            <span className="font-display text-3xl leading-none text-primary">
+                              {date.toLocaleDateString(locale, { day: "2-digit" })}
+                            </span>
+                            <span className="text-xs font-semibold tracking-wide text-primary uppercase">
+                              {date.toLocaleDateString(locale, { month: "short", year: "numeric" })}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <CalendarClock className="size-6 text-primary" />
+                            <span className="text-xs font-semibold text-primary">
+                              {t("home.events.tbc")}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      <div className="p-5 sm:p-6">
+                        <Badge variant="secondary" className="rounded-full">
+                          {t(`events.type.${e.type}` as MessageKey)}
+                        </Badge>
+                        <h3 className="mt-3 font-display text-lg leading-snug">
                           {locale === "en" ? e.titleEn : e.title}
                         </h3>
-                        <p className="mt-2 text-sm text-muted-foreground">
+                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                           {locale === "en" ? e.descriptionEn : e.description}
                         </p>
-                      </CardContent>
-                    </Card>
+                      </div>
+                      {e.image ? (
+                        <img
+                          src={e.image}
+                          alt=""
+                          loading="lazy"
+                          className="hidden h-full w-full object-cover sm:block"
+                        />
+                      ) : (
+                        <div className="hidden bg-secondary/40 sm:block" />
+                      )}
+                    </Reveal>
                   </li>
-                </Reveal>
-              ))}
-          </ul>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </section>
 

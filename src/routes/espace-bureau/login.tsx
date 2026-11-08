@@ -7,8 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
 import { supabase } from "@/lib/supabase";
+import { isBureauAdmin } from "@/lib/admin-auth";
 
-export const Route = createFileRoute("/admin/login")({
+export const Route = createFileRoute("/espace-bureau/login")({
+  head: () => ({
+    meta: [{ title: "Espace Bureau" }, { name: "robots", content: "noindex, nofollow" }],
+  }),
   component: AdminLoginPage,
 });
 
@@ -32,24 +36,25 @@ function AdminLoginPage() {
       return;
     }
 
-    // Vérifier les identifiants du Bureau
-    if (email !== "adminclub@supptic.cm" || password !== "Siteclubinf0_") {
-      setErrorMessage("Identifiants du Bureau invalides.");
+    // Authentification Supabase (aucun identifiant n'est stocké dans le code)
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) {
       setLoading(false);
+      setErrorMessage("E-mail ou mot de passe incorrect.");
       return;
     }
 
-    // Authentifier via Supabase
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    // Le compte doit figurer dans la table bureau_admins
+    if (!(await isBureauAdmin())) {
+      await supabase.auth.signOut();
+      setLoading(false);
+      setErrorMessage("Ce compte n'a pas accès à l'espace Bureau.");
+      return;
+    }
     setLoading(false);
 
-    if (error) {
-      setErrorMessage(error.message || "Erreur d'authentification");
-      return;
-    }
-
     // Redirection vers le dashboard
-    await navigate({ to: "/admin/dashboard" });
+    await navigate({ to: "/espace-bureau/dashboard" });
   }
 
   return (
@@ -60,9 +65,7 @@ function AdminLoginPage() {
           <div className="inline-flex justify-center mb-1">
             <Logo />
           </div>
-          <p className="text-sm text-muted-foreground">
-            Accès réservé au Bureau.
-          </p>
+          <p className="text-sm text-muted-foreground">Accès réservé au Bureau.</p>
         </div>
 
         {/* Formulaire de connexion */}
@@ -80,6 +83,7 @@ function AdminLoginPage() {
                     id="admin-email"
                     type="email"
                     required
+                    autoComplete="username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="admin@example.com"
@@ -99,6 +103,7 @@ function AdminLoginPage() {
                     id="admin-password"
                     type={showPassword ? "text" : "password"}
                     required
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
@@ -107,13 +112,12 @@ function AdminLoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={
+                      showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"
+                    }
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? (
-                      <EyeOff className="size-4" />
-                    ) : (
-                      <Eye className="size-4" />
-                    )}
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
               </div>
@@ -141,7 +145,8 @@ function AdminLoginPage() {
         {/* Info */}
         <div className="rounded-lg border border-border/50 bg-muted/30 p-4">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            <span className="font-semibold text-foreground">Accès réservé</span> au Bureau Exécutif du Club Informatique SUP'PTIC uniquement. Accès protégé.
+            <span className="font-semibold text-foreground">Accès réservé</span> au Bureau Exécutif
+            du Club Informatique SUP'PTIC uniquement. Accès protégé.
           </p>
         </div>
       </div>

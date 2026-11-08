@@ -58,6 +58,8 @@ export const club = {
   tagline: "Une école, un esprit, une intelligence",
   taglineEn: "One school, one spirit, one intelligence",
   email: "clubinfosupptic@gmail.com",
+  /** Groupe WhatsApp communiqué après l'envoi du formulaire d'adhésion. */
+  whatsappGroup: "https://chat.whatsapp.com/FSGWhP5GRML6Oo7QsTiRzq",
   linkedin: "https://www.linkedin.com/company/club-info-supptic",
   github: "https://github.com/nkoumougrinnel/SupOneAI",
   schoolUrl: "https://e-supptic.cm",
@@ -641,26 +643,47 @@ export const poles = [
   },
 ];
 
-export const objectives: L10n[] = [
+/** Objectifs du Club — reprise fidèle de la Charte, article 2 (docs/07_Charte.md). */
+export const objectives: { icon: "megaphone" | "learn" | "innovate" | "career" | "local"; title: L10n; text: L10n }[] = [
   {
-    fr: "Fédérer les étudiants de SUP'PTIC — ingénieurs, inspecteurs, techniciens et agents d'exploitation — autour de projets concrets.",
-    en: "Bring together SUP'PTIC students — engineers, inspectors, technicians and operations officers — around concrete projects.",
+    icon: "megaphone",
+    title: { fr: "Culture numérique", en: "Digital culture" },
+    text: {
+      fr: "Promouvoir la culture numérique, informatique et les TIC auprès des étudiants.",
+      en: "Promote digital culture, computing and ICT among students.",
+    },
   },
   {
-    fr: "Renforcer les compétences, numériques et professionnelles, par la formation entre pairs.",
-    en: "Build digital and professional skills through peer training.",
+    icon: "learn",
+    title: { fr: "Apprendre ensemble", en: "Learn together" },
+    text: {
+      fr: "Favoriser la formation continue, l'apprentissage pratique et le partage des connaissances.",
+      en: "Encourage continuous learning, hands-on practice and knowledge sharing.",
+    },
   },
   {
-    fr: "Porter des projets utiles à l'école, à l'administration des P&T et à leur écosystème.",
-    en: "Deliver projects that are useful to the school, P&T administration and their ecosystem.",
+    icon: "innovate",
+    title: { fr: "Innover", en: "Innovate" },
+    text: {
+      fr: "Encourager l'innovation, la recherche et la participation aux compétitions, projets et événements technologiques.",
+      en: "Encourage innovation, research and participation in competitions, projects and tech events.",
+    },
   },
   {
-    fr: "Créer des ponts avec les entreprises, les institutions et les communautés tech.",
-    en: "Build bridges with companies, institutions and tech communities.",
+    icon: "career",
+    title: { fr: "Préparer l'avenir", en: "Prepare for the future" },
+    text: {
+      fr: "Préparer les membres à l'insertion professionnelle et représenter SUP'PTIC lors d'événements scientifiques et technologiques.",
+      en: "Prepare members for professional life and represent SUP'PTIC at scientific and technology events.",
+    },
   },
   {
-    fr: "Valoriser l'image de SUP'PTIC et de tous ses cursus.",
-    en: "Promote SUP'PTIC and every programme it offers.",
+    icon: "local",
+    title: { fr: "Agir localement", en: "Act locally" },
+    text: {
+      fr: "Développer des initiatives locales adaptées aux besoins de la communauté.",
+      en: "Develop local initiatives suited to the community's needs.",
+    },
   },
 ];
 
@@ -765,206 +788,30 @@ export const school = {
   cursus: ["Ingénierie", "Management"] as const,
 };
 
-export const engineeringCycles = ["ITT", "MIT", "TT", "ATT"] as const;
-export const inspectionCycles = ["IPT", "MAPT", "CPT", "AEPT"] as const;
-
-export type JoinProfile = "engineering" | "inspection";
-
-export function joinProfile(cycle: string): JoinProfile | null {
-  if ((engineeringCycles as readonly string[]).includes(cycle)) return "engineering";
-  if ((inspectionCycles as readonly string[]).includes(cycle)) return "inspection";
-  return null;
-}
-
-export const joinChoiceLabels: Record<string, L10n> = {
-  Classique: { fr: "Classique", en: "Regular" },
-  Alternance: { fr: "Alternance", en: "Work-study" },
-  Concours: { fr: "Concours", en: "Competitive exam" },
-  "Admission directe": { fr: "Admission directe", en: "Direct admission" },
-  "1re année (ITT1)": { fr: "1re année (ITT1)", en: "1st year (ITT1)" },
-  "2e année (ITT2)": { fr: "2e année (ITT2)", en: "2nd year (ITT2)" },
-  "3e année (ITT3)": { fr: "3e année (ITT3)", en: "3rd year (ITT3)" },
-  "1re année (IPT1)": { fr: "1re année (IPT1)", en: "1st year (IPT1)" },
-  "2e année (IPT2)": { fr: "2e année (IPT2)", en: "2nd year (IPT2)" },
-  "3e année (IPT3)": { fr: "3e année (IPT3)", en: "3rd year (IPT3)" },
-  "Master 1": { fr: "Master 1", en: "Master 1" },
-  "Master 2": { fr: "Master 2", en: "Master 2" },
-  "1re année": { fr: "1re année", en: "1st year" },
-  "2e année": { fr: "2e année", en: "2nd year" },
-  "Tronc commun (1re année)": { fr: "Tronc commun (1re année)", en: "Common core (1st year)" },
-  "Informatique et réseaux (IR)": { fr: "Informatique et réseaux (IR)", en: "IT and networks (IR)" },
-  "Réseaux et télécommunications (RT)": {
-    fr: "Réseaux et télécommunications (RT)",
-    en: "Networks and telecommunications (RT)",
-  },
-  "Radiocommunication (RC)": { fr: "Radiocommunication (RC)", en: "Radiocommunication (RC)" },
-  "Management (MGT)": { fr: "Management (MGT)", en: "Management (MGT)" },
-  "Comptabilité et Finances (CF)": {
-    fr: "Comptabilité et Finances (CF)",
-    en: "Accounting and Finance (CF)",
-  },
-  "Logistique et Transport (LT)": {
-    fr: "Logistique et Transport (LT)",
-    en: "Logistics and Transport (LT)",
-  },
-  "Commerce et distribution": { fr: "Commerce et distribution", en: "Commerce and distribution" },
-  "Tronc commun": { fr: "Tronc commun", en: "Common core" },
-  "Sécurité des réseaux et systèmes (SERES)": {
-    fr: "Sécurité des réseaux et systèmes (SERES)",
-    en: "Network and systems security (SERES)",
-  },
-  "Services et Radiomobiles (SRM)": {
-    fr: "Services et Radiomobiles (SRM)",
-    en: "Services and mobile radio (SRM)",
-  },
-  "Spécialité à préciser": { fr: "Spécialité à préciser", en: "Specialisation to specify" },
-  "Parcours technique télécoms": { fr: "Parcours technique télécoms", en: "Telecoms technical track" },
-  "Contrôle et exploitation des P&T": {
-    fr: "Contrôle et exploitation des P&T",
-    en: "P&T control and operations",
-  },
-  "Techniques des télécoms": { fr: "Techniques des télécoms", en: "Telecoms techniques" },
-  "Exploitation des postes et télécoms": {
-    fr: "Exploitation des postes et télécoms",
-    en: "Postal and telecoms operations",
-  },
-};
+/**
+ * Formulaire d'adhésion (/join).
+ * Principe : le cursus décrit la personne, les centres d'intérêt ce qu'elle
+ * souhaite faire, et la préférence de pôle comment elle souhaite contribuer.
+ * Aucun de ces éléments n'est déduit des autres (pas de suggestion par cycle).
+ */
+export const OTHER = "Autre";
 
 export const joinForm = {
-  campuses: ["Yaoundé", "Buea"] as const,
-  poles: [
+  campuses: [
+    { value: "Yaoundé", label: { fr: "Yaoundé", en: "Yaoundé" } },
     {
-      value: "Pôle Innovation & Projets",
-      label: { fr: "Pôle Innovation & Projets", en: "Innovation & Projects" },
-      desc: {
-        fr: "Idéation, montage de projets, hackathons, pitchs — pour profils techniques et management.",
-        en: "Ideation, project set-up, hackathons, pitches — for technical and management profiles.",
-      },
+      value: "Buea",
+      label: { fr: "Buea — Centre régional annexe", en: "Buea — Regional annex centre" },
     },
-    {
-      value: "Pôle Développement",
-      label: { fr: "Pôle Développement", en: "Development" },
-      desc: {
-        fr: "Conception technique, web/mobile, IA, IoT et sécurité — ouvert à qui veut apprendre.",
-        en: "Technical design, web/mobile, AI, IoT and security — open to anyone willing to learn.",
-      },
-    },
-    {
-      value: "Pôle Communication",
-      label: { fr: "Pôle Communication", en: "Communications" },
-      desc: {
-        fr: "Visibilité, médias, relations, design et événementiel — très adapté aux profils inspection et management.",
-        en: "Visibility, media, relations, design and events — a strong fit for inspection and management profiles.",
-      },
-    },
-    {
-      value: "Découverte & Ateliers",
-      label: { fr: "Découverte & Ateliers", en: "Discovery & workshops" },
-      desc: {
-        fr: "Participer aux formations et découvrir le Club avant de choisir un pôle.",
-        en: "Join training sessions and explore the Club before choosing a unit.",
-      },
-    },
+    { value: OTHER, label: { fr: "Autre situation — préciser", en: "Other situation — specify" } },
   ],
-  experienceLevels: [
-    {
-      value: "Débutant",
-      label: { fr: "Je découvre", en: "I'm starting out" },
-      desc: {
-        fr: "Aucune expérience exigée — cours, curiosité ou envie d'apprendre suffisent.",
-        en: "No prior experience needed — coursework, curiosity or a will to learn is enough.",
-      },
-    },
-    {
-      value: "Intermédiaire",
-      label: { fr: "Je pratique", en: "I already practise" },
-      desc: {
-        fr: "Projets scolaires, stages, missions associatives ou responsabilités déjà menées.",
-        en: "Course projects, internships, club work or responsibilities already taken on.",
-      },
-    },
-    {
-      value: "Avancé",
-      label: { fr: "Je peux contribuer", en: "I can contribute" },
-      desc: {
-        fr: "Expérience solide : je peux livrer, encadrer ou structurer un projet.",
-        en: "Solid experience: I can deliver, mentor or structure a project.",
-      },
-    },
-  ],
-  domainGroups: [
-    {
-      id: "digital",
-      highlight: "engineering" as const,
-      title: { fr: "Numérique & techniques", en: "Digital & technical" },
-      domains: [
-        { value: "Intelligence Artificielle", label: { fr: "Intelligence artificielle", en: "Artificial intelligence" } },
-        { value: "Développement logiciel", label: { fr: "Développement logiciel", en: "Software development" } },
-        { value: "Cybersécurité", label: { fr: "Cybersécurité", en: "Cybersecurity" } },
-        {
-          value: "Réseaux & Télécommunications",
-          label: { fr: "Réseaux & télécommunications", en: "Networks & telecommunications" },
-        },
-        { value: "Électronique & IoT", label: { fr: "Électronique & IoT", en: "Electronics & IoT" } },
-        { value: "Radiocommunication", label: { fr: "Radiocommunication", en: "Radiocommunication" } },
-      ],
-    },
-    {
-      id: "inspection",
-      highlight: "inspection" as const,
-      title: { fr: "Inspection, management & services", en: "Inspection, management & services" },
-      domains: [
-        {
-          value: "Régulation & conformité P&T",
-          label: { fr: "Régulation & conformité des P&T", en: "P&T regulation & compliance" },
-        },
-        {
-          value: "Management des postes et télécoms",
-          label: { fr: "Management des postes et télécoms", en: "Postal & telecoms management" },
-        },
-        { value: "Comptabilité & finances", label: { fr: "Comptabilité & finances", en: "Accounting & finance" } },
-        {
-          value: "Logistique & transport",
-          label: { fr: "Logistique, transport & supply chain", en: "Logistics, transport & supply chain" },
-        },
-        {
-          value: "Commerce & relation client",
-          label: { fr: "Commerce, distribution & relation client", en: "Commerce, distribution & customer relations" },
-        },
-        {
-          value: "Exploitation des services postaux",
-          label: { fr: "Exploitation des services postaux", en: "Postal operations" },
-        },
-        {
-          value: "Transformation numérique",
-          label: {
-            fr: "Transformation numérique des administrations",
-            en: "Digital transformation of public services",
-          },
-        },
-      ],
-    },
-    {
-      id: "club",
-      highlight: "all" as const,
-      title: { fr: "Vie du Club", en: "Club life" },
-      domains: [
-        { value: "Communication & médias", label: { fr: "Communication & médias", en: "Communications & media" } },
-        { value: "Design & identité visuelle", label: { fr: "Design & identité visuelle", en: "Design & visual identity" } },
-        { value: "Organisation d'événements", label: { fr: "Organisation d'événements", en: "Event organising" } },
-        {
-          value: "Pédagogie & formation",
-          label: { fr: "Pédagogie & formation entre pairs", en: "Peer teaching & training" },
-        },
-      ],
-    },
-  ],
+  /** Cycles publiés par l'école. Liste non exhaustive : « Autre formation » reste toujours proposé. */
   cyclesByCampus: {
     Yaoundé: [
       {
         value: "ITT",
         label: {
-          fr: "ITT — Ingénieur des Travaux de Télécommunications",
+          fr: "ITT — Ingénieur des Travaux des Télécommunications",
           en: "ITT — Telecommunications Works Engineer",
         },
       },
@@ -991,67 +838,172 @@ export const joinForm = {
       },
     ],
     Buea: [
-      { value: "TT", label: { fr: "TT — Technicien des Télécoms", en: "TT — Telecoms Technician" } },
+      {
+        value: "TT",
+        label: { fr: "TT — Technicien des Télécommunications", en: "TT — Telecoms Technician" },
+      },
       {
         value: "CPT",
-        label: { fr: "CPT — Contrôleur des Postes et Télécoms", en: "CPT — Posts and Telecoms Controller" },
+        label: {
+          fr: "CPT — Contrôleur des Postes et Télécommunications",
+          en: "CPT — Posts and Telecoms Controller",
+        },
       },
       {
         value: "ATT",
-        label: { fr: "ATT — Agent Technique des Télécoms", en: "ATT — Telecoms Technical Officer" },
+        label: {
+          fr: "ATT — Agent Technique des Télécommunications",
+          en: "ATT — Telecoms Technical Officer",
+        },
       },
       {
         value: "AEPT",
         label: {
-          fr: "AEPT — Agent d'Exploitation des Postes et Télécoms",
+          fr: "AEPT — Agent d'Exploitation des Postes et Télécommunications",
           en: "AEPT — Posts and Telecoms Operations Officer",
         },
       },
     ],
+  } as Record<string, { value: string; label: L10n }[]>,
+  otherCycle: {
+    value: OTHER,
+    label: {
+      fr: "Autre formation / mon intitulé n'apparaît pas — préciser",
+      en: "Other programme / mine isn't listed — specify",
+    },
   },
-  regimesByCycle: {
-    ITT: ["Classique", "Alternance"],
-    IPT: ["Classique", "Alternance"],
-    MIT: ["Concours", "Admission directe"],
-    MAPT: ["Concours", "Admission directe"],
-    TT: ["Classique"],
-    CPT: ["Classique"],
-    ATT: ["Classique"],
-    AEPT: ["Classique"],
-  } as Record<string, string[]>,
-  optionsByCycle: {
-    ITT: [
-      "Tronc commun (1re année)",
-      "Informatique et réseaux (IR)",
-      "Réseaux et télécommunications (RT)",
-      "Radiocommunication (RC)",
-    ],
-    IPT: [
-      "Tronc commun (1re année)",
-      "Management (MGT)",
-      "Comptabilité et Finances (CF)",
-      "Logistique et Transport (LT)",
-      "Commerce et distribution",
-    ],
-    MIT: [
-      "Tronc commun",
-      "Sécurité des réseaux et systèmes (SERES)",
-      "Services et Radiomobiles (SRM)",
-    ],
-    MAPT: ["Tronc commun", "Spécialité à préciser"],
-    TT: ["Parcours technique télécoms"],
-    CPT: ["Contrôle et exploitation des P&T"],
-    ATT: ["Techniques des télécoms"],
-    AEPT: ["Exploitation des postes et télécoms"],
-  } as Record<string, string[]>,
-  levelsByCycle: {
-    ITT: ["1re année (ITT1)", "2e année (ITT2)", "3e année (ITT3)"],
-    IPT: ["1re année (IPT1)", "2e année (IPT2)", "3e année (IPT3)"],
-    MIT: ["Master 1", "Master 2"],
-    MAPT: ["Master 1", "Master 2"],
-    TT: ["1re année", "2e année"],
-    CPT: ["1re année", "2e année"],
-    ATT: ["1re année", "2e année"],
-    AEPT: ["1re année", "2e année"],
-  } as Record<string, string[]>,
+  /** Activités concrètes (plusieurs choix, 3 maximum). Ce ne sont pas des pôles. */
+  maxInterests: 3,
+  interests: [
+    {
+      value: "Développement web, mobile ou logiciel",
+      label: {
+        fr: "Développement web, mobile ou logiciel",
+        en: "Web, mobile or software development",
+      },
+    },
+    {
+      value: "Intelligence artificielle et données",
+      label: { fr: "Intelligence artificielle et données", en: "Artificial intelligence and data" },
+    },
+    {
+      value: "Électronique, objets connectés et prototypage",
+      label: {
+        fr: "Électronique, objets connectés et prototypage",
+        en: "Electronics, IoT and prototyping",
+      },
+    },
+    {
+      value: "Veille technologique et partage de connaissances",
+      label: {
+        fr: "Veille technologique et partage de connaissances",
+        en: "Tech watch and knowledge sharing",
+      },
+    },
+    {
+      value: "Recherche d'idées et conception de projets",
+      label: {
+        fr: "Recherche d'idées et conception de projets",
+        en: "Finding ideas and designing projects",
+      },
+    },
+    {
+      value: "Organisation et coordination d'un projet",
+      label: {
+        fr: "Organisation et coordination d'un projet",
+        en: "Organising and coordinating a project",
+      },
+    },
+    {
+      value: "Préparation de pitchs et présentations",
+      label: {
+        fr: "Préparation de pitchs et présentations",
+        en: "Preparing pitches and presentations",
+      },
+    },
+    {
+      value: "Hackathons, concours et recherche d'opportunités",
+      label: {
+        fr: "Hackathons, concours et recherche d'opportunités",
+        en: "Hackathons, competitions and finding opportunities",
+      },
+    },
+    {
+      value: "Design graphique et création de visuels",
+      label: { fr: "Design graphique et création de visuels", en: "Graphic design and visuals" },
+    },
+    {
+      value: "Rédaction, photo, vidéo ou réseaux sociaux",
+      label: {
+        fr: "Rédaction, photo, vidéo ou réseaux sociaux",
+        en: "Writing, photo, video or social media",
+      },
+    },
+    {
+      value: "Communication de terrain et mobilisation",
+      label: { fr: "Communication de terrain et mobilisation", en: "Outreach and mobilisation" },
+    },
+    {
+      value: "Je souhaite découvrir avant de choisir",
+      label: {
+        fr: "Je souhaite découvrir avant de choisir",
+        en: "I'd like to explore before choosing",
+      },
+    },
+    { value: OTHER, label: { fr: "Autre — préciser", en: "Other — specify" } },
+  ],
+  /** Préférence de pôle (pas une affectation). Descriptions reprises des articles 14 à 17. */
+  poles: [
+    {
+      value: "Pôle Innovation & Projets",
+      label: { fr: "Innovation & Projets", en: "Innovation & Projects" },
+      desc: {
+        fr: "Faire émerger et structurer les idées, coordonner les équipes projet, préparer les pitchs et organiser la préparation aux concours.",
+        en: "Surface and structure ideas, coordinate project teams, prepare pitches and organise competition preparation.",
+      },
+    },
+    {
+      value: "Pôle Développement",
+      label: { fr: "Développement", en: "Development" },
+      desc: {
+        fr: "Concevoir les solutions techniques, réaliser des prototypes, apporter un appui technique et partager des compétences.",
+        en: "Design technical solutions, build prototypes, provide technical support and share skills.",
+      },
+    },
+    {
+      value: "Pôle Communication",
+      label: { fr: "Communication", en: "Communications" },
+      desc: {
+        fr: "Créer les supports visuels et éditoriaux, couvrir les activités et diffuser les informations du club.",
+        en: "Create visual and editorial content, cover activities and share the club's news.",
+      },
+    },
+    {
+      value: "Découvrir avant de choisir",
+      label: {
+        fr: "Je souhaite découvrir avant de choisir",
+        en: "I'd like to explore before choosing",
+      },
+      desc: {
+        fr: "Participer aux premières activités pour mieux comprendre les trois pôles.",
+        en: "Take part in the first activities to better understand the three units.",
+      },
+    },
+  ],
+  availability: [
+    {
+      value: "En semaine, en journée",
+      label: { fr: "En semaine, en journée", en: "Weekdays, daytime" },
+    },
+    {
+      value: "En semaine, en soirée",
+      label: { fr: "En semaine, en soirée", en: "Weekday evenings" },
+    },
+    { value: "Le week-end", label: { fr: "Le week-end", en: "Weekends" } },
+    { value: "Disponibilités variables", label: { fr: "Disponibilités variables", en: "Varies" } },
+    {
+      value: "Je préciserai plus tard",
+      label: { fr: "Je préciserai plus tard", en: "I'll tell you later" },
+    },
+  ],
 };

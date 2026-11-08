@@ -1,43 +1,6 @@
 import { supabase } from "./supabase";
 
 /**
- * Crée un utilisateur Supabase pour un candidat validé
- * @param email Email du nouvel utilisateur
- * @param password Mot de passe temporaire
- * @returns { userId, error }
- */
-export async function createUserFromCandidature(email: string, password: string) {
-  if (!supabase) {
-    return { userId: null, error: "Supabase n'est pas configuré" };
-  }
-
-  // Vérifier que l'email n'existe pas déjà
-  const { data: existingUsers, error: checkError } = await supabase.auth.admin.listUsers();
-  
-  if (checkError) {
-    return { userId: null, error: `Erreur lors de la vérification: ${checkError.message}` };
-  }
-
-  const emailExists = existingUsers?.users.some(u => u.email === email);
-  if (emailExists) {
-    return { userId: null, error: `Un compte avec l'email ${email} existe déjà` };
-  }
-
-  // Créer l'utilisateur
-  const { data, error } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true, // Confirmer l'email d'office
-  });
-
-  if (error) {
-    return { userId: null, error: error.message };
-  }
-
-  return { userId: data.user?.id, error: null };
-}
-
-/**
  * Met à jour le statut d'une candidature
  * @param candidatureId UUID de la candidature
  * @param newStatus Nouveau statut
