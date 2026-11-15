@@ -148,7 +148,7 @@ function AnnoncesPage() {
       }
     >
       {filtres.length > 1 ? (
-        <div className="flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Structure">
+        <div className="flex flex-wrap gap-2" role="tablist" aria-label="Structure">
           <Chip
             active={!search.structure}
             onClick={() => setSearch({ structure: undefined })}

@@ -85,7 +85,9 @@ function PasswordPage() {
           <div className="mb-1 inline-flex justify-center">
             <Logo />
           </div>
-          <h1 className="font-display text-xl font-bold text-foreground">Choisir mon mot de passe</h1>
+          <h1 className="font-display text-xl font-bold text-foreground">
+            Choisir mon mot de passe
+          </h1>
           <p className="text-sm text-muted-foreground">Espace Bureau — accès réservé.</p>
         </div>
 
