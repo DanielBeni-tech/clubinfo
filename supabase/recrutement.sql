@@ -548,7 +548,7 @@ grant execute on function public.retirer_responsable(uuid, uuid) to authenticate
 
 -- ------------------------------------------------------------
 -- 12 (exécutée avant 11). Structures de départ
---     Les pôles Cybersécurité & Réseau et Infrastructure & Cloud ne sont pas
+--     Les pôles dont la création n'est pas encore validée ne sont pas
 --     créés ici : le Bureau les ajoutera depuis l'espace Bureau une fois validés.
 -- ------------------------------------------------------------
 insert into public.structures (slug, nom, nom_en, description, description_en, type, couleur, ordre)

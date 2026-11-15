@@ -56,15 +56,15 @@ Onglet **Annonces** > **Nouvelle annonce**. Toutes les structures utilisent le m
 
 | Rubrique | Obligatoire | Exemple |
 |---|---|---|
-| Intitulé du poste | Oui | Responsable des labos réseau |
+| Intitulé du poste | Oui | Responsable Événements et Compétitions |
 | Résumé (une phrase, affichée sur la carte) | Conseillé | Monter et animer les ateliers pratiques |
-| Ce que tu feras | Oui | Préparer les TP, encadrer les séances… |
-| Profil recherché | Oui | Bases en routage et commutation |
-| Livrables attendus | Non | Un labo documenté par mois |
-| Outils et technologies | Non | Packet Tracer, GNS3, Wireshark |
-| Rubrique libre (titre au choix) | Non | « Certifications préparées », « Contribution à la digitalisation » |
-| Places, engagement, date limite | Places : oui | 2 places · 3 h par semaine · 30 novembre |
-| Questions propres au poste (3 maximum) | Non | As-tu déjà configuré un VLAN ? |
+| Ce que tu feras | Oui | Coordonner les ateliers, hackathons et compétitions… |
+| Profil recherché | Oui | Sens de l'organisation, aisance à l'oral |
+| Livrables attendus | Non | Un bilan après chaque événement |
+| Outils et technologies | Non | Canva, CapCut, Notion |
+| Rubrique libre (titre au choix) | Non | « Concours visés », « Contribution à la digitalisation » |
+| Places, engagement, date limite | Places : oui | 1 place · 3 h par semaine · 30 novembre |
+| Questions propres au poste (3 maximum) | Non | As-tu déjà organisé un événement ? |
 
 - **Brouillon** : invisible sur le site. **Publier** : visible sur /recrutement. **Fermer les candidatures** : la fiche reste consultable, mais on ne peut plus postuler.
 - Une annonce publiée **disparaît automatiquement de la liste** le lendemain de sa date limite.

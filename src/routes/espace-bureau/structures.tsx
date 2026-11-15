@@ -262,7 +262,7 @@ function StructureForm({
             value={nom}
             maxLength={80}
             onChange={(e) => setNom(e.target.value)}
-            placeholder="Cybersécurité & Réseau"
+            placeholder="Innovation & Projets"
           />
         </F>
         {!structure ? (
@@ -278,7 +278,7 @@ function StructureForm({
             value={nomEn}
             maxLength={80}
             onChange={(e) => setNomEn(e.target.value)}
-            placeholder="Cybersecurity & Networks"
+            placeholder="Innovation & Projects"
           />
         </F>
         <F label="Description (affichée dans le formulaire d'adhésion)">

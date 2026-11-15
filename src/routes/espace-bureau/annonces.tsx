@@ -401,7 +401,7 @@ function AnnonceForm({
           value={titre}
           maxLength={120}
           onChange={(e) => onTitre(e.target.value)}
-          placeholder="Responsable des labos réseau"
+          placeholder="Responsable Événements et Compétitions"
         />
       </F>
       <F
@@ -449,7 +449,7 @@ function AnnonceForm({
           value={outils}
           maxLength={300}
           onChange={(e) => setOutils(e.target.value)}
-          placeholder="Canva, CapCut… / Packet Tracer, GNS3…"
+          placeholder="Canva, CapCut, Notion, GitHub…"
         />
       </F>
       <div className="grid gap-3 rounded-xl border border-dashed border-border p-4">
@@ -500,7 +500,7 @@ function AnnonceForm({
         <div>
           <p className="text-sm font-medium">Questions propres au poste ({questions.length}/3)</p>
           <p className="text-xs text-muted-foreground">
-            Le candidat devra y répondre. Exemple : « As-tu déjà configuré un VLAN ? »
+            Le candidat devra y répondre. Exemple : « As-tu déjà organisé un événement ? Raconte en deux lignes. »
           </p>
         </div>
         {questions.map((q, i) => (
