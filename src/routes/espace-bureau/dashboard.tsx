@@ -1,261 +1,285 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Inbox, Mail, UserPlus, Users } from "lucide-react";
+import { Briefcase, Inbox, Mail, UserPlus, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { BureauLoading, BureauShell, PoleDot, StatutBadge } from "@/components/bureau/BureauShell";
-import { getCandidatures, getMessages } from "@/lib/admin-helpers";
-import { useBureauGuard } from "@/lib/admin-auth";
+import { BureauLoading, BureauShell, StatutBadge } from "@/components/bureau/BureauShell";
+import { Bar, SectionTitle, StructureDot } from "@/components/bureau/ui";
 import {
-  POLES,
+  getAllStructures,
+  getAnnoncesGerees,
+  getCandidaturesPoste,
+  getMembres,
+  getMessages,
+} from "@/lib/admin-helpers";
+import { useEspaceGuard } from "@/lib/admin-auth";
+import {
   daysAgo,
   formatDate,
   fullName,
-  interestsOf,
-  poleInfo,
-  poleSlug,
-  type CandidatureRow,
+  structureById,
+  type CandidaturePosteRow,
+  type MembreRow,
   type MessageRow,
 } from "@/lib/bureau-data";
+import { annonceOuverte, couleur, type Annonce, type Structure } from "@/lib/recrutement";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/espace-bureau/dashboard")({
   head: () => ({
     meta: [{ title: "Espace Bureau" }, { name: "robots", content: "noindex, nofollow" }],
   }),
-  component: AdminDashboard,
+  component: Dashboard,
 });
 
-function AdminDashboard() {
-  const { user, ready } = useBureauGuard();
-  const [candidatures, setCandidatures] = useState<CandidatureRow[]>([]);
+/** Compte les occurrences et renvoie les entrées triées par fréquence. */
+function countBy<T>(items: T[], key: (item: T) => string | null | undefined) {
+  const map = new Map<string, number>();
+  for (const it of items) {
+    const k = key(it)?.trim();
+    if (k) map.set(k, (map.get(k) ?? 0) + 1);
+  }
+  return [...map.entries()].sort((a, b) => b[1] - a[1]);
+}
+
+/** « ITT — Ingénieur des Travaux… » → « ITT » ; « Autre : … » → « Autre ». */
+function cycleCourt(cycle: string) {
+  if (cycle.startsWith("Autre")) return "Autre";
+  return cycle.split(" — ")[0] ?? cycle;
+}
+
+function Dashboard() {
+  const { user, role, ready } = useEspaceGuard();
+  const [membres, setMembres] = useState<MembreRow[]>([]);
+  const [structures, setStructures] = useState<Structure[]>([]);
+  const [annonces, setAnnonces] = useState<Annonce[]>([]);
+  const [candidatures, setCandidatures] = useState<CandidaturePosteRow[]>([]);
   const [messages, setMessages] = useState<MessageRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!ready) return;
-    void Promise.all([getCandidatures(), getMessages()]).then(([c, m]) => {
-      setCandidatures(c as CandidatureRow[]);
-      setMessages(m as MessageRow[]);
+    void Promise.all([
+      getMembres(),
+      getAllStructures(),
+      getAnnoncesGerees(),
+      getCandidaturesPoste(),
+      role.bureau ? getMessages() : Promise.resolve([] as MessageRow[]),
+    ]).then(([m, s, a, c, msg]) => {
+      setMembres(m);
+      setStructures(s);
+      setAnnonces(a.filter((x) => role.bureau || role.structures.includes(x.structure_id)));
+      setCandidatures(c);
+      setMessages(msg);
       setLoading(false);
     });
-  }, [ready]);
+  }, [ready, role]);
 
   const stats = useMemo(() => {
-    const nouvelles = candidatures.filter((c) => c.statut === "Nouveau").length;
-    const semaine = candidatures.filter((c) => daysAgo(c.created_at) <= 7).length;
-    const nonTraites = messages.filter((m) => !m.traite);
-
-    const parPole = POLES.map((p) => {
-      const list = candidatures.filter((c) => poleSlug(c.pole) === p.slug);
-      return {
-        ...p,
-        total: list.length,
-        nouvelles: list.filter((c) => c.statut === "Nouveau").length,
-      };
-    });
-    const autres = candidatures.filter((c) => poleSlug(c.pole) === "autre").length;
-
-    const counts = new Map<string, number>();
-    for (const c of candidatures)
-      for (const i of interestsOf(c)) {
-        const key = i.startsWith("Autre") ? "Autre" : i;
-        counts.set(key, (counts.get(key) ?? 0) + 1);
-      }
-    const interets = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
-
-    return { nouvelles, semaine, nonTraites, parPole, autres, interets };
-  }, [candidatures, messages]);
+    const poles = structures.filter(
+      (s) => s.type === "pole" && s.actif && (role.bureau || role.structures.includes(s.id)),
+    );
+    const parPole = poles.map((s) => ({
+      s,
+      n: membres.filter((m) => m.interets.some((i) => i.structure_id === s.id)).length,
+    }));
+    return {
+      semaine: membres.filter((m) => daysAgo(m.created_at) <= 7).length,
+      ouvertes: annonces.filter((a) => annonceOuverte(a)).length,
+      aTraiter: candidatures.filter((c) => c.statut === "Reçue").length,
+      nonTraites: messages.filter((m) => !m.traite).length,
+      parPole,
+      sansPole: membres.filter((m) => m.interets.length === 0).length,
+      parCycle: countBy(membres, (m) => cycleCourt(m.cycle)).slice(0, 6),
+      parCampus: countBy(membres, (m) => (m.campus.startsWith("Autre") ? "Autre" : m.campus)),
+      parSource: countBy(membres, (m) => m.source).slice(0, 6),
+      parStatut: (["Reçue", "Entretien", "Acceptée", "Refusée"] as const).map((st) => ({
+        st,
+        n: candidatures.filter((c) => c.statut === st).length,
+      })),
+    };
+  }, [membres, structures, annonces, candidatures, messages, role]);
 
   if (!ready || loading) return <BureauLoading />;
 
-  const maxInteret = stats.interets[0]?.[1] ?? 1;
+  const maxPole = Math.max(1, ...stats.parPole.map((p) => p.n), stats.sansPole);
+  const maxCycle = stats.parCycle[0]?.[1] ?? 1;
+  const maxSource = stats.parSource[0]?.[1] ?? 1;
 
   return (
     <BureauShell
+      role={role}
       title="Tableau de bord"
-      subtitle="Vue d'ensemble des inscriptions et des messages reçus."
+      subtitle={
+        role.bureau
+          ? "Vue d'ensemble des membres, du recrutement et des messages."
+          : "Vue d'ensemble de ta structure : membres intéressés, annonces et candidatures."
+      }
       email={user?.email ?? null}
       badges={{
-        "/espace-bureau/candidatures": stats.nouvelles,
-        "/espace-bureau/messages": stats.nonTraites.length,
+        "/espace-bureau/candidatures": stats.aTraiter,
+        ...(role.bureau ? { "/espace-bureau/messages": stats.nonTraites } : {}),
       }}
     >
-      {/* Chiffres clés */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi
-          icon={UserPlus}
-          label="À traiter"
-          value={stats.nouvelles}
-          hint="candidatures « Nouveau »"
-          to="/espace-bureau/candidatures"
-          search={{ statut: "Nouveau" }}
-          highlight={stats.nouvelles > 0}
+          icon={Users}
+          label={role.bureau ? "Membres" : "Membres suivis"}
+          value={membres.length}
+          hint={role.bureau ? "inscrits au club" : "intéressés ou candidats"}
+          to="/espace-bureau/membres"
         />
         <Kpi
-          icon={Users}
-          label="Candidatures"
-          value={candidatures.length}
-          hint="au total"
-          to="/espace-bureau/candidatures"
+          icon={UserPlus}
+          label="Cette semaine"
+          value={stats.semaine}
+          hint="nouveaux membres (7 j)"
+        />
+        <Kpi
+          icon={Briefcase}
+          label="Annonces"
+          value={stats.ouvertes}
+          hint="ouvertes sur le site"
+          to="/espace-bureau/annonces"
         />
         <Kpi
           icon={Inbox}
-          label="Cette semaine"
-          value={stats.semaine}
-          hint="nouvelles inscriptions (7 j)"
-        />
-        <Kpi
-          icon={Mail}
-          label="Messages"
-          value={stats.nonTraites.length}
-          hint="non traités"
-          to="/espace-bureau/messages"
-          highlight={stats.nonTraites.length > 0}
+          label="À traiter"
+          value={stats.aTraiter}
+          hint="candidatures reçues"
+          to="/espace-bureau/candidatures"
+          highlight={stats.aTraiter > 0}
         />
       </div>
 
-      {/* Par pôle */}
-      <section className="mt-10">
-        <SectionTitle
-          title="Candidatures par pôle"
-          lead="Chaque chef de pôle retrouve ici les personnes qui ont choisi son pôle en priorité."
-        />
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.parPole.map((p) => (
-            <Link
-              key={p.slug}
-              to="/espace-bureau/candidatures"
-              search={{ pole: p.slug }}
-              className="group rounded-xl border border-border bg-card p-5 shadow-xs transition-colors hover:border-primary/50"
-            >
-              <div className="flex items-center gap-2">
-                <PoleDot className={p.dot} />
-                <span className="text-sm font-semibold text-foreground">{p.label}</span>
-              </div>
-              <p className="mt-3 font-display text-3xl font-bold text-foreground">{p.total}</p>
-              <p className="text-xs text-muted-foreground">
-                {p.nouvelles > 0 ? (
-                  <span className="font-semibold text-primary">{p.nouvelles} à traiter</span>
-                ) : (
-                  "aucune en attente"
-                )}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                Voir la liste
-                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </Link>
-          ))}
-        </div>
-        {stats.autres > 0 ? (
-          <p className="mt-2 text-xs text-muted-foreground">
-            {stats.autres} candidature(s) avec un pôle non reconnu (ancienne version du formulaire)
-            —{" "}
-            <Link
-              to="/espace-bureau/candidatures"
-              search={{ pole: "autre" }}
-              className="text-primary underline"
-            >
-              les voir
-            </Link>
-            .
-          </p>
-        ) : null}
-      </section>
+      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <Card className="border-border shadow-xs">
+          <CardContent className="grid gap-4 p-5">
+            <SectionTitle
+              title="Membres par pôle d'intérêt"
+              lead="Un membre peut indiquer jusqu'à 2 pôles."
+            />
+            {stats.parPole.map(({ s, n }) => (
+              <Link
+                key={s.id}
+                to="/espace-bureau/membres"
+                search={{ structure: s.id }}
+                className="block hover:opacity-80"
+              >
+                <Bar
+                  label={
+                    <>
+                      <StructureDot color={s.couleur} />
+                      {s.nom}
+                    </>
+                  }
+                  value={n}
+                  max={maxPole}
+                  color={couleur(s.couleur).dot}
+                />
+              </Link>
+            ))}
+            {role.bureau ? (
+              <Bar
+                label="Découvre d'abord (aucun pôle)"
+                value={stats.sansPole}
+                max={maxPole}
+                color="bg-muted-foreground/50"
+              />
+            ) : null}
+          </CardContent>
+        </Card>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        {/* Dernières candidatures */}
-        <section>
-          <SectionTitle title="Dernières candidatures" />
-          <Card className="mt-4 border-border shadow-xs">
-            <CardContent className="divide-y divide-border p-0">
-              {candidatures.length === 0 ? (
-                <p className="p-6 text-sm text-muted-foreground">
-                  Aucune candidature pour le moment.
-                </p>
-              ) : (
-                candidatures.slice(0, 6).map((c) => {
-                  const pole = poleInfo(poleSlug(c.pole));
+        <Card className="border-border shadow-xs">
+          <CardContent className="grid gap-4 p-5">
+            <SectionTitle
+              title="Candidatures par statut"
+              lead="Reçue → entretien → décision du responsable."
+            />
+            <div className="grid grid-cols-2 gap-3">
+              {stats.parStatut.map(({ st, n }) => (
+                <Link
+                  key={st}
+                  to="/espace-bureau/candidatures"
+                  search={{ statut: st }}
+                  className="flex items-center justify-between rounded-lg border border-border p-3 hover:bg-surface"
+                >
+                  <StatutBadge statut={st} />
+                  <span className="font-display text-xl font-bold tabular-nums">{n}</span>
+                </Link>
+              ))}
+            </div>
+            <SectionTitle title="Dernières candidatures" />
+            {candidatures.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Aucune candidature pour le moment.</p>
+            ) : (
+              <ul className="grid gap-2">
+                {candidatures.slice(0, 5).map((c) => {
+                  const s = structureById(structures, c.annonce?.structure_id);
                   return (
-                    <Link
-                      key={c.id}
-                      to="/espace-bureau/candidatures"
-                      search={{ id: c.id }}
-                      className="flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-surface"
-                    >
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-foreground">
-                          {fullName(c)}
-                        </p>
-                        <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <PoleDot className={pole.dot} />
-                          <span className="truncate">
-                            {pole.short} · {formatDate(c.created_at)}
+                    <li key={c.id}>
+                      <Link
+                        to="/espace-bureau/candidatures"
+                        search={{ id: c.id }}
+                        className="flex items-center justify-between gap-3 rounded-lg p-2 text-sm hover:bg-surface"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate font-medium">{fullName(c.membre)}</span>
+                          <span className="flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                            <StructureDot color={s?.couleur} />
+                            {c.annonce?.titre} · {formatDate(c.created_at)}
                           </span>
-                        </p>
-                      </div>
-                      <StatutBadge statut={c.statut} />
-                    </Link>
+                        </span>
+                        <StatutBadge statut={c.statut} />
+                      </Link>
+                    </li>
                   );
-                })
-              )}
-            </CardContent>
-          </Card>
-        </section>
+                })}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
 
-        <div className="grid content-start gap-6">
-          {/* Messages en attente */}
-          <section>
-            <SectionTitle title="Messages en attente" />
-            <Card className="mt-4 border-border shadow-xs">
-              <CardContent className="divide-y divide-border p-0">
-                {stats.nonTraites.length === 0 ? (
-                  <p className="p-5 text-sm text-muted-foreground">
-                    Tous les messages sont traités. 👌
-                  </p>
-                ) : (
-                  stats.nonTraites.slice(0, 3).map((m) => (
-                    <Link
-                      key={m.id}
-                      to="/espace-bureau/messages"
-                      className="block px-5 py-3.5 transition-colors hover:bg-surface"
-                    >
-                      <p className="truncate text-sm font-medium text-foreground">{m.sujet}</p>
-                      <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                        {m.nom} · {m.categorie ?? "—"} · {formatDate(m.created_at)}
-                      </p>
-                    </Link>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </section>
+        <Card className="border-border shadow-xs">
+          <CardContent className="grid gap-4 p-5">
+            <SectionTitle title="Membres par formation" />
+            {stats.parCycle.map(([label, n]) => (
+              <Bar key={label} label={label} value={n} max={maxCycle} />
+            ))}
+            {stats.parCampus.length > 1 ? (
+              <p className="text-xs text-muted-foreground">
+                Campus : {stats.parCampus.map(([c, n]) => `${c} (${n})`).join(" · ")}
+              </p>
+            ) : null}
+          </CardContent>
+        </Card>
 
-          {/* Centres d'intérêt */}
-          {stats.interets.length > 0 ? (
-            <section>
-              <SectionTitle title="Centres d'intérêt les plus cités" />
-              <Card className="mt-4 border-border shadow-xs">
-                <CardContent className="grid gap-3 p-5">
-                  {stats.interets.map(([label, n]) => (
-                    <div key={label}>
-                      <div className="flex justify-between gap-3 text-xs">
-                        <span className="truncate text-foreground">{label}</span>
-                        <span className="font-semibold text-foreground tabular-nums">{n}</span>
-                      </div>
-                      <div className="mt-1 h-1.5 rounded-full bg-muted">
-                        <div
-                          className="h-full rounded-full bg-primary"
-                          style={{ width: `${(n / maxInteret) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </section>
-          ) : null}
-        </div>
+        <Card className="border-border shadow-xs">
+          <CardContent className="grid gap-4 p-5">
+            <SectionTitle
+              title="Comment ont-ils connu le club ?"
+              lead="Réponse facultative au formulaire d'adhésion."
+            />
+            {stats.parSource.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Pas encore de réponses.</p>
+            ) : (
+              stats.parSource.map(([label, n]) => (
+                <Bar key={label} label={label} value={n} max={maxSource} />
+              ))
+            )}
+            {role.bureau ? (
+              <Link
+                to="/espace-bureau/messages"
+                className="mt-2 flex items-center justify-between rounded-lg border border-border p-3 text-sm hover:bg-surface"
+              >
+                <span className="flex items-center gap-2">
+                  <Mail className="size-4 text-muted-foreground" />
+                  Messages non traités
+                </span>
+                <span className="font-semibold tabular-nums">{stats.nonTraites}</span>
+              </Link>
+            ) : null}
+          </CardContent>
+        </Card>
       </div>
     </BureauShell>
   );
@@ -267,15 +291,13 @@ function Kpi({
   value,
   hint,
   to,
-  search,
   highlight,
 }: {
   icon: typeof Users;
   label: string;
   value: number;
   hint: string;
-  to?: "/espace-bureau/candidatures" | "/espace-bureau/messages";
-  search?: { statut?: string };
+  to?: "/espace-bureau/membres" | "/espace-bureau/annonces" | "/espace-bureau/candidatures";
   highlight?: boolean;
 }) {
   const body = (
@@ -300,19 +322,11 @@ function Kpi({
     highlight ? "border-primary/40 bg-primary/5" : "border-border",
     to && "transition-colors hover:border-primary/50",
   );
-  if (!to) return <div className={cls}>{body}</div>;
-  return (
-    <Link to={to} search={search ?? {}} className={cls}>
+  return to ? (
+    <Link to={to} className={cls}>
       {body}
     </Link>
-  );
-}
-
-function SectionTitle({ title, lead }: { title: string; lead?: string }) {
-  return (
-    <div>
-      <h2 className="font-display text-base font-semibold text-foreground">{title}</h2>
-      {lead ? <p className="mt-0.5 text-xs text-muted-foreground">{lead}</p> : null}
-    </div>
+  ) : (
+    <div className={cls}>{body}</div>
   );
 }

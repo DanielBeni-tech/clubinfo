@@ -28,7 +28,7 @@ export const Route = createFileRoute("/espace-bureau/messages")({
 type Message = any;
 
 function AdminMessages() {
-  const { user, ready } = useBureauGuard();
+  const { user, role, ready } = useBureauGuard();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
@@ -143,6 +143,7 @@ function AdminMessages() {
 
   return (
     <BureauShell
+      role={role}
       title="Messages"
       subtitle="Demandes reçues via le formulaire de contact."
       email={user?.email ?? null}

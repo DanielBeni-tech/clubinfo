@@ -9,8 +9,9 @@ _Document destiné aux membres du Bureau Exécutif_
 
 L'Espace Bureau est la partie privée du site du Club. Il permet de :
 
-- suivre les **demandes d'adhésion** et les traiter ;
-- retrouver, pour chaque **chef de pôle**, les personnes qui souhaitent rejoindre son pôle ;
+- suivre les **membres** du Club et leurs pôles d'intérêt ;
+- publier les **annonces de recrutement** des pôles et traiter les **candidatures** ;
+- gérer les **structures** du Club (pôles, Secrétariat général…) et leurs responsables ;
 - consulter et traiter les **messages** reçus via la page Contact.
 
 Il contient des données personnelles d'étudiants et de partenaires. Son accès est donc strictement encadré.
@@ -19,9 +20,10 @@ Il contient des données personnelles d'étudiants et de partenaires. Son accès
 
 ## 2. Qui peut y accéder ?
 
-- Uniquement les **membres du Bureau Exécutif en fonction**.
-- Chaque membre dispose d'un **compte personnel et nominatif**. Il n'existe pas de compte partagé.
-- L'accès est accordé et retiré par le **responsable de la sécurité** du Club.
+- Les **membres du Bureau Exécutif en fonction** : ils voient et gèrent tout.
+- Les **responsables de structure** (chefs de pôle, Secrétaire général…) : ils ne voient que leur structure, c'est-à-dire ses annonces, ses candidatures et les membres intéressés par leur pôle.
+- Chaque personne dispose d'un **compte personnel et nominatif**. Il n'existe pas de compte partagé.
+- L'accès Bureau est accordé et retiré par le **responsable de la sécurité**. L'accès responsable est accordé depuis l'onglet **Structures** (voir `11_Recrutement.md`).
 
 ---
 
@@ -49,27 +51,22 @@ Si le message **« Ce compte n'a pas accès à l'espace Bureau »** s'affiche, l
 
 ## 5. Utiliser l'Espace Bureau
 
-L'espace comporte trois onglets.
+Les onglets **Structures** et **Messages** sont réservés au Bureau.
 
 ### Tableau de bord
 
-Vue d'ensemble : candidatures à traiter, inscriptions de la semaine, messages en attente, **nombre de candidatures par pôle**, dernières inscriptions et centres d'intérêt les plus cités.
+Vue d'ensemble : nombre de membres, nouveaux membres de la semaine, annonces ouvertes, candidatures à traiter, **membres par pôle d'intérêt**, candidatures par statut, membres par formation et réponses à « Comment as-tu connu le club ? ».
 
-### Candidatures
+### Membres
 
-- **Chefs de pôle :** cliquez sur le bouton de votre pôle en haut de la liste (Innovation, Développement, Communication, Découverte) pour n'afficher que les personnes qui l'ont choisi en priorité. Le filtre **« Centre d'intérêt »** permet aussi de retrouver les personnes intéressées par vos activités qui ont choisi un autre pôle.
-- **Les filtres restent dans le lien de la page.** Vous pouvez l'enregistrer en favori pour retrouver directement la liste de votre pôle.
-- **En cliquant sur une personne**, vous ouvrez sa fiche complète, avec des boutons pour la contacter par WhatsApp ou par e-mail.
-- **Le statut** de chaque candidature se met à jour depuis la fiche :
+- Une fiche par personne (une adresse e-mail = un membre). L'adhésion est automatique, sans validation.
+- Filtrez par **pôle d'intérêt** pour retrouver les personnes à contacter lors d'un recrutement.
+- La fiche affiche aussi les candidatures de la personne et, pour les anciennes inscriptions, les réponses de l'ancien formulaire.
+- **Export :** « Exporter (Excel / CSV) » et « Copier les e-mails » portent sur la liste affichée.
 
-| Statut | Signification |
-|---|---|
-| Nouveau | Demande reçue, pas encore traitée |
-| Contacté | La personne a été contactée par le Club |
-| Accepté | L'adhésion est validée |
-| Refusé | La demande n'est pas retenue |
+### Annonces et Candidatures
 
-- **Export :** le bouton « Exporter (Excel / CSV) » télécharge la liste affichée. « Copier les e-mails » copie les adresses de la liste affichée.
+Voir la procédure détaillée dans `11_Recrutement.md`.
 
 ### Messages
 
@@ -84,7 +81,7 @@ Chaque membre est responsable de l'usage fait de son compte.
 1. **Ne jamais communiquer ses identifiants**, y compris à un autre membre du Bureau.
 2. **Utiliser un mot de passe propre au Club**, qui ne sert sur aucun autre site.
 3. **Se déconnecter** après utilisation sur un ordinateur ou un téléphone partagé.
-4. **Les données consultées restent internes au Bureau.** Elles ne doivent pas être publiées ni transférées dans des groupes ouverts.
+4. **Les données consultées restent internes au Bureau et aux responsables concernés.** Elles ne doivent pas être publiées ni transférées dans des groupes ouverts.
 5. **Les fichiers exportés** sont utilisés pour le besoin précis qui a justifié l'export, puis supprimés.
 6. **Signaler sans délai** au responsable de la sécurité toute perte d'identifiants, tout accès suspect ou toute erreur de manipulation.
 
@@ -102,4 +99,4 @@ Chaque membre est responsable de l'usage fait de son compte.
 |---|---|
 | Obtenir, retrouver ou retirer un accès | Responsable de la sécurité |
 | Mot de passe oublié ou compte bloqué | Responsable de la sécurité |
-| Question sur le traitement d'une candidature | Bureau Exécutif |
+| Question sur le traitement d'une candidature | Responsable de la structure concernée |

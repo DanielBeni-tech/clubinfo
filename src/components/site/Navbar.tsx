@@ -14,7 +14,7 @@ import { Logo } from "@/components/site/Logo";
 import { LangToggle } from "@/components/site/LangToggle";
 import { useLocale } from "@/lib/i18n";
 import { supabase } from "@/lib/supabase";
-import { BUREAU_PASSWORD, isBureauAdmin } from "@/lib/admin-auth";
+import { BUREAU_PASSWORD, hasEspaceAccess } from "@/lib/admin-auth";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -30,6 +30,7 @@ export function Navbar() {
     { to: "/about", label: t("nav.about") },
     { to: "/projects", label: t("nav.projects") },
     { to: "/events", label: t("nav.events") },
+    { to: "/recrutement", label: t("nav.recruit") },
     { to: "/gallery", label: t("nav.gallery") },
     { to: "/contact", label: t("nav.contact") },
   ] as const;
@@ -63,7 +64,7 @@ export function Navbar() {
 
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user || null);
-    setIsAdmin(session ? await isBureauAdmin() : false);
+    setIsAdmin(session ? await hasEspaceAccess() : false);
     setLoading(false);
   }
 

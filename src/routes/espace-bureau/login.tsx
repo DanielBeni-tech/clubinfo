@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
 import { supabase } from "@/lib/supabase";
-import { isBureauAdmin } from "@/lib/admin-auth";
+import { hasEspaceAccess } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/espace-bureau/login")({
   head: () => ({
@@ -44,8 +44,8 @@ function AdminLoginPage() {
       return;
     }
 
-    // Le compte doit figurer dans la table bureau_admins
-    if (!(await isBureauAdmin())) {
+    // Le compte doit être membre du Bureau ou responsable d'une structure
+    if (!(await hasEspaceAccess())) {
       await supabase.auth.signOut();
       setLoading(false);
       setErrorMessage("Ce compte n'a pas accès à l'espace Bureau.");
@@ -65,7 +65,9 @@ function AdminLoginPage() {
           <div className="inline-flex justify-center mb-1">
             <Logo />
           </div>
-          <p className="text-sm text-muted-foreground">Accès réservé au Bureau.</p>
+          <p className="text-sm text-muted-foreground">
+            Accès réservé au Bureau et aux responsables de pôle.
+          </p>
         </div>
 
         {/* Formulaire de connexion */}
