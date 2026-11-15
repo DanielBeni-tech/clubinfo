@@ -298,37 +298,41 @@ function AdminMessages() {
                       </DialogContent>
                     </Dialog>
 
-                    {/* Marquer comme traité */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleMarkAsTraite(message.id, message.traite)}
-                      disabled={actionLoading}
-                      className="text-xs"
-                    >
-                      {message.traite ? (
-                        <>
-                          <Circle className="size-3.5 mr-1.5" />
-                          Non-traité
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className="size-3.5 mr-1.5" />
-                          Traité
-                        </>
-                      )}
-                    </Button>
+                    {role.admin ? (
+                      <>
+                        {/* Marquer comme traité */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleMarkAsTraite(message.id, message.traite)}
+                          disabled={actionLoading}
+                          className="text-xs"
+                        >
+                          {message.traite ? (
+                            <>
+                              <Circle className="size-3.5 mr-1.5" />
+                              Non-traité
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle2 className="size-3.5 mr-1.5" />
+                              Traité
+                            </>
+                          )}
+                        </Button>
 
-                    {/* Supprimer */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(message.id)}
-                      disabled={actionLoading}
-                      className="text-xs text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
+                        {/* Supprimer */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(message.id)}
+                          disabled={actionLoading}
+                          className="text-xs text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </Button>
+                      </>
+                    ) : null}
                   </div>
                 </div>
               </CardContent>

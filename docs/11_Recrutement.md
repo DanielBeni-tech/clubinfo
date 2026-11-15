@@ -91,10 +91,23 @@ Côté responsable, onglet **Candidatures** :
 
 ---
 
-## 6. Ce que chacun voit
+## 6. Qui peut faire quoi
 
-| | Public | Responsable | Bureau |
-|---|---|---|---|
+Trois niveaux (script `supabase/roles-bureau.sql`) :
+
+| | Public | Membre du Bureau | Chef de pôle (responsable) | Administrateur |
+|---|---|---|---|---|
+| Pôles actifs, annonces publiées | ✓ | ✓ | ✓ | ✓ |
+| Lire membres, annonces (brouillons compris), candidatures, messages, structures | — | ✓ | ✓ | ✓ |
+| Créer, modifier, publier une annonce ; traiter une candidature | — | — | Sa structure | Tout |
+| Modifier les membres, les structures, nommer les responsables, traiter les messages | — | — | — | ✓ |
+
+- Un chef de pôle est en général aussi membre du Bureau : il voit tout et modifie son pôle.
+- L'administrateur (super-admin) est le responsable de la sécurité : colonne `super_admin` de `bureau_admins`.
+- Ces règles sont appliquées par la base de données elle-même (Supabase RLS), pas seulement par l'affichage.
+- L'ancienne table `candidatures` est une archive en lecture seule.
+
+---|---|---|---|
 | Pôles actifs, annonces publiées | ✓ | ✓ | ✓ |
 | Membres | — | Intéressés par son pôle + ses candidats | Tous |
 | Annonces brouillon | — | Celles de sa structure | Toutes |

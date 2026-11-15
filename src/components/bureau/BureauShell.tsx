@@ -57,7 +57,11 @@ export function BureauShell({
           <div className="flex flex-wrap items-center justify-between gap-3 pt-6">
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
-                {role.bureau ? "Espace Bureau" : "Espace responsable"}
+                {role.admin
+                  ? "Espace Bureau · administrateur"
+                  : role.bureau
+                    ? "Espace Bureau"
+                    : "Espace responsable"}
               </p>
               <h1 className="mt-1 font-display text-2xl font-bold text-foreground">{title}</h1>
               {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
