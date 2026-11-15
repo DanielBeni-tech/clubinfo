@@ -73,7 +73,7 @@ function StructuresPage() {
 
   const editing =
     search.edit === NEW ? null : (structures.find((s) => s.id === search.edit) ?? null);
-  const open = search.edit === NEW || !!editing;
+  const open = role.admin && (search.edit === NEW || !!editing);
   const close = () => void navigate({ search: {}, replace: true });
 
   if (!ready || loading) return <BureauLoading />;
@@ -82,13 +82,19 @@ function StructuresPage() {
     <BureauShell
       role={role}
       title="Structures"
-      subtitle="Pôles et autres entités du club. Un pôle actif apparaît dans le formulaire d'adhésion ; chaque structure peut publier des annonces via ses responsables."
+      subtitle={
+        role.admin
+          ? "Pôles et autres entités du club. Un pôle actif apparaît dans le formulaire d'adhésion ; chaque structure peut publier des annonces via ses responsables."
+          : "Pôles et autres entités du club, avec leurs responsables. Seul l'administrateur peut les modifier."
+      }
       email={user?.email ?? null}
       actions={
-        <Button onClick={() => void navigate({ search: { edit: NEW }, replace: true })}>
-          <Plus className="size-4" />
-          Nouvelle structure
-        </Button>
+        role.admin ? (
+          <Button onClick={() => void navigate({ search: { edit: NEW }, replace: true })}>
+            <Plus className="size-4" />
+            Nouvelle structure
+          </Button>
+        ) : null
       }
     >
       <ul className="grid gap-3 md:grid-cols-2">
@@ -113,14 +119,16 @@ function StructuresPage() {
                     {s.actif ? "active" : "inactive"} · ordre {s.ordre}
                   </p>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => void navigate({ search: { edit: s.id }, replace: true })}
-                >
-                  <Pencil className="size-4" />
-                  Modifier
-                </Button>
+                {role.admin ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void navigate({ search: { edit: s.id }, replace: true })}
+                  >
+                    <Pencil className="size-4" />
+                    Modifier
+                  </Button>
+                ) : null}
               </div>
               {s.description ? (
                 <p className="mt-3 text-sm text-muted-foreground">{s.description}</p>

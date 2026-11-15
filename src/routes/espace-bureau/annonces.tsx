@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { ExternalLink, Pencil, Plus, Trash2, X } from "lucide-react";
+import { ExternalLink, Eye, Pencil, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,13 +30,14 @@ import {
   setAnnonceStatut,
   type AnnonceInput,
 } from "@/lib/admin-helpers";
-import { useEspaceGuard } from "@/lib/admin-auth";
+import { canManage, useEspaceGuard } from "@/lib/admin-auth";
 import {
   ANNONCE_STATUT_LABEL,
   formatDate,
   structureById,
   type CandidaturePosteRow,
 } from "@/lib/bureau-data";
+import { cn } from "@/lib/utils";
 import { annonceOuverte, slugify, today, type Annonce, type Structure } from "@/lib/recrutement";
 
 type Search = { structure?: string; edit?: string };
@@ -91,19 +92,24 @@ function AnnoncesPage() {
     });
   }
 
-  // Structures où le compte peut publier
+  // Structures où le compte peut publier (super-admin ou responsable)
   const gerees = useMemo(
-    () => structures.filter((s) => s.actif && (role.bureau || role.structures.includes(s.id))),
+    () => structures.filter((s) => s.actif && canManage(role, s.id)),
     [structures, role],
   );
-  // Le public ne voit que les annonces publiées : on ne liste ici que celles que le compte gère
+  // Le Bureau voit toutes les annonces (lecture) ; un responsable hors Bureau, les siennes
   const mine = useMemo(
-    () => annonces.filter((a) => role.bureau || role.structures.includes(a.structure_id)),
+    () => annonces.filter((a) => role.bureau || canManage(role, a.structure_id)),
     [annonces, role],
+  );
+  // Structures proposées en filtre : celles qui ont des annonces visibles
+  const filtres = useMemo(
+    () => structures.filter((s) => mine.some((a) => a.structure_id === s.id)),
+    [structures, mine],
   );
   const visible = search.structure ? mine.filter((a) => a.structure_id === search.structure) : mine;
   const editing = search.edit === NEW ? null : (mine.find((a) => a.id === search.edit) ?? null);
-  const sheetOpen = search.edit === NEW || !!editing;
+  const sheetOpen = (search.edit === NEW && gerees.length > 0) || !!editing;
 
   async function changeStatut(a: Annonce, statut: Annonce["statut"]) {
     const { success, error } = await setAnnonceStatut(a.id, statut);
@@ -126,7 +132,11 @@ function AnnoncesPage() {
     <BureauShell
       role={role}
       title="Annonces"
-      subtitle="Publie les postes de ta structure sur la page Recrutement du site. Une annonce reste invisible tant qu'elle est en brouillon."
+      subtitle={
+        gerees.length > 0
+          ? "Publie les postes de ta structure sur la page Recrutement du site. Une annonce reste invisible tant qu'elle est en brouillon."
+          : "Annonces de toutes les structures, en lecture. Seuls le responsable de la structure et l'administrateur peuvent les modifier."
+      }
       email={user?.email ?? null}
       actions={
         gerees.length > 0 ? (
@@ -137,8 +147,8 @@ function AnnoncesPage() {
         ) : null
       }
     >
-      {gerees.length > 1 ? (
-        <div className="flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Structure">
+      {filtres.length > 1 ? (
+        <div className="flex flex-wrap gap-2" role="tablist" aria-label="Structure">
           <Chip
             active={!search.structure}
             onClick={() => setSearch({ structure: undefined })}
@@ -146,7 +156,7 @@ function AnnoncesPage() {
           >
             Toutes
           </Chip>
-          {gerees.map((s) => (
+          {filtres.map((s) => (
             <Chip
               key={s.id}
               active={search.structure === s.id}
@@ -209,10 +219,14 @@ function AnnoncesPage() {
                 ) : null}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Button size="sm" variant="outline" onClick={() => setSearch({ edit: a.id })}>
-                    <Pencil className="size-4" />
-                    Modifier
+                    {canManage(role, a.structure_id) ? (
+                      <Pencil className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
+                    {canManage(role, a.structure_id) ? "Modifier" : "Consulter"}
                   </Button>
-                  {a.statut !== "publiee" ? (
+                  {!canManage(role, a.structure_id) ? null : a.statut !== "publiee" ? (
                     <Button size="sm" onClick={() => void changeStatut(a, "publiee")}>
                       Publier
                     </Button>
@@ -233,15 +247,17 @@ function AnnoncesPage() {
                       </Link>
                     </Button>
                   ) : null}
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-destructive"
-                    onClick={() => void remove(a)}
-                  >
-                    <Trash2 className="size-4" />
-                    Supprimer
-                  </Button>
+                  {canManage(role, a.structure_id) ? (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-destructive"
+                      onClick={() => void remove(a)}
+                    >
+                      <Trash2 className="size-4" />
+                      Supprimer
+                    </Button>
+                  ) : null}
                 </div>
               </li>
             );
@@ -255,7 +271,8 @@ function AnnoncesPage() {
             <AnnonceForm
               key={editing?.id ?? NEW}
               annonce={editing}
-              structures={gerees}
+              readOnly={!!editing && !canManage(role, editing.structure_id)}
+              structures={editing && !canManage(role, editing.structure_id) ? structures : gerees}
               defaultStructure={search.structure}
               onSaved={async () => {
                 setSearch({ edit: undefined });
@@ -275,11 +292,13 @@ function AnnoncesPage() {
 
 function AnnonceForm({
   annonce,
+  readOnly = false,
   structures,
   defaultStructure,
   onSaved,
 }: {
   annonce: Annonce | null;
+  readOnly?: boolean;
   structures: Structure[];
   defaultStructure?: string | undefined;
   onSaved: () => Promise<void>;
@@ -374,169 +393,175 @@ function AnnonceForm({
   return (
     <form className="grid gap-5" onSubmit={(e) => void submit(e, annonce?.statut ?? "brouillon")}>
       <SheetHeader className="text-left">
-        <SheetTitle>{annonce ? "Modifier l'annonce" : "Nouvelle annonce"}</SheetTitle>
+        <SheetTitle>
+          {readOnly ? "Annonce" : annonce ? "Modifier l'annonce" : "Nouvelle annonce"}
+        </SheetTitle>
         <SheetDescription>
-          Les champs marqués * sont obligatoires. Les rubriques facultatives n'apparaissent sur le
-          site que si elles sont remplies.
+          {readOnly
+            ? "Lecture seule : seuls le responsable de la structure et l'administrateur peuvent la modifier."
+            : "Les champs marqués * sont obligatoires. Les rubriques facultatives n'apparaissent sur le site que si elles sont remplies."}
         </SheetDescription>
       </SheetHeader>
 
-      <F label="Structure" required>
-        <Select value={structureId} onValueChange={setStructureId}>
-          <SelectTrigger>
-            <SelectValue placeholder="Choisir" />
-          </SelectTrigger>
-          <SelectContent>
-            {structures.map((s) => (
-              <SelectItem key={s.id} value={s.id}>
-                {s.nom}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </F>
+      <fieldset disabled={readOnly} className="grid gap-5 disabled:opacity-90">
+        <F label="Structure" required>
+          <Select value={structureId} onValueChange={setStructureId}>
+            <SelectTrigger>
+              <SelectValue placeholder="Choisir" />
+            </SelectTrigger>
+            <SelectContent>
+              {structures.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.nom}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </F>
 
-      <F label="Intitulé du poste" required>
-        <Input
-          value={titre}
-          maxLength={120}
-          onChange={(e) => onTitre(e.target.value)}
-          placeholder="Responsable Événements et Compétitions"
-        />
-      </F>
-      <F
-        label="Adresse de la page"
-        hint={`Le poste sera visible sur /recrutement/${slugify(slug || titre) || "…"}`}
-      >
-        <Input
-          value={slug}
-          maxLength={80}
-          onChange={(e) => {
-            setSlug(e.target.value);
-            setSlugTouched(true);
-          }}
-        />
-      </F>
-      <F label="Résumé (une phrase, affichée sur la carte)">
-        <Input value={resume} maxLength={180} onChange={(e) => setResume(e.target.value)} />
-      </F>
-      <F label="Ce que tu feras" required>
-        <Textarea
-          rows={4}
-          value={missions}
-          maxLength={3000}
-          onChange={(e) => setMissions(e.target.value)}
-        />
-      </F>
-      <F label="Profil recherché" required>
-        <Textarea
-          rows={3}
-          value={profil}
-          maxLength={2000}
-          onChange={(e) => setProfil(e.target.value)}
-        />
-      </F>
-      <F label="Livrables attendus">
-        <Textarea
-          rows={2}
-          value={livrables}
-          maxLength={2000}
-          onChange={(e) => setLivrables(e.target.value)}
-        />
-      </F>
-      <F label="Outils et technologies">
-        <Input
-          value={outils}
-          maxLength={300}
-          onChange={(e) => setOutils(e.target.value)}
-          placeholder="Canva, CapCut, Notion, GitHub…"
-        />
-      </F>
-      <div className="grid gap-3 rounded-xl border border-dashed border-border p-4">
-        <p className="text-sm font-medium">Rubrique libre</p>
-        <p className="-mt-2 text-xs text-muted-foreground">
-          Titre au choix : « Contribution à la digitalisation », « Concours visés », «
-          Certifications préparées »…
-        </p>
-        <Input
-          value={rubriqueTitre}
-          maxLength={80}
-          onChange={(e) => setRubriqueTitre(e.target.value)}
-          placeholder="Titre"
-        />
-        <Textarea
-          rows={2}
-          value={rubriqueContenu}
-          maxLength={2000}
-          onChange={(e) => setRubriqueContenu(e.target.value)}
-          placeholder="Contenu"
-        />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <F label="Places" required>
+        <F label="Intitulé du poste" required>
           <Input
-            type="number"
-            min={1}
-            max={50}
-            value={places}
-            onChange={(e) => setPlaces(e.target.value)}
+            value={titre}
+            maxLength={120}
+            onChange={(e) => onTitre(e.target.value)}
+            placeholder="Responsable Événements et Compétitions"
           />
         </F>
-        <F label="Engagement">
+        <F
+          label="Adresse de la page"
+          hint={`Le poste sera visible sur /recrutement/${slugify(slug || titre) || "…"}`}
+        >
           <Input
-            value={engagement}
-            maxLength={60}
-            onChange={(e) => setEngagement(e.target.value)}
-            placeholder="3 h par semaine"
+            value={slug}
+            maxLength={80}
+            onChange={(e) => {
+              setSlug(e.target.value);
+              setSlugTouched(true);
+            }}
           />
         </F>
-        <F label="Date limite">
-          <Input type="date" value={dateLimite} onChange={(e) => setDateLimite(e.target.value)} />
+        <F label="Résumé (une phrase, affichée sur la carte)">
+          <Input value={resume} maxLength={180} onChange={(e) => setResume(e.target.value)} />
         </F>
-      </div>
-
-      <div className="grid gap-3">
-        <div>
-          <p className="text-sm font-medium">Questions propres au poste ({questions.length}/3)</p>
-          <p className="text-xs text-muted-foreground">
-            Le candidat devra y répondre. Exemple : « As-tu déjà organisé un événement ? Raconte en deux lignes. »
+        <F label="Ce que tu feras" required>
+          <Textarea
+            rows={4}
+            value={missions}
+            maxLength={3000}
+            onChange={(e) => setMissions(e.target.value)}
+          />
+        </F>
+        <F label="Profil recherché" required>
+          <Textarea
+            rows={3}
+            value={profil}
+            maxLength={2000}
+            onChange={(e) => setProfil(e.target.value)}
+          />
+        </F>
+        <F label="Livrables attendus">
+          <Textarea
+            rows={2}
+            value={livrables}
+            maxLength={2000}
+            onChange={(e) => setLivrables(e.target.value)}
+          />
+        </F>
+        <F label="Outils et technologies">
+          <Input
+            value={outils}
+            maxLength={300}
+            onChange={(e) => setOutils(e.target.value)}
+            placeholder="Canva, CapCut, Notion, GitHub…"
+          />
+        </F>
+        <div className="grid gap-3 rounded-xl border border-dashed border-border p-4">
+          <p className="text-sm font-medium">Rubrique libre</p>
+          <p className="-mt-2 text-xs text-muted-foreground">
+            Titre au choix : « Contribution à la digitalisation », « Concours visés », «
+            Certifications préparées »…
           </p>
+          <Input
+            value={rubriqueTitre}
+            maxLength={80}
+            onChange={(e) => setRubriqueTitre(e.target.value)}
+            placeholder="Titre"
+          />
+          <Textarea
+            rows={2}
+            value={rubriqueContenu}
+            maxLength={2000}
+            onChange={(e) => setRubriqueContenu(e.target.value)}
+            placeholder="Contenu"
+          />
         </div>
-        {questions.map((q, i) => (
-          <div key={i} className="flex gap-2">
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <F label="Places" required>
             <Input
-              value={q}
-              maxLength={300}
-              onChange={(e) =>
-                setQuestions((list) => list.map((x, j) => (j === i ? e.target.value : x)))
-              }
-              placeholder={`Question ${i + 1}`}
+              type="number"
+              min={1}
+              max={50}
+              value={places}
+              onChange={(e) => setPlaces(e.target.value)}
             />
+          </F>
+          <F label="Engagement">
+            <Input
+              value={engagement}
+              maxLength={60}
+              onChange={(e) => setEngagement(e.target.value)}
+              placeholder="3 h par semaine"
+            />
+          </F>
+          <F label="Date limite">
+            <Input type="date" value={dateLimite} onChange={(e) => setDateLimite(e.target.value)} />
+          </F>
+        </div>
+
+        <div className="grid gap-3">
+          <div>
+            <p className="text-sm font-medium">Questions propres au poste ({questions.length}/3)</p>
+            <p className="text-xs text-muted-foreground">
+              Le candidat devra y répondre. Exemple : « As-tu déjà organisé un événement ? Raconte
+              en deux lignes. »
+            </p>
+          </div>
+          {questions.map((q, i) => (
+            <div key={i} className="flex gap-2">
+              <Input
+                value={q}
+                maxLength={300}
+                onChange={(e) =>
+                  setQuestions((list) => list.map((x, j) => (j === i ? e.target.value : x)))
+                }
+                placeholder={`Question ${i + 1}`}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Retirer la question"
+                onClick={() => setQuestions((list) => list.filter((_, j) => j !== i))}
+              >
+                <X className="size-4" />
+              </Button>
+            </div>
+          ))}
+          {questions.length < 3 ? (
             <Button
               type="button"
-              variant="ghost"
-              size="icon"
-              aria-label="Retirer la question"
-              onClick={() => setQuestions((list) => list.filter((_, j) => j !== i))}
+              variant="outline"
+              size="sm"
+              className="justify-self-start"
+              onClick={() => setQuestions((l) => [...l, ""])}
             >
-              <X className="size-4" />
+              <Plus className="size-4" />
+              Ajouter une question
             </Button>
-          </div>
-        ))}
-        {questions.length < 3 ? (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="justify-self-start"
-            onClick={() => setQuestions((l) => [...l, ""])}
-          >
-            <Plus className="size-4" />
-            Ajouter une question
-          </Button>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+      </fieldset>
 
       {error ? (
         <div
@@ -547,7 +572,12 @@ function AnnonceForm({
         </div>
       ) : null}
 
-      <div className="flex flex-wrap justify-end gap-2 border-t border-border pt-4">
+      <div
+        className={cn(
+          "flex flex-wrap justify-end gap-2 border-t border-border pt-4",
+          readOnly && "hidden",
+        )}
+      >
         {annonce?.statut === "publiee" ? (
           <Button type="submit" disabled={saving}>
             {saving ? "Enregistrement…" : "Enregistrer"}

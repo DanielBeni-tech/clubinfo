@@ -151,9 +151,9 @@ function Dashboard() {
         />
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Card className="border-border shadow-xs">
-          <CardContent className="grid gap-4 p-5">
+          <CardContent className="grid grid-cols-[minmax(0,1fr)] gap-4 p-5">
             <SectionTitle
               title="Membres par pôle d'intérêt"
               lead="Un membre peut indiquer jusqu'à 2 pôles."
@@ -190,7 +190,7 @@ function Dashboard() {
         </Card>
 
         <Card className="border-border shadow-xs">
-          <CardContent className="grid gap-4 p-5">
+          <CardContent className="grid grid-cols-[minmax(0,1fr)] gap-4 p-5">
             <SectionTitle
               title="Candidatures par statut"
               lead="Reçue → entretien → décision du responsable."
@@ -212,7 +212,7 @@ function Dashboard() {
             {candidatures.length === 0 ? (
               <p className="text-sm text-muted-foreground">Aucune candidature pour le moment.</p>
             ) : (
-              <ul className="grid gap-2">
+              <ul className="grid grid-cols-[minmax(0,1fr)] gap-2">
                 {candidatures.slice(0, 5).map((c) => {
                   const s = structureById(structures, c.annonce?.structure_id);
                   return (
@@ -222,11 +222,13 @@ function Dashboard() {
                         search={{ id: c.id }}
                         className="flex items-center justify-between gap-3 rounded-lg p-2 text-sm hover:bg-surface"
                       >
-                        <span className="min-w-0">
+                        <span className="min-w-0 flex-1">
                           <span className="block truncate font-medium">{fullName(c.membre)}</span>
-                          <span className="flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                          <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
                             <StructureDot color={s?.couleur} />
-                            {c.annonce?.titre} · {formatDate(c.created_at)}
+                            <span className="truncate">
+                              {c.annonce?.titre} · {formatDate(c.created_at)}
+                            </span>
                           </span>
                         </span>
                         <StatutBadge statut={c.statut} />
@@ -240,7 +242,7 @@ function Dashboard() {
         </Card>
 
         <Card className="border-border shadow-xs">
-          <CardContent className="grid gap-4 p-5">
+          <CardContent className="grid grid-cols-[minmax(0,1fr)] gap-4 p-5">
             <SectionTitle title="Membres par formation" />
             {stats.parCycle.map(([label, n]) => (
               <Bar key={label} label={label} value={n} max={maxCycle} />
@@ -254,7 +256,7 @@ function Dashboard() {
         </Card>
 
         <Card className="border-border shadow-xs">
-          <CardContent className="grid gap-4 p-5">
+          <CardContent className="grid grid-cols-[minmax(0,1fr)] gap-4 p-5">
             <SectionTitle
               title="Comment ont-ils connu le club ?"
               lead="Réponse facultative au formulaire d'adhésion."

@@ -24,7 +24,7 @@ import {
   getCandidaturesPoste,
   updateCandidaturePoste,
 } from "@/lib/admin-helpers";
-import { useEspaceGuard } from "@/lib/admin-auth";
+import { canManage, useEspaceGuard } from "@/lib/admin-auth";
 import {
   CANDIDATURE_STATUTS,
   downloadCsv,
@@ -256,6 +256,7 @@ function CandidaturesPage() {
           {selected ? (
             <CandidatureDetail
               key={selected.id}
+              editable={canManage(role, selected.annonce?.structure_id)}
               c={selected}
               onUpdate={(p) => void update(selected, p)}
             />
@@ -268,9 +269,12 @@ function CandidaturesPage() {
 
 function CandidatureDetail({
   c,
+  editable,
   onUpdate,
 }: {
   c: CandidaturePosteRow;
+  /** Responsable de la structure ou administrateur ; sinon lecture seule. */
+  editable: boolean;
   onUpdate: (patch: Partial<Pick<CandidaturePosteRow, "statut" | "note_interne">>) => void;
 }) {
   const [note, setNote] = useState(c.note_interne ?? "");
@@ -309,14 +313,24 @@ function CandidatureDetail({
 
       <div>
         <p className="text-xs font-semibold text-muted-foreground">Statut</p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {CANDIDATURE_STATUTS.map((s) => (
-            <StatusChip key={s} active={c.statut === s} onClick={() => onUpdate({ statut: s })}>
-              {s}
-            </StatusChip>
-          ))}
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground">{ETAPES[c.statut]}</p>
+        {editable ? (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {CANDIDATURE_STATUTS.map((s) => (
+              <StatusChip key={s} active={c.statut === s} onClick={() => onUpdate({ statut: s })}>
+                {s}
+              </StatusChip>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-2">
+            <StatutBadge statut={c.statut} />
+          </div>
+        )}
+        <p className="mt-2 text-xs text-muted-foreground">
+          {editable
+            ? ETAPES[c.statut]
+            : "Lecture seule : la décision revient au responsable de la structure."}
+        </p>
       </div>
 
       <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
@@ -360,26 +374,33 @@ function CandidatureDetail({
         ))}
       </dl>
 
-      <div className="grid gap-2">
-        <p className="text-xs font-semibold text-muted-foreground">
-          Note interne (compte rendu d'entretien…)
-        </p>
-        <Textarea
-          rows={4}
-          value={note}
-          maxLength={3000}
-          onChange={(e) => setNote(e.target.value)}
-        />
-        <Button
-          size="sm"
-          variant="outline"
-          className="justify-self-end"
-          disabled={!noteChanged}
-          onClick={() => onUpdate({ note_interne: note.trim() || null })}
-        >
-          Enregistrer la note
-        </Button>
-      </div>
+      {editable ? (
+        <div className="grid gap-2">
+          <p className="text-xs font-semibold text-muted-foreground">
+            Note interne (compte rendu d'entretien…)
+          </p>
+          <Textarea
+            rows={4}
+            value={note}
+            maxLength={3000}
+            onChange={(e) => setNote(e.target.value)}
+          />
+          <Button
+            size="sm"
+            variant="outline"
+            className="justify-self-end"
+            disabled={!noteChanged}
+            onClick={() => onUpdate({ note_interne: note.trim() || null })}
+          >
+            Enregistrer la note
+          </Button>
+        </div>
+      ) : c.note_interne ? (
+        <div className="rounded-lg bg-surface p-3 text-sm">
+          <p className="text-xs font-semibold text-muted-foreground">Note interne</p>
+          <p className="mt-1 whitespace-pre-line text-foreground">{c.note_interne}</p>
+        </div>
+      ) : null}
     </div>
   );
 }

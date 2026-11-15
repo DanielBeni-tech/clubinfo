@@ -11,14 +11,45 @@ const TABS = [
   {
     to: "/espace-bureau/dashboard",
     label: "Tableau de bord",
+    short: "Accueil",
     icon: LayoutDashboard,
     bureauOnly: false,
   },
-  { to: "/espace-bureau/membres", label: "Membres", icon: Users, bureauOnly: false },
-  { to: "/espace-bureau/annonces", label: "Annonces", icon: Briefcase, bureauOnly: false },
-  { to: "/espace-bureau/candidatures", label: "Candidatures", icon: Inbox, bureauOnly: false },
-  { to: "/espace-bureau/structures", label: "Structures", icon: Building2, bureauOnly: true },
-  { to: "/espace-bureau/messages", label: "Messages", icon: Mail, bureauOnly: true },
+  {
+    to: "/espace-bureau/membres",
+    label: "Membres",
+    short: "Membres",
+    icon: Users,
+    bureauOnly: false,
+  },
+  {
+    to: "/espace-bureau/annonces",
+    label: "Annonces",
+    short: "Annonces",
+    icon: Briefcase,
+    bureauOnly: false,
+  },
+  {
+    to: "/espace-bureau/candidatures",
+    label: "Candidatures",
+    short: "Candidatures",
+    icon: Inbox,
+    bureauOnly: false,
+  },
+  {
+    to: "/espace-bureau/structures",
+    label: "Structures",
+    short: "Structures",
+    icon: Building2,
+    bureauOnly: true,
+  },
+  {
+    to: "/espace-bureau/messages",
+    label: "Messages",
+    short: "Messages",
+    icon: Mail,
+    bureauOnly: true,
+  },
 ] as const;
 
 export type BureauTab = (typeof TABS)[number]["to"];
@@ -44,6 +75,7 @@ export function BureauShell({
   children: ReactNode;
 }) {
   const navigate = useNavigate();
+  const tabs = TABS.filter((tab) => role.bureau || !tab.bureauOnly);
 
   async function logout() {
     await supabase?.auth.signOut();
@@ -57,10 +89,16 @@ export function BureauShell({
           <div className="flex flex-wrap items-center justify-between gap-3 pt-6">
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
-                {role.bureau ? "Espace Bureau" : "Espace responsable"}
+                {role.admin
+                  ? "Espace Bureau · administrateur"
+                  : role.bureau
+                    ? "Espace Bureau"
+                    : "Espace responsable"}
               </p>
               <h1 className="mt-1 font-display text-2xl font-bold text-foreground">{title}</h1>
-              {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
+              {subtitle ? (
+                <p className="mt-1 hidden text-sm text-muted-foreground sm:block">{subtitle}</p>
+              ) : null}
             </div>
             <div className="flex items-center gap-2">
               {email ? (
@@ -75,25 +113,47 @@ export function BureauShell({
             </div>
           </div>
 
-          <nav className="-mb-px mt-5 flex gap-1 overflow-x-auto" aria-label="Espace Bureau">
-            {TABS.filter((tab) => role.bureau || !tab.bureauOnly).map(
-              ({ to, label, icon: Icon }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className="flex shrink-0 items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  activeProps={{ className: "border-primary! text-primary!" }}
-                >
-                  <Icon className="size-4" />
-                  {label}
-                  {badges?.[to] ? (
-                    <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] leading-none font-semibold text-primary-foreground">
-                      {badges[to]}
-                    </span>
-                  ) : null}
-                </Link>
-              ),
-            )}
+          {/* Mobile : grille d'onglets sans défilement horizontal */}
+          <nav className="mt-5 grid grid-cols-3 gap-2 pb-4 sm:hidden" aria-label="Espace Bureau">
+            {tabs.map(({ to, short, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
+                className="relative flex flex-col items-center gap-1 rounded-lg border border-border bg-card px-1 py-2.5 text-[11px] font-medium text-muted-foreground"
+                activeProps={{ className: "border-primary! bg-primary/10! text-primary!" }}
+              >
+                <Icon className="size-4" />
+                {short}
+                {badges?.[to] ? (
+                  <span className="absolute top-1 right-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] leading-none font-semibold text-primary-foreground">
+                    {badges[to]}
+                  </span>
+                ) : null}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Tablette et ordinateur : onglets en ligne */}
+          <nav
+            className="-mb-px mt-5 hidden gap-1 overflow-x-auto sm:flex"
+            aria-label="Espace Bureau"
+          >
+            {tabs.map(({ to, label, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex shrink-0 items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                activeProps={{ className: "border-primary! text-primary!" }}
+              >
+                <Icon className="size-4" />
+                {label}
+                {badges?.[to] ? (
+                  <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] leading-none font-semibold text-primary-foreground">
+                    {badges[to]}
+                  </span>
+                ) : null}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>

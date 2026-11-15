@@ -10,15 +10,22 @@ export const BUREAU_PASSWORD = "/espace-bureau/mot-de-passe" as const;
 
 /**
  * Rôle de l'utilisateur connecté :
- *  - bureau : membre du Bureau (table bureau_admins), voit et gère tout ;
- *  - structures : identifiants des structures dont il est responsable (chef de pôle…).
+ *  - admin : super-admin (bureau_admins.super_admin), tous les droits ;
+ *  - bureau : membre du Bureau (table bureau_admins), voit tout en lecture ;
+ *  - structures : structures dont il est responsable (chef de pôle…) : il modifie
+ *    leurs annonces et leurs candidatures.
  */
-export type EspaceRole = { bureau: boolean; structures: string[] };
+export type EspaceRole = { admin: boolean; bureau: boolean; structures: string[] };
 
-export const NO_ROLE: EspaceRole = { bureau: false, structures: [] };
+export const NO_ROLE: EspaceRole = { admin: false, bureau: false, structures: [] };
+
+/** Peut modifier les annonces et candidatures de cette structure. */
+export function canManage(role: EspaceRole, structureId: string | null | undefined) {
+  return role.admin || (!!structureId && role.structures.includes(structureId));
+}
 
 export function hasAccess(role: EspaceRole) {
-  return role.bureau || role.structures.length > 0;
+  return role.admin || role.bureau || role.structures.length > 0;
 }
 
 /**
@@ -29,14 +36,16 @@ export async function getRole(): Promise<EspaceRole> {
   if (!supabase) return NO_ROLE;
   const { data, error } = await supabase.rpc("mon_role");
   if (!error && data && typeof data === "object") {
-    const d = data as { bureau?: unknown; structures?: unknown };
+    const d = data as { admin?: unknown; bureau?: unknown; structures?: unknown };
     return {
+      admin: d.admin === true,
       bureau: d.bureau === true,
       structures: Array.isArray(d.structures) ? (d.structures as string[]) : [],
     };
   }
   // Base pas encore migrée (fonction mon_role absente) : ancien contrôle Bureau seul
-  return { bureau: await isBureauAdmin(), structures: [] };
+  const bureau = await isBureauAdmin();
+  return { admin: bureau, bureau, structures: [] };
 }
 
 /** Membre du Bureau (fonction SQL `is_bureau_admin`). */
