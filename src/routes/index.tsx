@@ -26,7 +26,7 @@ import {
   expertise,
   gallery,
   isUpcoming,
-  joinForm,
+  poles as staticPoles,
   projects,
   stats,
 } from "@/data/club";
@@ -34,6 +34,8 @@ import { eventDateParts } from "@/lib/event-utils";
 import { useLocale, type MessageKey } from "@/lib/i18n";
 import { loc } from "@/lib/locale-text";
 import { brandHeadLinks, brandSocialMeta } from "@/lib/brand-head";
+import { structureNom } from "@/lib/recrutement";
+import { useStructures } from "@/lib/use-structures";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -74,7 +76,14 @@ function Home() {
     { icon: Users, title: t("home.value.peers"), desc: t("home.value.peersDesc") },
     { icon: Rocket, title: t("home.value.ship"), desc: t("home.value.shipDesc") },
   ];
-  const poles = joinForm.poles.slice(0, 3);
+  // Pôles gérés depuis l'espace Bureau ; liste statique tant qu'ils ne sont pas chargés
+  const { structures } = useStructures();
+  const dynamicPoles = structures.filter((s) => s.type === "pole");
+  const poleNames = dynamicPoles.length
+    ? dynamicPoles.map((s) => structureNom(s, locale))
+    : staticPoles
+        .filter((p) => p.name.startsWith("Pôle"))
+        .map((p) => (locale === "en" ? p.nameEn : p.name.replace("Pôle ", "")));
   const upcoming = events
     .filter((e) => isUpcoming(e))
     .sort((a, b) => (a.date || "9").localeCompare(b.date || "9"))
@@ -174,12 +183,12 @@ function Home() {
                     {t("home.about.poles")}
                   </p>
                   <ul className="mt-2 flex flex-wrap gap-1.5">
-                    {poles.map((p) => (
+                    {poleNames.map((name) => (
                       <li
-                        key={p.value}
+                        key={name}
                         className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-foreground"
                       >
-                        {loc(p.label, locale)}
+                        {name}
                       </li>
                     ))}
                   </ul>

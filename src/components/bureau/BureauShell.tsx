@@ -1,22 +1,34 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { LayoutDashboard, LogOut, Mail, Users } from "lucide-react";
+import { Briefcase, Building2, Inbox, LayoutDashboard, LogOut, Mail, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
+import type { EspaceRole } from "@/lib/admin-auth";
 import { STATUT_STYLE } from "@/lib/bureau-data";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { to: "/espace-bureau/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
-  { to: "/espace-bureau/candidatures", label: "Candidatures", icon: Users },
-  { to: "/espace-bureau/messages", label: "Messages", icon: Mail },
+  {
+    to: "/espace-bureau/dashboard",
+    label: "Tableau de bord",
+    icon: LayoutDashboard,
+    bureauOnly: false,
+  },
+  { to: "/espace-bureau/membres", label: "Membres", icon: Users, bureauOnly: false },
+  { to: "/espace-bureau/annonces", label: "Annonces", icon: Briefcase, bureauOnly: false },
+  { to: "/espace-bureau/candidatures", label: "Candidatures", icon: Inbox, bureauOnly: false },
+  { to: "/espace-bureau/structures", label: "Structures", icon: Building2, bureauOnly: true },
+  { to: "/espace-bureau/messages", label: "Messages", icon: Mail, bureauOnly: true },
 ] as const;
+
+export type BureauTab = (typeof TABS)[number]["to"];
 
 /** Mise en page commune aux pages de l'espace Bureau. */
 export function BureauShell({
   title,
   subtitle,
   email,
+  role,
   actions,
   badges,
   children,
@@ -24,9 +36,11 @@ export function BureauShell({
   title: string;
   subtitle?: string;
   email?: string | null;
+  /** Rôle du compte : les onglets réservés au Bureau sont masqués aux responsables. */
+  role: EspaceRole;
   actions?: ReactNode;
   /** Pastilles affichées à côté des onglets (ex. nombre de nouveautés). */
-  badges?: Partial<Record<(typeof TABS)[number]["to"], number>>;
+  badges?: Partial<Record<BureauTab, number>>;
   children: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -43,7 +57,7 @@ export function BureauShell({
           <div className="flex flex-wrap items-center justify-between gap-3 pt-6">
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
-                Espace Bureau
+                {role.bureau ? "Espace Bureau" : "Espace responsable"}
               </p>
               <h1 className="mt-1 font-display text-2xl font-bold text-foreground">{title}</h1>
               {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
@@ -62,22 +76,24 @@ export function BureauShell({
           </div>
 
           <nav className="-mb-px mt-5 flex gap-1 overflow-x-auto" aria-label="Espace Bureau">
-            {TABS.map(({ to, label, icon: Icon }) => (
-              <Link
-                key={to}
-                to={to}
-                className="flex shrink-0 items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                activeProps={{ className: "border-primary! text-primary!" }}
-              >
-                <Icon className="size-4" />
-                {label}
-                {badges?.[to] ? (
-                  <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] leading-none font-semibold text-primary-foreground">
-                    {badges[to]}
-                  </span>
-                ) : null}
-              </Link>
-            ))}
+            {TABS.filter((tab) => role.bureau || !tab.bureauOnly).map(
+              ({ to, label, icon: Icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="flex shrink-0 items-center gap-2 border-b-2 border-transparent px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  activeProps={{ className: "border-primary! text-primary!" }}
+                >
+                  <Icon className="size-4" />
+                  {label}
+                  {badges?.[to] ? (
+                    <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] leading-none font-semibold text-primary-foreground">
+                      {badges[to]}
+                    </span>
+                  ) : null}
+                </Link>
+              ),
+            )}
           </nav>
         </div>
       </div>

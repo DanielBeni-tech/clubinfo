@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
-import { isBureauAdmin } from "@/lib/admin-auth";
+import { hasEspaceAccess } from "@/lib/admin-auth";
 import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/espace-bureau/mot-de-passe")({
@@ -73,7 +73,7 @@ function PasswordPage() {
       );
       return;
     }
-    setHasAccess(await isBureauAdmin());
+    setHasAccess(await hasEspaceAccess());
     setSaving(false);
     setState("done");
   }

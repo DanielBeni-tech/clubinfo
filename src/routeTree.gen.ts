@@ -18,15 +18,20 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ReglementRouteImport } from './routes/reglement'
+import { Route as EspaceBureauAnnoncesRouteImport } from './routes/espace-bureau/annonces'
 import { Route as EspaceBureauCandidaturesRouteImport } from './routes/espace-bureau/candidatures'
 import { Route as EspaceBureauDashboardRouteImport } from './routes/espace-bureau/dashboard'
 import { Route as EspaceBureauLoginRouteImport } from './routes/espace-bureau/login'
+import { Route as EspaceBureauMembresRouteImport } from './routes/espace-bureau/membres'
 import { Route as EspaceBureauMessagesRouteImport } from './routes/espace-bureau/messages'
 import { Route as EspaceBureauMotDePasseRouteImport } from './routes/espace-bureau/mot-de-passe'
+import { Route as EspaceBureauStructuresRouteImport } from './routes/espace-bureau/structures'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects/$slug'
+import { Route as RecrutementIndexRouteImport } from './routes/recrutement.index'
+import { Route as RecrutementSlugRouteImport } from './routes/recrutement.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -73,6 +78,11 @@ const ReglementRoute = ReglementRouteImport.update({
   path: '/reglement',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceBureauAnnoncesRoute = EspaceBureauAnnoncesRouteImport.update({
+  id: '/espace-bureau/annonces',
+  path: '/espace-bureau/annonces',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EspaceBureauCandidaturesRoute =
   EspaceBureauCandidaturesRouteImport.update({
     id: '/espace-bureau/candidatures',
@@ -89,6 +99,11 @@ const EspaceBureauLoginRoute = EspaceBureauLoginRouteImport.update({
   path: '/espace-bureau/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceBureauMembresRoute = EspaceBureauMembresRouteImport.update({
+  id: '/espace-bureau/membres',
+  path: '/espace-bureau/membres',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EspaceBureauMessagesRoute = EspaceBureauMessagesRouteImport.update({
   id: '/espace-bureau/messages',
   path: '/espace-bureau/messages',
@@ -97,6 +112,11 @@ const EspaceBureauMessagesRoute = EspaceBureauMessagesRouteImport.update({
 const EspaceBureauMotDePasseRoute = EspaceBureauMotDePasseRouteImport.update({
   id: '/espace-bureau/mot-de-passe',
   path: '/espace-bureau/mot-de-passe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceBureauStructuresRoute = EspaceBureauStructuresRouteImport.update({
+  id: '/espace-bureau/structures',
+  path: '/espace-bureau/structures',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
@@ -119,6 +139,16 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
 } as any)
+const RecrutementIndexRoute = RecrutementIndexRouteImport.update({
+  id: '/recrutement/',
+  path: '/recrutement/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecrutementSlugRoute = RecrutementSlugRouteImport.update({
+  id: '/recrutement/$slug',
+  path: '/recrutement/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,15 +160,20 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
+  '/espace-bureau/annonces': typeof EspaceBureauAnnoncesRoute
   '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/membres': typeof EspaceBureauMembresRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/espace-bureau/structures': typeof EspaceBureauStructuresRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/recrutement/$slug': typeof RecrutementSlugRoute
   '/events/': typeof EventsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/recrutement/': typeof RecrutementIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,15 +184,20 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/login': typeof LoginRoute
   '/reglement': typeof ReglementRoute
+  '/espace-bureau/annonces': typeof EspaceBureauAnnoncesRoute
   '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/membres': typeof EspaceBureauMembresRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/espace-bureau/structures': typeof EspaceBureauStructuresRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/recrutement/$slug': typeof RecrutementSlugRoute
   '/events': typeof EventsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/recrutement': typeof RecrutementIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,15 +210,20 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/reglement': typeof ReglementRoute
+  '/espace-bureau/annonces': typeof EspaceBureauAnnoncesRoute
   '/espace-bureau/candidatures': typeof EspaceBureauCandidaturesRoute
   '/espace-bureau/dashboard': typeof EspaceBureauDashboardRoute
   '/espace-bureau/login': typeof EspaceBureauLoginRoute
+  '/espace-bureau/membres': typeof EspaceBureauMembresRoute
   '/espace-bureau/messages': typeof EspaceBureauMessagesRoute
   '/espace-bureau/mot-de-passe': typeof EspaceBureauMotDePasseRoute
+  '/espace-bureau/structures': typeof EspaceBureauStructuresRoute
   '/events/$slug': typeof EventsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/recrutement/$slug': typeof RecrutementSlugRoute
   '/events/': typeof EventsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/recrutement/': typeof RecrutementIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -192,15 +237,20 @@ export interface FileRouteTypes {
     | '/login'
     | '/projects'
     | '/reglement'
+    | '/espace-bureau/annonces'
     | '/espace-bureau/candidatures'
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
+    | '/espace-bureau/membres'
     | '/espace-bureau/messages'
     | '/espace-bureau/mot-de-passe'
+    | '/espace-bureau/structures'
     | '/events/$slug'
     | '/projects/$slug'
+    | '/recrutement/$slug'
     | '/events/'
     | '/projects/'
+    | '/recrutement/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -211,15 +261,20 @@ export interface FileRouteTypes {
     | '/join'
     | '/login'
     | '/reglement'
+    | '/espace-bureau/annonces'
     | '/espace-bureau/candidatures'
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
+    | '/espace-bureau/membres'
     | '/espace-bureau/messages'
     | '/espace-bureau/mot-de-passe'
+    | '/espace-bureau/structures'
     | '/events/$slug'
     | '/projects/$slug'
+    | '/recrutement/$slug'
     | '/events'
     | '/projects'
+    | '/recrutement'
   id:
     | '__root__'
     | '/'
@@ -231,15 +286,20 @@ export interface FileRouteTypes {
     | '/login'
     | '/projects'
     | '/reglement'
+    | '/espace-bureau/annonces'
     | '/espace-bureau/candidatures'
     | '/espace-bureau/dashboard'
     | '/espace-bureau/login'
+    | '/espace-bureau/membres'
     | '/espace-bureau/messages'
     | '/espace-bureau/mot-de-passe'
+    | '/espace-bureau/structures'
     | '/events/$slug'
     | '/projects/$slug'
+    | '/recrutement/$slug'
     | '/events/'
     | '/projects/'
+    | '/recrutement/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -252,13 +312,18 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
   ReglementRoute: typeof ReglementRoute
+  EspaceBureauAnnoncesRoute: typeof EspaceBureauAnnoncesRoute
   EspaceBureauCandidaturesRoute: typeof EspaceBureauCandidaturesRoute
   EspaceBureauDashboardRoute: typeof EspaceBureauDashboardRoute
   EspaceBureauLoginRoute: typeof EspaceBureauLoginRoute
+  EspaceBureauMembresRoute: typeof EspaceBureauMembresRoute
   EspaceBureauMessagesRoute: typeof EspaceBureauMessagesRoute
   EspaceBureauMotDePasseRoute: typeof EspaceBureauMotDePasseRoute
+  EspaceBureauStructuresRoute: typeof EspaceBureauStructuresRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  RecrutementSlugRoute: typeof RecrutementSlugRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  RecrutementIndexRoute: typeof RecrutementIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -326,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReglementRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace-bureau/annonces': {
+      id: '/espace-bureau/annonces'
+      path: '/espace-bureau/annonces'
+      fullPath: '/espace-bureau/annonces'
+      preLoaderRoute: typeof EspaceBureauAnnoncesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/espace-bureau/candidatures': {
       id: '/espace-bureau/candidatures'
       path: '/espace-bureau/candidatures'
@@ -347,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EspaceBureauLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace-bureau/membres': {
+      id: '/espace-bureau/membres'
+      path: '/espace-bureau/membres'
+      fullPath: '/espace-bureau/membres'
+      preLoaderRoute: typeof EspaceBureauMembresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/espace-bureau/messages': {
       id: '/espace-bureau/messages'
       path: '/espace-bureau/messages'
@@ -359,6 +438,13 @@ declare module '@tanstack/react-router' {
       path: '/espace-bureau/mot-de-passe'
       fullPath: '/espace-bureau/mot-de-passe'
       preLoaderRoute: typeof EspaceBureauMotDePasseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-bureau/structures': {
+      id: '/espace-bureau/structures'
+      path: '/espace-bureau/structures'
+      fullPath: '/espace-bureau/structures'
+      preLoaderRoute: typeof EspaceBureauStructuresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/': {
@@ -389,6 +475,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
     }
+    '/recrutement/': {
+      id: '/recrutement/'
+      path: '/recrutement'
+      fullPath: '/recrutement/'
+      preLoaderRoute: typeof RecrutementIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recrutement/$slug': {
+      id: '/recrutement/$slug'
+      path: '/recrutement/$slug'
+      fullPath: '/recrutement/$slug'
+      preLoaderRoute: typeof RecrutementSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -416,13 +516,18 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
   ReglementRoute: ReglementRoute,
+  EspaceBureauAnnoncesRoute: EspaceBureauAnnoncesRoute,
   EspaceBureauCandidaturesRoute: EspaceBureauCandidaturesRoute,
   EspaceBureauDashboardRoute: EspaceBureauDashboardRoute,
   EspaceBureauLoginRoute: EspaceBureauLoginRoute,
+  EspaceBureauMembresRoute: EspaceBureauMembresRoute,
   EspaceBureauMessagesRoute: EspaceBureauMessagesRoute,
   EspaceBureauMotDePasseRoute: EspaceBureauMotDePasseRoute,
+  EspaceBureauStructuresRoute: EspaceBureauStructuresRoute,
   EventsSlugRoute: EventsSlugRoute,
+  RecrutementSlugRoute: RecrutementSlugRoute,
   EventsIndexRoute: EventsIndexRoute,
+  RecrutementIndexRoute: RecrutementIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

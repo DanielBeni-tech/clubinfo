@@ -64,6 +64,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link to="/recrutement" className="hover:text-accent">
+                {t("nav.recruit")}
+              </Link>
+            </li>
+            <li>
               <Link to="/gallery" className="hover:text-accent">
                 {t("nav.gallery")}
               </Link>

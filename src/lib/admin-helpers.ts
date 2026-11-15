@@ -1,142 +1,180 @@
+import type { Annonce, Structure } from "./recrutement";
+import type {
+  CandidaturePosteRow,
+  CandidatureStatut,
+  MembreRow,
+  MessageRow,
+  ResponsableRow,
+} from "./bureau-data";
 import { supabase } from "./supabase";
 
-/**
- * Met à jour le statut d'une candidature
- * @param candidatureId UUID de la candidature
- * @param newStatus Nouveau statut
- * @returns { success, error }
+/*
+ * Accès aux données de l'espace Bureau. Les règles RLS de Supabase limitent
+ * automatiquement ce que chaque compte voit : le Bureau voit tout, un responsable
+ * ne voit que sa ou ses structures.
  */
-export async function updateCandidatureStatus(candidatureId: string, newStatus: string) {
-  if (!supabase) {
-    return { success: false, error: "Supabase n'est pas configuré" };
-  }
 
-  const { error } = await supabase
-    .from("candidatures")
-    .update({ statut: newStatus })
-    .eq("id", candidatureId);
+type Result = { success: boolean; error: string | null };
 
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  return { success: true, error: null };
+function db() {
+  if (!supabase) throw new Error("Supabase n'est pas configuré");
+  return supabase;
 }
 
-/**
- * Récupère toutes les candidatures avec filtres optionnels
- * @param status Filtre par statut (optionnel)
- * @returns Array de candidatures
- */
-export async function getCandidatures(status?: string) {
-  if (!supabase) {
+async function run(promise: PromiseLike<{ error: { message: string } | null }>): Promise<Result> {
+  try {
+    const { error } = await promise;
+    return error ? { success: false, error: error.message } : { success: true, error: null };
+  } catch (e) {
+    return { success: false, error: e instanceof Error ? e.message : "Erreur inconnue" };
+  }
+}
+
+async function list<T>(
+  promise: PromiseLike<{ data: unknown; error: { message: string } | null }>,
+  label: string,
+): Promise<T[]> {
+  try {
+    const { data, error } = await promise;
+    if (error) {
+      console.error(`Lecture impossible (${label}) :`, error.message);
+      return [];
+    }
+    return (data ?? []) as T[];
+  } catch {
     return [];
   }
-
-  let query = supabase.from("candidatures").select("*").order("created_at", { ascending: false });
-
-  if (status) {
-    query = query.eq("statut", status);
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("Erreur lors de la récupération des candidatures:", error);
-    return [];
-  }
-
-  return data || [];
 }
 
-/**
- * Récupère une candidature par ID
- * @param candidatureId UUID de la candidature
- * @returns Candidature ou null
- */
-export async function getCandidatureById(candidatureId: string) {
-  if (!supabase) {
-    return null;
-  }
+/* ------------------------------------------------------------------ */
+/* Structures                                                         */
+/* ------------------------------------------------------------------ */
 
-  const { data, error } = await supabase
-    .from("candidatures")
-    .select("*")
-    .eq("id", candidatureId)
-    .single();
-
-  if (error) {
-    console.error("Erreur lors de la récupération de la candidature:", error);
-    return null;
-  }
-
-  return data;
+/** Toutes les structures (les inactives ne sont visibles que du Bureau). */
+export function getAllStructures() {
+  return list<Structure>(
+    db().from("structures").select("*").order("ordre").order("nom"),
+    "structures",
+  );
 }
 
-/**
- * Récupère tous les messages
- * @param traiteOnly Filtre par statut traité (optionnel)
- * @returns Array de messages
- */
-export async function getMessages(traiteOnly?: boolean) {
-  if (!supabase) {
-    return [];
-  }
+export type StructureInput = Omit<Structure, "id">;
 
-  let query = supabase.from("messages").select("*").order("created_at", { ascending: false });
-
-  if (traiteOnly !== undefined) {
-    query = query.eq("traite", traiteOnly);
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("Erreur lors de la récupération des messages:", error);
-    return [];
-  }
-
-  return data || [];
+export function saveStructure(input: StructureInput, id?: string) {
+  return id
+    ? run(db().from("structures").update(input).eq("id", id))
+    : run(db().from("structures").insert(input));
 }
 
-/**
- * Marque un message comme traité
- * @param messageId UUID du message
- * @param traite true ou false
- * @returns { success, error }
- */
-export async function updateMessageTraite(messageId: string, traite: boolean) {
-  if (!supabase) {
-    return { success: false, error: "Supabase n'est pas configuré" };
-  }
-
-  const { error } = await supabase
-    .from("messages")
-    .update({ traite })
-    .eq("id", messageId);
-
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  return { success: true, error: null };
+export function getResponsables() {
+  return list<ResponsableRow>(db().from("responsables").select("*").order("email"), "responsables");
 }
 
-/**
- * Supprime un message
- * @param messageId UUID du message
- * @returns { success, error }
- */
-export async function deleteMessage(messageId: string) {
-  if (!supabase) {
-    return { success: false, error: "Supabase n'est pas configuré" };
+export async function addResponsable(email: string, structureId: string): Promise<Result> {
+  try {
+    const { data, error } = await db().rpc("ajouter_responsable", {
+      p_email: email,
+      p_structure: structureId,
+    });
+    if (error) return { success: false, error: error.message };
+    if (data === "compte_introuvable")
+      return {
+        success: false,
+        error:
+          "Aucun compte n'existe avec cet e-mail. Créez-le d'abord dans Supabase (Authentication > Users).",
+      };
+    return { success: true, error: null };
+  } catch (e) {
+    return { success: false, error: e instanceof Error ? e.message : "Erreur inconnue" };
   }
+}
 
-  const { error } = await supabase.from("messages").delete().eq("id", messageId);
+export function removeResponsable(userId: string, structureId: string) {
+  return run(db().rpc("retirer_responsable", { p_user: userId, p_structure: structureId }));
+}
 
-  if (error) {
-    return { success: false, error: error.message };
-  }
+/* ------------------------------------------------------------------ */
+/* Membres                                                            */
+/* ------------------------------------------------------------------ */
 
-  return { success: true, error: null };
+export function getMembres() {
+  return list<MembreRow>(
+    db()
+      .from("membres")
+      .select("*, interets:membres_interets(structure_id)")
+      .order("created_at", { ascending: false }),
+    "membres",
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Annonces                                                           */
+/* ------------------------------------------------------------------ */
+
+/** Annonces gérées par le compte connecté (tous statuts). */
+export async function getAnnoncesGerees(): Promise<Annonce[]> {
+  const rows = await list<Annonce>(
+    db().from("annonces").select("*").order("updated_at", { ascending: false }),
+    "annonces",
+  );
+  return rows.map((a) => ({ ...a, questions: Array.isArray(a.questions) ? a.questions : [] }));
+}
+
+export type AnnonceInput = Omit<Annonce, "id" | "created_at" | "updated_at">;
+
+export function saveAnnonce(input: AnnonceInput, id?: string) {
+  return id
+    ? run(db().from("annonces").update(input).eq("id", id))
+    : run(db().from("annonces").insert(input));
+}
+
+export function setAnnonceStatut(id: string, statut: Annonce["statut"]) {
+  return run(db().from("annonces").update({ statut }).eq("id", id));
+}
+
+export function deleteAnnonce(id: string) {
+  return run(db().from("annonces").delete().eq("id", id));
+}
+
+/* ------------------------------------------------------------------ */
+/* Candidatures aux postes                                            */
+/* ------------------------------------------------------------------ */
+
+export async function getCandidaturesPoste(): Promise<CandidaturePosteRow[]> {
+  const rows = await list<CandidaturePosteRow>(
+    db()
+      .from("candidatures_poste")
+      .select(
+        "*, annonce:annonces(id, titre, slug, structure_id, questions), membre:membres(id, nom, prenom, email, telephone, campus, cycle, niveau)",
+      )
+      .order("created_at", { ascending: false }),
+    "candidatures_poste",
+  );
+  return rows.map((c) => ({ ...c, reponses: Array.isArray(c.reponses) ? c.reponses : [] }));
+}
+
+export function updateCandidaturePoste(
+  id: string,
+  patch: Partial<{ statut: CandidatureStatut; note_interne: string | null }>,
+) {
+  return run(db().from("candidatures_poste").update(patch).eq("id", id));
+}
+
+/* ------------------------------------------------------------------ */
+/* Messages (formulaire Contact)                                      */
+/* ------------------------------------------------------------------ */
+
+export function getMessages() {
+  return list<MessageRow>(
+    db().from("messages").select("*").order("created_at", { ascending: false }),
+    "messages",
+  );
+}
+
+export function updateMessageTraite(messageId: string, traite: boolean) {
+  return run(db().from("messages").update({ traite }).eq("id", messageId));
+}
+
+export function deleteMessage(messageId: string) {
+  return run(db().from("messages").delete().eq("id", messageId));
 }

@@ -895,138 +895,23 @@ export const joinForm = {
       en: "Other programme / mine isn't listed — specify",
     },
   },
-  /** Activités concrètes (plusieurs choix, 3 maximum). Ce ne sont pas des pôles. */
-  maxInterests: 3,
-  interests: [
-    {
-      value: "Développement web, mobile ou logiciel",
-      label: {
-        fr: "Développement web, mobile ou logiciel",
-        en: "Web, mobile or software development",
-      },
-    },
-    {
-      value: "Intelligence artificielle et données",
-      label: { fr: "Intelligence artificielle et données", en: "Artificial intelligence and data" },
-    },
-    {
-      value: "Électronique, objets connectés et prototypage",
-      label: {
-        fr: "Électronique, objets connectés et prototypage",
-        en: "Electronics, IoT and prototyping",
-      },
-    },
-    {
-      value: "Veille technologique et partage de connaissances",
-      label: {
-        fr: "Veille technologique et partage de connaissances",
-        en: "Tech watch and knowledge sharing",
-      },
-    },
-    {
-      value: "Recherche d'idées et conception de projets",
-      label: {
-        fr: "Recherche d'idées et conception de projets",
-        en: "Finding ideas and designing projects",
-      },
-    },
-    {
-      value: "Organisation et coordination d'un projet",
-      label: {
-        fr: "Organisation et coordination d'un projet",
-        en: "Organising and coordinating a project",
-      },
-    },
-    {
-      value: "Préparation de pitchs et présentations",
-      label: {
-        fr: "Préparation de pitchs et présentations",
-        en: "Preparing pitches and presentations",
-      },
-    },
-    {
-      value: "Hackathons, concours et recherche d'opportunités",
-      label: {
-        fr: "Hackathons, concours et recherche d'opportunités",
-        en: "Hackathons, competitions and finding opportunities",
-      },
-    },
-    {
-      value: "Design graphique et création de visuels",
-      label: { fr: "Design graphique et création de visuels", en: "Graphic design and visuals" },
-    },
-    {
-      value: "Rédaction, photo, vidéo ou réseaux sociaux",
-      label: {
-        fr: "Rédaction, photo, vidéo ou réseaux sociaux",
-        en: "Writing, photo, video or social media",
-      },
-    },
-    {
-      value: "Communication de terrain et mobilisation",
-      label: { fr: "Communication de terrain et mobilisation", en: "Outreach and mobilisation" },
-    },
-    {
-      value: "Je souhaite découvrir avant de choisir",
-      label: {
-        fr: "Je souhaite découvrir avant de choisir",
-        en: "I'd like to explore before choosing",
-      },
-    },
-    { value: OTHER, label: { fr: "Autre — préciser", en: "Other — specify" } },
+  /** Pôles d'intérêt cochables à l'adhésion (facultatif, liste chargée depuis la base). */
+  maxPoles: 2,
+  /** « Comment as-tu connu le club ? » (facultatif). */
+  sources: [
+    { value: "Groupe WhatsApp", label: { fr: "Groupe WhatsApp", en: "WhatsApp group" } },
+    { value: "Cérémonie ou activité du club", label: { fr: "Cérémonie ou activité du club", en: "Club ceremony or activity" } },
+    { value: "Un ami ou un camarade", label: { fr: "Un ami ou un camarade", en: "A friend or classmate" } },
+    { value: "Affiche", label: { fr: "Affiche", en: "Poster" } },
+    { value: "Réseaux sociaux", label: { fr: "Réseaux sociaux", en: "Social media" } },
+    { value: "Site du club", label: { fr: "Site du club", en: "Club website" } },
+    { value: "Autre", label: { fr: "Autre", en: "Other" } },
   ],
-  /** Préférence de pôle (pas une affectation). Descriptions reprises des articles 14 à 17. */
-  poles: [
-    {
-      value: "Pôle Innovation & Projets",
-      label: { fr: "Innovation & Projets", en: "Innovation & Projects" },
-      desc: {
-        fr: "Faire émerger et structurer les idées, coordonner les équipes projet, préparer les pitchs et organiser la préparation aux concours.",
-        en: "Surface and structure ideas, coordinate project teams, prepare pitches and organise competition preparation.",
-      },
-    },
-    {
-      value: "Pôle Développement",
-      label: { fr: "Développement", en: "Development" },
-      desc: {
-        fr: "Concevoir les solutions techniques, réaliser des prototypes, apporter un appui technique et partager des compétences.",
-        en: "Design technical solutions, build prototypes, provide technical support and share skills.",
-      },
-    },
-    {
-      value: "Pôle Communication",
-      label: { fr: "Communication", en: "Communications" },
-      desc: {
-        fr: "Créer les supports visuels et éditoriaux, couvrir les activités et diffuser les informations du club.",
-        en: "Create visual and editorial content, cover activities and share the club's news.",
-      },
-    },
-    {
-      value: "Découvrir avant de choisir",
-      label: {
-        fr: "Je souhaite découvrir avant de choisir",
-        en: "I'd like to explore before choosing",
-      },
-      desc: {
-        fr: "Participer aux premières activités pour mieux comprendre les trois pôles.",
-        en: "Take part in the first activities to better understand the three units.",
-      },
-    },
-  ],
+  /** Disponibilité demandée dans les candidatures à un poste. */
   availability: [
-    {
-      value: "En semaine, en journée",
-      label: { fr: "En semaine, en journée", en: "Weekdays, daytime" },
-    },
-    {
-      value: "En semaine, en soirée",
-      label: { fr: "En semaine, en soirée", en: "Weekday evenings" },
-    },
-    { value: "Le week-end", label: { fr: "Le week-end", en: "Weekends" } },
-    { value: "Disponibilités variables", label: { fr: "Disponibilités variables", en: "Varies" } },
-    {
-      value: "Je préciserai plus tard",
-      label: { fr: "Je préciserai plus tard", en: "I'll tell you later" },
-    },
+    { value: "Moins de 2 h par semaine", label: { fr: "Moins de 2 h par semaine", en: "Under 2 h a week" } },
+    { value: "2 à 4 h par semaine", label: { fr: "2 à 4 h par semaine", en: "2 to 4 h a week" } },
+    { value: "4 à 6 h par semaine", label: { fr: "4 à 6 h par semaine", en: "4 to 6 h a week" } },
+    { value: "Plus de 6 h par semaine", label: { fr: "Plus de 6 h par semaine", en: "Over 6 h a week" } },
   ],
 };
